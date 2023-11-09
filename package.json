@@ -1,0 +1,28 @@
+{
+  "name": "thread",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emailjs/browser": "^3.11.0",
+    "@headlessui/react": "^1.7.17",
+    "@react-pdf/renderer": "^3.1.14",
+    "@types/node": "20.5.7",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.15",
+    "framer-motion": "^10.16.4",
+    "next": "13.4.19",
+    "postcss": "8.4.28",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-icons": "^4.11.0",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.2.2"
+  }
+}

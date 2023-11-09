@@ -1,0 +1,32 @@
+.navopen {
+  max-height: 500px;
+
+  transition: max-height 0.5s ease-in;
+}
+.navclose {
+  max-height: 0;
+
+  transition: max-height 0.5s ease-out;
+}
+
+.arrow {
+  cursor: pointer;
+  transition: transform 0.5s;
+}
+.arrow.rotateUp {
+  transform: rotate(180deg);
+}
+.arrow.rotateDown {
+  transform: rotate(-180deg);
+}
+
+/* .accordionOpen {
+  max-height: 200px;
+
+  transition: max-height 0.5s ease-in;
+}
+.accordionClose {
+  max-height: 0;
+
+  transition: max-height 0.5s ease-out;
+} */
