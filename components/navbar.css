@@ -1,14 +1,11 @@
 .navopen {
   max-height: 500px;
-
   transition: max-height 0.5s ease-in;
 }
 .navclose {
   max-height: 0;
-
   transition: max-height 0.5s ease-out;
 }
-
 .arrow {
   cursor: pointer;
   transition: transform 0.5s;

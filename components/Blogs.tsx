@@ -4,7 +4,7 @@ import React from "react";
 const blogPosts = ["/ui_1.jpg", "/ui_2.png", "/ui_3.png", "/taskky.png"];
 const Blogs = () => {
   return (
-    <main className="px-24 my-10">
+    <main className="lg:px-24 px-10 my-10">
       <div className="flex flex-col">
         <span className="text-center text-5xl font-semibold">Our Blog</span>
         <p className="text-center">

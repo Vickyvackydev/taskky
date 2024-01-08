@@ -1,6 +1,5 @@
 import Dashboard from "@/components/dashboard";
 import "./globals.css";
-import Homepage from "@/components/homepage";
 
 export const metadata = {
   title: "Next.js",
@@ -15,7 +14,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Dashboard>{children}</Dashboard>
+        {/* <AuthProvider> */}
+        <Dashboard>
+          <div className="flex">
+            <main>{children}</main>
+          </div>
+        </Dashboard>
+        {/* </AuthProvider> */}
       </body>
     </html>
   );

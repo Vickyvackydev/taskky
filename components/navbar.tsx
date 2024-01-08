@@ -7,38 +7,44 @@ import "./navbar.css";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { useMediaQuery } from "@/hooks";
 
 const Navbar = () => {
   const router = useRouter();
   const [navopen, setNavOpen] = useState(false);
+  const isMobileScreen = useMediaQuery("(max-width: 640px)");
 
   return (
-    <nav className="p-10 sticky flex justify-between transition-all duration-500">
-      <Link href="/">
+    <nav className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500">
+      <Link href="/Homepage">
         <Image src="/logo.png" width={150} height={150} alt="logo image" />
       </Link>
 
-      <div>
+      <div
+        className={`lg:relative absolute lg:top-0 top-24 ${
+          navopen || isMobileScreen ? "lg:bg-none bg-white" : "bg-none"
+        } lg:w-32 w-full `}
+      >
         <ul
-          className={`flex flex-col gap-12 text-2xl text-center pt-10 w-full overflow-hidden transition-all duration-500   ${
+          className={`flex flex-col gap-12 text-2xl text-center pt-10 w-full overflow-hidden transition-all duration-500  ${
             navopen ? "navopen" : "navclose"
           }`}
         >
           {navLinks.map((links) => (
-            <li className="hover:text-green-500 transition-all duration-300 cursor-pointer">
+            <li className="hover:text-green-500 transition-all duration-300 cursor-pointer ">
               {links.label}
             </li>
           ))}
         </ul>
-        <hr />
+        <hr className={`lg:block hidden`} />
       </div>
       <div className="flex gap-5">
         <div>
           <Button
             text="My Dashboard"
-            textStyles="text-white text-lg"
-            btnStyles="rounded-xl bg-green-500 px-5 py-3 float-right"
-            handleClick={() => router.push("/Dashboard")}
+            textStyles="text-white lg:text-lg text-sm"
+            btnStyles="rounded-xl bg-green-500 lg:px-5 px-2 py-3 float-right"
+            handleClick={() => router.push("/login")}
           />
         </div>
         <div

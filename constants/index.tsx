@@ -75,3 +75,54 @@ export const faqs = [
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendu ",
   },
 ];
+
+export const boxesDetails = [
+  {
+    id: 1,
+    icon: "/speed.png",
+    title: "Tasks In Progress",
+    num: 17,
+    when: "Yesterday",
+  },
+  {
+    id: 2,
+    icon: "/speed.png",
+    title: "Planning",
+    num: 17,
+    when: "Yesterday",
+  },
+  {
+    id: 3,
+    icon: "/speed.png",
+    title: "Activities",
+    num: 17,
+    when: "Yesterday",
+  },
+];
+
+export const departments = [
+  {
+    id: "1",
+    name: "Frontend Developers",
+  },
+  {
+    id: "2",
+    name: "Backend Developers",
+  },
+  {
+    id: "3",
+    name: "Devops Developers",
+  },
+  {
+    id: "4",
+    name: "Mobile Developers",
+  },
+  {
+    id: "5",
+    name: "Graphic Designer",
+  },
+  {
+    id: "6",
+    name: "Project Managers",
+  },
+];

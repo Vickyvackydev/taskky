@@ -2,7 +2,7 @@
 import { faqs } from "@/constants";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import { FaArrowDown, FaArrowUp, FaPlus } from "react-icons/fa";
 // import "./navbar.css";
 
 const faQs = () => {
@@ -12,29 +12,34 @@ const faQs = () => {
     setSelectedFaq(index);
   };
   return (
-    <main className="px-20 my-10">
+    <main className="lg:px-20 px-10 my-10">
       <div className="flex flex-col">
         <span className="text-center text-4xl font-semibold">
           Frequently Asked Questions.
         </span>
-        <div className="flex justify-around mt-14 items-center ">
+        <div className="flex lg:flex-row flex-col justify-around mt-14 items-center ">
           <div>
-            <span>Here are some questions you may want to ask.</span>
-            <div className="flex flex-col gap-5 mt-5 max-w-[700px]">
+            <span className="text-xl">
+              Here are some questions you may want to ask.
+            </span>
+            <div className="flex flex-col gap-5 mt-5">
               {faqs.map((item, index) => (
-                <div className="border-b-2">
-                  <div className="flex justify-between overflow-hidden">
-                    <span>{item.question}</span>
+                <div
+                  className={`border-b-2 ${
+                    selectedFaq === index
+                      ? "h-auto transition-all duration-500"
+                      : "h-[30px]"
+                  }  overflow-hidden`}
+                >
+                  <div className="flex justify-between overflow-hidden lg:min-w-[800px] min-w-[300px]">
+                    <span className="text-lg">{item.question}</span>
                     {selectedFaq === index ? (
                       <span onClick={() => setSelectedFaq(null)}>
-                        {/* {selectedFaq === index ? <FaArrowDown /> : <FaArrowUp />}
-                         */}
-
-                        <FaArrowUp />
+                        <FaPlus />
                       </span>
                     ) : (
                       <span onClick={() => handleSelected(index)}>
-                        <FaArrowDown />
+                        <FaPlus />
                       </span>
                     )}
                   </div>

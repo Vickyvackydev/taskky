@@ -3,8 +3,8 @@ import React from "react";
 
 const Intro = () => {
   return (
-    <main className="flex justify-evenly px-24 my-24">
-      <div className="w-[500px] h-full justify-center items-start flex flex-col border rounded-lg p-5">
+    <main className="flex lg:flex-row flex-col justify-evenly lg:px-24 px-10 my-24 lg:gap-0 gap-5">
+      <div className="lg:w-[500px] w-auto h-full justify-center items-start flex flex-col border rounded-lg p-5">
         <span className="text-3xl text-green-500 font-semibold">
           What We Do
         </span>
