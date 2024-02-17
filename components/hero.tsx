@@ -1,15 +1,15 @@
 "use client";
 import React from "react";
 import Button from "./Button";
-
 import { useRouter } from "next/navigation";
+import ScrollBtn from "./ScrollBtn";
 
 const Hero = () => {
   const router = useRouter();
   return (
     <main className="flex flex-col justify-center items-center mt-10 gap-10">
       <div className="text-center flex flex-col gap-5">
-        <span className="lg:text-7xl text-4xl font-semibold">
+        <span className="lg:text-7xl text-2xl font-semibold">
           Manage Your Tasks.
         </span>
         <p className="max-w-xl lg:ml-10 ml-0 lg:px-0 px-3">

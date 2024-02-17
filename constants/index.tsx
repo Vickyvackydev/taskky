@@ -80,7 +80,7 @@ export const boxesDetails = [
   {
     id: 1,
     icon: "/speed.png",
-    title: "Tasks In Progress",
+    title: "Tasks",
     num: 17,
     when: "Yesterday",
   },

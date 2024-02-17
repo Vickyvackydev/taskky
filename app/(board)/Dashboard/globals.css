@@ -11,13 +11,13 @@
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Montserrat", sans-serif;
   background: white;
   overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 1px;
   height: 4px;
 }
 

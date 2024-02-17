@@ -2,7 +2,16 @@
 import { faqs } from "@/constants";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FaArrowDown, FaArrowUp, FaPlus } from "react-icons/fa";
+import { Transition } from "@headlessui/react";
+import {
+  FaArrowDown,
+  FaArrowUp,
+  FaMinus,
+  FaMinusCircle,
+  FaPlus,
+  FaPlusCircle,
+} from "react-icons/fa";
+import ScrollBtn from "./ScrollBtn";
 // import "./navbar.css";
 
 const faQs = () => {
@@ -12,12 +21,12 @@ const faQs = () => {
     setSelectedFaq(index);
   };
   return (
-    <main className="lg:px-20 px-10 my-10">
+    <main className="lg:px-20 px-10 my-10" id="faq">
       <div className="flex flex-col">
-        <span className="text-center text-4xl font-semibold">
+        <span className="text-center lg:text-4xl text-2xl font-semibold">
           Frequently Asked Questions.
         </span>
-        <div className="flex lg:flex-row flex-col justify-around mt-14 items-center ">
+        <div className="flex lg:flex-row flex-col justify-around mt-14 items-center">
           <div>
             <span className="text-xl">
               Here are some questions you may want to ask.
@@ -31,19 +40,26 @@ const faQs = () => {
                       : "h-[30px]"
                   }  overflow-hidden`}
                 >
-                  <div className="flex justify-between overflow-hidden lg:min-w-[800px] min-w-[300px]">
+                  <div className="flex justify-between overflow-hidden  lg:min-w-[750px] min-w-[300px]">
                     <span className="text-lg">{item.question}</span>
                     {selectedFaq === index ? (
                       <span onClick={() => setSelectedFaq(null)}>
-                        <FaPlus />
+                        <FaMinusCircle />
                       </span>
                     ) : (
-                      <span onClick={() => handleSelected(index)}>
-                        <FaPlus />
+                      <span
+                        onClick={() => handleSelected(index)}
+                        className="text-green-400"
+                      >
+                        <FaPlusCircle />
                       </span>
                     )}
                   </div>
-                  {selectedFaq === index && <span>{item.answer}</span>}
+                  {selectedFaq === index && (
+                    <div className="max-w-[750px]">
+                      <span>{item.answer}</span>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -53,6 +69,7 @@ const faQs = () => {
           </div>
         </div>
       </div>
+      <ScrollBtn />
     </main>
   );
 };

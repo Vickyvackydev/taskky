@@ -7,6 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        text_black: "#26282C",
+        text_gray: "#3A3F51",
+        border_color: "#EDF2F7",
+        backgrd: "#FAFAFA",
+      },
       backgroundImage: {
         gif: "url('/gif.gif')",
       },

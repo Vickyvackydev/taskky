@@ -4,9 +4,11 @@ import React from "react";
 const blogPosts = ["/ui_1.jpg", "/ui_2.png", "/ui_3.png", "/taskky.png"];
 const Blogs = () => {
   return (
-    <main className="lg:px-24 px-10 my-10">
+    <main className="lg:px-24 px-10 my-10" id="blogs">
       <div className="flex flex-col">
-        <span className="text-center text-5xl font-semibold">Our Blog</span>
+        <span className="text-center lg:text-5xl text-3xl font-semibold">
+          Our Blog
+        </span>
         <p className="text-center">
           Exciting <span className="text-green-500 text-lg">Updates</span>{" "}
           Everyday

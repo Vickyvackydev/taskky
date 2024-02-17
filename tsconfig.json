@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "utils/index.js",
     "hooks/useHeaderShadow.jsx",
-    "components/CartProvider.tsx"
+    "components/CartProvider.tsx",
+    "context/AuthContext.jsx"
   ],
   "exclude": ["node_modules"]
 }

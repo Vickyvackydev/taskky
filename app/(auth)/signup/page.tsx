@@ -12,7 +12,8 @@ import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 
 const Signup = () => {
-  const { showUserName } = useAuth();
+  // const { showUserName } = useAuth();
+  const router = useRouter();
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,11 +22,14 @@ const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [noUser, setNoUser] = useState(false);
+  const [noPassword, setNoPassword] = useState(false);
+  const [check, setCheck] = useState<boolean | string>(false);
 
   const handleRegister = async () => {
     setLogging(true);
 
-    if (password === confirmPassword) {
+    if (password === confirmPassword && userName !== "" && checked) {
       try {
         const userCredentials = await createUserWithEmailAndPassword(
           auth,
@@ -58,14 +62,28 @@ const Signup = () => {
         // const usersData = usersSnapshot.docs.map((doc) => doc.data());
 
         // console.log("Users:", usersData);
+
+        router.push("/login");
       } catch (error: any) {
         console.log("Registration failed", error.message);
       } finally {
         setLogging(false);
       }
-    } else {
+    } else if (password !== confirmPassword) {
       console.log("password is not the same");
+      setNoPassword(true);
       setLogging(false);
+    } else if (userName === "") {
+      console.log("no username added");
+      setNoUser(true);
+      setLogging(false);
+    } else if (!checked) {
+      setCheck(true);
+      console.log("pls check the box");
+      setLogging(false);
+    } else if (userName === "") {
+      setNoUser(true);
+      console.log("pls add a username");
     }
   };
 
@@ -89,8 +107,12 @@ const Signup = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setUserName(e.target.value)
               }
+              placeholder="e.g Josh Sam"
               className="w-full border h-12 outline-none pl-3"
             />
+            {noUser && (
+              <span className="text-red-400">please add a username</span>
+            )}
           </div>
           <div>
             <label htmlFor="">Email</label>
@@ -100,6 +122,7 @@ const Signup = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setEmail(e.target.value)
               }
+              placeholder="josh@gmail.com"
               className="w-full border h-12 outline-none pl-3"
             />
           </div>
@@ -111,6 +134,7 @@ const Signup = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setPassword(e.target.value)
               }
+              placeholder="e.g 1234"
               className="w-full border h-12  outline-none pl-3"
             />
             {showPassword ? (
@@ -137,6 +161,7 @@ const Signup = () => {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setConfirmPassword(e.target.value)
               }
+              placeholder="e.g 1234"
               className="w-full border h-12  outline-none pl-3"
             />
             {showConfirmPassword ? (
@@ -154,11 +179,16 @@ const Signup = () => {
                 <FaEye />
               </span>
             )}
+            {noPassword && (
+              <span className="text-red-400">password is not the same</span>
+            )}
           </div>
 
           <div className="flex gap-3 items-center">
             <div
-              className={`flex justify-center items-center border w-7 h-7 rounded-lg ${
+              className={`flex justify-center items-center ${
+                check ? "border-red-400" : ""
+              } border w-7 h-7 lg:rounded-lg rounded-xl ${
                 checked ? "bg-green-500" : ""
               }`}
               onClick={() => setChecked((prev) => !prev)}

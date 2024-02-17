@@ -6,7 +6,7 @@ import Button from "./Button";
 import "./navbar.css";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaArrowUp, FaArrowDown } from "react-icons/fa";
+import { FaBars, FaTimes } from "react-icons/fa";
 import { useMediaQuery } from "@/hooks";
 
 const Navbar = () => {
@@ -14,8 +14,18 @@ const Navbar = () => {
   const [navopen, setNavOpen] = useState(false);
   const isMobileScreen = useMediaQuery("(max-width: 640px)");
 
+  const scrollToComponent = (component: string) => {
+    const element = document.getElementById(component);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
-    <nav className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500">
+    <nav
+      className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500"
+      id="navbar"
+    >
       <Link href="/Homepage">
         <Image src="/logo.png" width={150} height={150} alt="logo image" />
       </Link>
@@ -26,12 +36,22 @@ const Navbar = () => {
         } lg:w-32 w-full `}
       >
         <ul
-          className={`flex flex-col gap-12 text-2xl text-center pt-10 w-full overflow-hidden transition-all duration-500  ${
+          className={`flex flex-col gap-12 text-2xl text-center pt-10 lg:pr-0 pr-10 w-full overflow-hidden transition-all duration-500  ${
             navopen ? "navopen" : "navclose"
+          } ${
+            navopen && isMobileScreen
+              ? "border-b-2 max-w-[10rem]"
+              : "border-none max-w-[10rem]"
           }`}
         >
           {navLinks.map((links) => (
-            <li className="hover:text-green-500 transition-all duration-300 cursor-pointer ">
+            <li
+              className="hover:text-green-500 transition-all duration-300 cursor-pointer "
+              onClick={() => {
+                scrollToComponent(links.href);
+                setNavOpen(false);
+              }}
+            >
               {links.label}
             </li>
           ))}
@@ -53,8 +73,11 @@ const Navbar = () => {
             navopen ? "rotateDown" : "rotateUp"
           }`}
         >
-          <span className="text-gray-300">
+          {/* <span className="text-gray-300">
             {navopen ? <FaArrowDown /> : <FaArrowUp />}
+          </span> */}
+          <span className="text-gray-300">
+            {navopen ? <FaTimes /> : <FaBars />}
           </span>
         </div>
       </div>

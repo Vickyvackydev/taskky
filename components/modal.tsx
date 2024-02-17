@@ -1,13 +1,16 @@
 import { Transition, Dialog } from "@headlessui/react";
+import { usePathname } from "next/navigation";
 import React, { Fragment } from "react";
 import { FaTimes } from "react-icons/fa";
 
 type ModalProps = {
   isOpen: boolean;
   isClose: () => void;
+  closeBtnColor: string;
   children: React.ReactNode;
 };
-const Modal = ({ isOpen, isClose, children }: ModalProps) => {
+const Modal = ({ isOpen, isClose, children, closeBtnColor }: ModalProps) => {
+  const pathName = usePathname();
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -37,7 +40,7 @@ const Modal = ({ isOpen, isClose, children }: ModalProps) => {
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl text-center bg-white p-6 align-middle shadow-xl transition-all h-full">
                   <button
                     type="button"
-                    className="flex items-center justify-center w-7 h-7 rounded-full bg-purple-400 text-white hover:scale-90 transition-all "
+                    className={`flex items-center justify-center w-7 h-7 rounded-full ${closeBtnColor} hover:scale-90 transition-all `}
                     onClick={isClose}
                   >
                     <FaTimes />

@@ -2,17 +2,28 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Calendar from "./calendar";
-import { useMediaQuery } from "@/hooks";
-import { FaArrowAltCircleLeft, FaBars, FaPlus } from "react-icons/fa";
+
+import { FaPlus } from "react-icons/fa";
 import { Transition } from "@headlessui/react";
 import Modal from "./modal";
 import Button from "./Button";
 import { departments } from "@/constants";
 import DetailsBox from "./detailsBox";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
+import { auth, db } from "@/firebase/firebase.config";
+import { T_ICON } from "@/public";
 
 type RightSideProps = {
   rightSide: boolean;
 };
+
 const RightHero = ({ rightSide }: RightSideProps) => {
   const [modal, setModal] = useState<boolean>(false);
   const [teamName, setTeamName] = useState("");
@@ -20,37 +31,85 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [department, setDepartment] = useState("");
   const [status, setStatus] = useState("");
   const [items, setItems] = useState<any>([]);
+  const teamCollectionRef = collection(db, "teams");
   const [hoverOption, setHoverOption] = useState(false);
   const [selectedModal, setSelectedModal] = useState(false);
-  const [selectedDetails, setSelectedDetails] = useState<any | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<any | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSelectedDetails = (id: any) => {
-    setSelectedDetails(items[id]);
+  const createTeam = async () => {
+    setIsLoading(true);
+
+    try {
+      await addDoc(teamCollectionRef, {
+        name: teamName,
+        task: teamTask,
+        dept: department,
+        status: status,
+        userId: auth?.currentUser?.uid,
+      });
+      setModal(false);
+    } catch (error) {
+      console.log("something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    const storedItems = JSON.parse(localStorage.getItem("items")) || [];
-    setItems(storedItems);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("items", JSON.stringify(items));
-  }, [items]);
-
-  const handleAddItems = () => {
-    const formData = {
-      input1: teamName,
-      input2: teamTask,
-      depart: department,
-      stat: status,
+    const getTeams = async () => {
+      const data = await getDocs(teamCollectionRef);
+      const allTeams = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setItems(allTeams);
     };
 
-    setItems([...items, formData]);
+    getTeams();
+  }, []);
+
+  const handleSelectedTeam = (team: any) => {
+    setSelectedTeam(team);
+  };
+
+  const handleDeleteTeam = async (id: any) => {
+    const teamDoc = doc(db, "teams", id);
+    await deleteDoc(teamDoc);
+
+    setSelectedModal(false);
+  };
+
+  const handleUpdate = (team: any) => {
+    setSelectedTeam(team);
+    setModal(true);
+    setSelectedModal(false);
+  };
+
+  const handleUpdateSelected = async (id: any) => {
+    setIsLoading(true);
+    if (id) {
+      const teamDoc = doc(db, "teams", id.toString());
+      const newTeams = {
+        name: teamName,
+        task: teamTask,
+        dept: department,
+        status: status,
+      };
+
+      try {
+        await updateDoc(teamDoc, newTeams);
+
+        console.log("docs updated");
+      } catch (error) {
+        console.log("could not update docs");
+      }
+    } else {
+      console.log("invalid ID", id);
+    }
+
     setModal(false);
   };
   return (
     <Transition
-      className={`flex-none h-full w-80 lg:w-[20vw] fixed lg:static lg:z-10 z-30 lg:mt-[8rem] mt-0 bg-white lg:px-0 px-5 lg:pt-0 pt-2`}
+      className={`flex-none h-full w-80 lg:w-[20vw] fixed lg:right-0  top-0 lg:z-10 z-30 lg:mt-[8rem] mt-0 bg-white lg:px-0 px-5 lg:pt-0 pt-2 lg:mr-6 mr-0 shadow-md lg:shadow-none`}
       as={"div"}
       show={rightSide}
       enter="transition-all ease-in duration-500"
@@ -61,26 +120,25 @@ const RightHero = ({ rightSide }: RightSideProps) => {
       leaveTo="transform -translate-x-full"
     >
       <div className="">
-        {/* <div className="lg:hidden block absolute left-5">
-        <FaArrowAltCircleLeft />
-      </div> */}
         <div className="flex justify-between ">
           <span className="lg:text-xl text-sm">
             My Team{" "}
-            <span className="text-purple-400 font-semibold">
+            <span className="text-purple-400 font-medium">
               {`(${items.length})`}
             </span>
           </span>
           <button
-            className="text-sm bg-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full text-white pt-3 hover:scale-90 transition-all duration-300"
-            onClick={() => setModal(true)}
+            className="text-sm border-2 border-border_color text-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full  pt-3 hover:scale-90 transition-all duration-300"
+            onClick={() => {
+              setModal(true);
+            }}
           >
             <FaPlus />
           </button>
         </div>
-        <div className="max-h-[400px] border-b-2 pb-4">
+        <div className="max-h-[200px] border-b-2 pb-4  overflow-y-scroll">
           {items.length > 0 ? (
-            items.map((item: any, i) => (
+            items.map((item: any, i: number) => (
               <div
                 className="mt-5 flex justify-between items-center hover:bg-purple-400 hover:bg-opacity-25 hover:opacity-20 hover:rounded-xl hover:px-2 transition-all duration-150 relative overflow-hidden"
                 onMouseEnter={() => setHoverOption(true)}
@@ -88,29 +146,24 @@ const RightHero = ({ rightSide }: RightSideProps) => {
               >
                 <div className="flex gap-5">
                   <div>
-                    <Image
-                      src="/speed.png"
-                      width={40}
-                      height={40}
-                      alt="image"
-                    />
+                    <Image src={T_ICON} width={40} height={40} alt="image" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[0.9rem]">{item.depart}</span>
-                    <span>{item.input2}</span>
+                    <span className="text-[0.9rem]">{item.dept}</span>
+                    <span>{item.task}</span>
                   </div>
                 </div>
                 <div className="">
                   <span
                     className={`text-[0.85rem] p-2 rounded-xl text-white ${
-                      item.stat === "Active"
+                      item.status === "active"
                         ? "bg-green-300"
-                        : item.stat === "Disabled"
+                        : item.status === "disabled"
                         ? "bg-red-300"
                         : ""
                     }`}
                   >
-                    {item.stat}
+                    {item.status}
                   </span>
                 </div>
                 {hoverOption && (
@@ -118,7 +171,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                     <div
                       className="bg-purple-900 px-2 rounded-xl cursor-pointer"
                       onClick={() => {
-                        handleSelectedDetails(i);
+                        handleSelectedTeam(item);
                         setSelectedModal(true);
                       }}
                     >
@@ -129,12 +182,21 @@ const RightHero = ({ rightSide }: RightSideProps) => {
               </div>
             ))
           ) : (
-            <span>no items to display</span>
+            <div className="flex justify-center items-center ">
+              <span className="text-gray-300 text-lg">no team to display</span>
+            </div>
           )}
         </div>
         <Calendar />
       </div>
-      <Modal isOpen={modal} isClose={() => setModal(false)}>
+      <Modal
+        isOpen={modal}
+        isClose={() => {
+          setModal(false);
+          setSelectedTeam(null);
+        }}
+        closeBtnColor=" text-purple-400 border border-border_color"
+      >
         <div>
           <span>Please fill in the details</span>
 
@@ -190,23 +252,34 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                 className="w-full border h-12 outline-none rounded-lg pl-3"
               >
                 <option value="Select status">Select status</option>
-                <option value="Active">Active</option>
-                <option value="Disabled">Disabled</option>
+                <option value="active">active</option>
+                <option value="disabled">disabled</option>
               </select>
             </div>
           </form>
-          <Button
-            text="Add team"
-            textStyles="text-white"
-            btnStyles="rounded-lg bg-purple-400 py-3 mt-5"
-            handleClick={handleAddItems}
-          />
+          {selectedTeam ? (
+            <Button
+              text={`${isLoading ? "updating..." : "Update team"}`}
+              textStyles=" text-purple-400 "
+              btnStyles="rounded-3xl border-border_color py-3 mt-5"
+              handleClick={() => handleUpdateSelected(selectedTeam)}
+            />
+          ) : (
+            <Button
+              text={`${isLoading ? "creating..." : "Add team"}`}
+              textStyles=" text-purple-400"
+              btnStyles="rounded-3xl border-border_color border py-3 mt-5"
+              handleClick={createTeam}
+            />
+          )}
         </div>
       </Modal>
       <DetailsBox
         open={selectedModal}
         close={() => setSelectedModal(false)}
-        items={selectedDetails}
+        items={selectedTeam}
+        handleUpdate={() => handleUpdate(selectedTeam?.id)}
+        handleDelete={() => handleDeleteTeam(selectedTeam?.id)}
       />
     </Transition>
   );

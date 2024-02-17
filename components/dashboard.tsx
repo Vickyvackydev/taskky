@@ -26,7 +26,7 @@ const Dashboard = ({ children }: Props) => {
     }
   }, [isMobileView]);
   return (
-    <div>
+    <div className="lg:flex h-screen w-screen">
       {isMobileView || isTabletView ? (
         <div
           onClick={() => {
@@ -38,19 +38,25 @@ const Dashboard = ({ children }: Props) => {
           }`}
         ></div>
       ) : null}
-      <Dashboardnav
-        isOpen={() => setIsSideBarVisible(true)}
-        onClose={() => setIsSideBarVisible(false)}
-        Open={() => setIsRightSide((prev: boolean) => !prev)}
-        Close={() => setIsRightSide(false)}
-        mobileView={isMobileView}
-        isVisible={isSideBarVisible}
-        isRightSide={isRightSide}
-      />
-      <div className="flex ">
-        <SidebarLg isOpen={isSideBarVisible} />
-        {children}
 
+      <SidebarLg
+        isOpen={isSideBarVisible}
+        onClose={() => setIsSideBarVisible(false)}
+      />
+
+      <div className="flex-1 ">
+        <Dashboardnav
+          isOpen={() => setIsSideBarVisible(true)}
+          onClose={() => setIsSideBarVisible(false)}
+          Open={() => setIsRightSide((prev: boolean) => !prev)}
+          Close={() => setIsRightSide(false)}
+          mobileView={isMobileView}
+          isVisible={isSideBarVisible}
+          isRightSide={isRightSide}
+        />
+        <div>{children}</div>
+      </div>
+      <div>
         <RightHero rightSide={isRightSide} />
       </div>
     </div>

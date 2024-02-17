@@ -54,7 +54,7 @@ const Calendar = () => {
       <div className="flex justify-between mt-5">
         <button
           onClick={handlePreviousMonth}
-          className="w-8 h-8 flex justify-center items-center rounded-full border bg-purple-400 text-white text-lg font-semibold hover:scale-75 transition-all duration-150"
+          className="w-8 h-8 flex justify-center items-center rounded-full border-2  border-border_color text-purple-400 text-lg font-semibold hover:scale-75 transition-all duration-150"
         >
           {"<"}
         </button>
@@ -63,11 +63,11 @@ const Calendar = () => {
           {
             month: "long",
           }
-        )}  ,${selectedDate.getFullYear()}`}</span>
+        )}, ${selectedDate.getFullYear()}`}</span>
 
         <button
           onClick={handleNextMonth}
-          className="w-8 h-8 flex justify-center items-center rounded-full border bg-purple-400 text-white text-lg font-semibold hover:scale-75 transition-all duration-150"
+          className="w-8 h-8 flex justify-center items-center rounded-full border-2  border-border_color text-purple-400 text-lg font-semibold hover:scale-75 transition-all duration-150"
         >
           {">"}
         </button>
@@ -89,7 +89,7 @@ const Calendar = () => {
                     key={i}
                     className={`${
                       days === selectedDate.getDate()
-                        ? "flex justify-center items-center w-8 h-8 bg-purple-400 rounded-full text-white"
+                        ? "flex justify-center items-center w-8 h-8 border-2  border-border_color text-purple-400 rounded-full"
                         : ""
                     }`}
                   >
