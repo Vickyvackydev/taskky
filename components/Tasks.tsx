@@ -6,28 +6,22 @@ import Modal from "./modal";
 import TaskComponent, { TaskProps } from "./TaskComponent";
 import PageHeader from "./pageHeader";
 import { maxWidth } from "./width";
-import { useMediaQuery } from "@/hooks";
+import { useFetchFirestoreData } from "@/hooks";
 import {
-  QuerySnapshot,
   addDoc,
   collection,
   deleteDoc,
   doc,
-  getDocs,
   updateDoc,
-  where,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { T_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
-import { useAuth } from "@/context/AuthContext";
 
 const Tasks = () => {
-  const { currentUser } = useAuth();
   const [modal, setModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [tasks, setTasks] = useState<any>([]);
+  const [updated, setUpdated] = useState(false);
   const tasksCollectionRef = collection(db, "tasks");
   const [taskName, setTaskName] = useState("");
   const [description, setDescription] = useState("");
@@ -35,45 +29,35 @@ const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState<TaskProps | null | any>(
     null
   );
-
-  const isSmallScreen = useMediaQuery("(max-width: (600px))");
+  const tasks = useFetchFirestoreData("tasks");
 
   const createTask = async () => {
     setIsLoading(true);
-
     try {
-      if (taskName && description && status) {
-        await addDoc(tasksCollectionRef, {
-          name: taskName,
-          desc: description,
-          status: status,
-          userId: auth?.currentUser?.uid,
-        });
-        setModal(false);
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        if (taskName && description && status) {
+          await addDoc(tasksCollectionRef, {
+            name: taskName,
+            desc: description,
+            status: status,
+            createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
+            createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+            userId: currentUser.uid,
+          });
+          setModal(false);
+        } else {
+          console.log("Please fill in all fields.");
+        }
       } else {
-        console.log("no user authenticated");
+        console.log("No user authenticated.");
       }
     } catch (error) {
-      console.log("something went wrong");
+      console.log("Something went wrong:", error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    const getTasks = async () => {
-      const data = await getDocs(tasksCollectionRef);
-
-      const getData = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      setTasks(getData);
-    };
-
-    getTasks();
-  }, []);
 
   const handleSelectedTask = (task: any) => {
     setSelectedTask(task);
@@ -86,24 +70,35 @@ const Tasks = () => {
 
   const handleUpdateSelected = (task: any) => {
     setSelectedTask(task);
+
+    setDescription(description);
+    setTaskName(taskName);
+    setStatus(status);
+
     setModal(true);
   };
 
   const handleSelectedToUpdate = async (id: any) => {
     setIsLoading(true);
+
     if (id) {
       const taskDoc = doc(db, "tasks", id.toString());
       const newFields = {
         name: taskName,
         desc: description,
         status: status,
+        createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
+        createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
       };
 
       try {
         await updateDoc(taskDoc, newFields);
+        setUpdated(true);
         console.log("docs updated");
       } catch (error) {
         console.log("error updating docs", error);
+      } finally {
+        setIsLoading(false);
       }
     } else {
       console.error("Invalid ID:", id);
@@ -136,6 +131,8 @@ const Tasks = () => {
         iconType={T_ICON}
         deleteContentColor="bg-purple-400"
         modalCloseColor="bg-purple-400"
+        modalname="Task"
+        updated={updated}
       />
       <AddTaskModal
         openModal={modal}

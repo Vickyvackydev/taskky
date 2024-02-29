@@ -8,7 +8,7 @@ import { FaSignOutAlt, FaTimes } from "react-icons/fa";
 import { signOut } from "firebase/auth";
 import { auth } from "@/firebase/firebase.config";
 import { usePathname, useRouter } from "next/navigation";
-import { A_ICON, P_ICON, T_ICON } from "@/public";
+import { A_ICON, E_ICON, P_ICON, T_ICON } from "@/public";
 
 const sidebarLinks = [
   {
@@ -28,6 +28,12 @@ const sidebarLinks = [
     label: "Activities",
     leadTo: "/Dashboard/activities",
     icon: A_ICON,
+  },
+  {
+    id: 4,
+    label: "Events",
+    leadTo: "/Dashboard/events",
+    icon: E_ICON,
   },
 ];
 
@@ -51,8 +57,13 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
 
   const handleLogOut = async () => {
     try {
-      await signOut(auth);
-      router.push("/login");
+      if (auth?.currentUser) {
+        await signOut(auth);
+
+        router.push("/login");
+      } else {
+        console.log("no user");
+      }
     } catch (error) {
       console.log("could not log out");
     }
@@ -104,6 +115,8 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
                     ? "border-r-8 rounded-md border-red-500 text-red-400"
                     : pathname === item.leadTo && item.id === 3
                     ? "border-r-8 rounded-md border-orange-400 text-orange-300"
+                    : pathname === item.leadTo && item.id === 4
+                    ? "border-r-8 rounded-md border-blue-400 text-blue-300"
                     : "text-gray-300"
                 } transition-all duration-300`}
                 key={item.id}

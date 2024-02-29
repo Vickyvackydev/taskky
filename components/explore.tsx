@@ -1,18 +1,27 @@
+"use client";
+
 import { whyChooseUs } from "@/constants";
 import Image from "next/image";
 import React from "react";
+import { motion } from "framer-motion";
 
 const Explore = () => {
   return (
     <main className="lg:px-24 px-10" id="services">
-      <div className="flex flex-col gap-10">
-        <span className="text-center lg:text-5xl text-3xl font-semibold">
+      <motion.div
+        initial={{ opacity: 0, y: -100 }}
+        whileInView={{ opacity: 1, y: 1 }}
+        viewport={{ once: false, amount: 0.25 }}
+        transition={{ duration: 2 }}
+        className="flex flex-col gap-10"
+      >
+        <span className="text-center lg:text-5xl text-3xl font-semibold text-text_black">
           Why Choose Us.
         </span>
         <div className="flex gap-10 lg:flex-row flex-col">
           {whyChooseUs.map((item) => {
             return (
-              <div className="flex flex-col justify-center items-center gap-8 border rounded-lg p-5 max-h-full">
+              <div className="flex flex-col justify-center items-center gap-8 shadow-sm rounded-lg p-5 max-h-full w-full bg-backgrd hover:-translate-y-10 transition-all duration-500">
                 <div>
                   <Image src={item.icon} width={50} height={50} alt="image" />
                 </div>
@@ -24,7 +33,7 @@ const Explore = () => {
             );
           })}
         </div>
-      </div>
+      </motion.div>
     </main>
   );
 };

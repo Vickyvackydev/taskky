@@ -2,7 +2,6 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import Calendar from "./calendar";
-
 import { FaPlus } from "react-icons/fa";
 import { Transition } from "@headlessui/react";
 import Modal from "./modal";
@@ -19,6 +18,8 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { T_ICON } from "@/public";
+import { useFetchFirestoreData } from "@/hooks";
+import Deletemodal from "./Deletemodal";
 
 type RightSideProps = {
   rightSide: boolean;
@@ -30,41 +31,53 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [teamTask, setTeamTask] = useState("");
   const [department, setDepartment] = useState("");
   const [status, setStatus] = useState("");
-  const [items, setItems] = useState<any>([]);
+
   const teamCollectionRef = collection(db, "teams");
   const [hoverOption, setHoverOption] = useState(false);
   const [selectedModal, setSelectedModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+
+  const teams = useFetchFirestoreData("teams");
 
   const createTeam = async () => {
     setIsLoading(true);
 
     try {
-      await addDoc(teamCollectionRef, {
-        name: teamName,
-        task: teamTask,
-        dept: department,
-        status: status,
-        userId: auth?.currentUser?.uid,
-      });
-      setModal(false);
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        if (teamName && teamTask && department && status) {
+          await addDoc(teamCollectionRef, {
+            name: teamName,
+            task: teamTask,
+            dept: department,
+            status: status,
+            userId: currentUser?.uid,
+          });
+          setModal(false);
+        } else {
+          console.log("no details to display");
+        }
+      } else {
+        console.log("no authenticated user");
+      }
     } catch (error) {
-      console.log("something went wrong");
+      console.log("could not create task", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    const getTeams = async () => {
-      const data = await getDocs(teamCollectionRef);
-      const allTeams = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-      setItems(allTeams);
-    };
+  // useEffect(() => {
+  //   const getTeams = async () => {
+  //     const data = await getDocs(teamCollectionRef);
+  //     const allTeams = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+  //     setItems(allTeams);
+  //   };
 
-    getTeams();
-  }, []);
+  //   getTeams();
+  // }, []);
 
   const handleSelectedTeam = (team: any) => {
     setSelectedTeam(team);
@@ -124,21 +137,26 @@ const RightHero = ({ rightSide }: RightSideProps) => {
           <span className="lg:text-xl text-sm">
             My Team{" "}
             <span className="text-purple-400 font-medium">
-              {`(${items.length})`}
+              {`(${teams.length})`}
             </span>
           </span>
-          <button
-            className="text-sm border-2 border-border_color text-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full  pt-3 hover:scale-90 transition-all duration-300"
-            onClick={() => {
-              setModal(true);
-            }}
+          <div
+            className="tooltip  tooltip-bottom text-text_gray "
+            data-tip="Add team"
           >
-            <FaPlus />
-          </button>
+            <button
+              className="text-sm border-2 border-border_color text-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full  pt-3 hover:scale-90 transition-all duration-300"
+              onClick={() => {
+                setModal(true);
+              }}
+            >
+              <FaPlus />
+            </button>
+          </div>
         </div>
         <div className="max-h-[200px] border-b-2 pb-4  overflow-y-scroll">
-          {items.length > 0 ? (
-            items.map((item: any, i: number) => (
+          {teams.length > 0 ? (
+            teams.map((item: any, i: number) => (
               <div
                 className="mt-5 flex justify-between items-center hover:bg-purple-400 hover:bg-opacity-25 hover:opacity-20 hover:rounded-xl hover:px-2 transition-all duration-150 relative overflow-hidden"
                 onMouseEnter={() => setHoverOption(true)}
@@ -196,9 +214,10 @@ const RightHero = ({ rightSide }: RightSideProps) => {
           setSelectedTeam(null);
         }}
         closeBtnColor=" text-purple-400 border border-border_color"
+        maxWidth="w-[450px]"
       >
         <div>
-          <span>Please fill in the details</span>
+          <span>Please fill in the details.</span>
 
           <form className="flex flex-col gap-5 mt-5">
             <div className="flex flex-col items-start gap-1">
@@ -279,7 +298,22 @@ const RightHero = ({ rightSide }: RightSideProps) => {
         close={() => setSelectedModal(false)}
         items={selectedTeam}
         handleUpdate={() => handleUpdate(selectedTeam?.id)}
+        // handleDelete={() => handleDeleteTeam(selectedTeam?.id)}
+        handleSelectToDelete={() => {
+          setDeleteModal(true);
+
+          setSelectedModal(false);
+        }}
+        actionBtns={true}
+        modalname="Team"
+        tasksdeatils={false}
+      />
+
+      <Deletemodal
+        openModal={deleteModal}
+        closeModal={() => setDeleteModal(false)}
         handleDelete={() => handleDeleteTeam(selectedTeam?.id)}
+        componentText="team"
       />
     </Transition>
   );

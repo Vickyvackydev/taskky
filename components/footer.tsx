@@ -1,33 +1,46 @@
+"use client";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { motion } from "framer-motion";
 
-const footerLinks = ["About us", "Services", "Blogs", "FaQs", "Login"];
-const footerIcons = [<FaFacebook />, <FaInstagram />, <FaTwitter />];
 const Footer = () => {
   return (
-    <main className="flex flex-col gap-10 mt-10 px-5 border-t-2 pt-5 pb-7 lg:items-center items-start">
-      <div className="flex flex-col justify-center lg:items-center items-start gap-5">
-        <Link href="/">
-          <Image src="/logo.png" width={150} height={150} alt="logo image" />
-        </Link>
-        <div className="flex gap-10 lg:flex-row flex-col">
-          {footerLinks.map((links) => (
-            <span>{links}</span>
-          ))}
-        </div>
-      </div>
-      <div className="flex justify-between lg:flex-row flex-col-reverse lg:items-center items-start gap-7">
-        <span>Terms and condition</span>
-        <div className="flex gap-10 lg:flex-row">
-          {footerIcons.map((icon) => (
-            <span>{icon}</span>
-          ))}
-        </div>
-        <span>copyright </span>
-      </div>
-    </main>
+    <motion.footer
+      initial={{ opacity: 0, scale: 0 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: false, amount: 0.25 }}
+      transition={{ duration: 2 }}
+      className="footer p-10 bg-transparent text-base-content border-t"
+    >
+      <aside>
+        <Image src={"/logo.png"} width={100} height={100} alt="logo image" />
+        <p>
+          Task Management Ltd.
+          <br />
+          Providing reliable task management assistance since 2024
+        </p>
+      </aside>
+      <nav>
+        <h6 className="footer-title">Services</h6>
+        <a className="link link-hover">Branding</a>
+        <a className="link link-hover">Design</a>
+        <a className="link link-hover">Marketing</a>
+        <a className="link link-hover">Advertisement</a>
+      </nav>
+      <nav>
+        <h6 className="footer-title">Company</h6>
+        <a className="link link-hover">About us</a>
+        <a className="link link-hover">Contact</a>
+        <a className="link link-hover">Jobs</a>
+        <a className="link link-hover">Press kit</a>
+      </nav>
+      <nav>
+        <h6 className="footer-title">Legal</h6>
+        <a className="link link-hover">Terms of use</a>
+        <a className="link link-hover">Privacy policy</a>
+        <a className="link link-hover">Cookie policy</a>
+      </nav>
+    </motion.footer>
   );
 };
 

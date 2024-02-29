@@ -26,53 +26,53 @@ export const whyChooseUs = [
     title: "Speed",
     icon: "/speed.png",
     details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendus quasi fugit? Veniam sed expedita excepturi aperiam. Praesentium, libero? Sequi, eaque debitis. Veritatis aliquid quia inventore.",
+      "In today's fast-paced world, speed is paramount. Web-based task management systems are designed for swift and seamless operation, ensuring that users can create, update, and delegate tasks with ease. ",
   },
   {
     title: "Save",
     icon: "/task.png",
     details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendus quasi fugit? Veniam sed expedita excepturi aperiam. Praesentium, libero? Sequi, eaque debitis. Veritatis aliquid quia inventore.",
+      "Efficiency often translates into cost savings, and web-based task management systems deliver on this front as well. By streamlining workflows, optimizing resource allocation, and minimizing administrative overhead expenses.",
   },
   {
     title: "Time Management",
     icon: "/time.png",
     details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendus quasi fugit? Veniam sed expedita excepturi aperiam. Praesentium, libero? Sequi, eaque debitis. Veritatis aliquid quia inventore.",
+      " Effective time management is at the heart of any successful endeavor. Web-based task management systems empower users to organize their tasks efficiently, prioritize them based on urgency and importance, and allocate time effectively.",
   },
   {
     title: "Security",
     icon: "/secure.jpg",
     details:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendus quasi fugit? Veniam sed expedita excepturi aperiam. Praesentium, libero? Sequi, eaque debitis. Veritatis aliquid quia inventore.",
+      " Data security is a critical consideration in the digital realm, particularly when dealing with sensitive information or confidential projects. Web-based task management systems prioritize security, employing robust encryption protocols. ",
   },
 ];
 
 export const faqs = [
   {
-    question: "Who are we?",
+    question: "What is a task management system?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendu ",
+      "A task management system is a digital tool designed to help individuals and teams organize, prioritize, and track tasks and projects efficiently.",
   },
   {
-    question: "Who are we?",
+    question: " How does a task management system improve productivity?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendu ",
+      "Task management systems centralize tasks, prioritize activities, facilitate collaboration, track progress, and offer customizable features, all of which contribute to enhanced productivity.",
   },
   {
-    question: "Who are we?",
+    question: "Can I access my tasks from anywhere?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendu ",
+      "Yes, most task management systems are web-based, allowing users to access their tasks from any internet-enabled device, ensuring flexibility and accessibility.",
   },
   {
-    question: "Who are we?",
+    question: "How does a task management system help with time management?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendu ",
+      "Task management systems assist with time management by enabling users to schedule tasks, set deadlines, allocate time slots, and track time spent on activities, helping users effectively manage their time and meet deadlines.",
   },
   {
-    question: "Who are we?",
+    question: " Is speed a priority in task management systems?",
     answer:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis libero totam tempore! Sequi repellendu ",
+      "Yes, speed is essential in task management systems. These systems are designed to be fast and responsive, ensuring quick task creation, updates, and real-time collaboration, thereby optimizing workflow efficiency.",
   },
 ];
 
@@ -124,5 +124,64 @@ export const departments = [
   {
     id: "6",
     name: "Project Managers",
+  },
+];
+
+export const event_card_data = [
+  {
+    event_name: "Interhouse sport",
+    event_status: "active",
+    start_time: "06:30",
+    end_time: "07:30",
+    location: "Ikorodu, lagos",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate ea amet accusantium eius, rerum eos facere cupiditate minima non temporibus ?",
+    event_image: "/event.jpg",
+    host: "Obioma Victor",
+    event_hold: "virtual event",
+    other_details: "pls come well prepared",
+    event_date: "01, january 2024",
+  },
+  {
+    event_name: "Interhouse sport",
+    event_status: "active",
+    start_time: "06:30",
+    end_time: "07:30",
+    location: "Ikorodu, lagos",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate ea amet accusantium eius, rerum eos facere cupiditate minima non temporibus ?",
+    event_image: "/event.jpg",
+    host: "Obioma Victor",
+    event_hold: "virtual event",
+    other_details: "pls come well prepared",
+    event_date: "01, january 2024",
+  },
+  {
+    event_name: "Interhouse sport",
+    event_status: "active",
+    start_time: "06:30",
+    end_time: "07:30",
+    location: "Ikorodu, lagos",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate ea amet accusantium eius, rerum eos facere cupiditate minima non temporibus ?",
+    event_image: "/event.jpg",
+    host: "Obioma Victor",
+    event_hold: "virtual event",
+    other_details: "pls come well prepared",
+    event_date: "01, january 2024",
+  },
+  {
+    event_name: "Interhouse sport",
+    event_status: "active",
+    start_time: "06:30",
+    end_time: "07:30",
+    location: "Ikorodu, lagos",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate ea amet accusantium eius, rerum eos facere cupiditate minima non temporibus ?",
+    event_image: "/event.jpg",
+    host: "Obioma Victor",
+    event_hold: "virtual event",
+    other_details: "pls come well prepared",
+    event_date: "01, january 2024",
   },
 ];

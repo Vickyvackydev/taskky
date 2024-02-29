@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PageHeader from "./pageHeader";
 import { maxWidth } from "./width";
 import TaskComponent from "./TaskComponent";
@@ -8,53 +8,54 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { A_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
+import { useFetchFirestoreData } from "@/hooks";
 
 const Activity = () => {
   const [modal, setModal] = useState(false);
   const [activityName, setActivityName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [activities, setActivities] = useState<any>([]);
   const activitiesCollectionRef = collection(db, "activities");
   const [selectedActivity, setSelectedActivity] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const activities = useFetchFirestoreData("activities");
+  const [updated, setUpdated] = useState(false);
+
   const createActivity = async () => {
     setIsLoading(true);
+
     try {
-      await addDoc(activitiesCollectionRef, {
-        name: activityName,
-        desc: description,
-        status: status,
-        userId: auth?.currentUser?.uid,
-      });
-      setModal(false);
+      const currentUser = auth.currentUser;
+
+      if (currentUser) {
+        if (activityName && description && status) {
+          await addDoc(activitiesCollectionRef, {
+            name: activityName,
+            desc: description,
+            status: status,
+            createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
+            createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+            userId: currentUser?.uid,
+          });
+          setModal(false);
+        } else {
+          console.log("no data to display");
+        }
+      } else {
+        console.log("no authenticated user");
+      }
     } catch (error) {
       console.log("something went wrong");
     } finally {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    const getActivity = async () => {
-      const data = await getDocs(activitiesCollectionRef);
-      const allActivity = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      setActivities(allActivity);
-    };
-
-    getActivity();
-  }, []);
 
   const handleSelectedActivity = (act: any) => {
     setSelectedActivity(act);
@@ -78,18 +79,21 @@ const Activity = () => {
         name: activityName,
         desc: description,
         status: status,
+        createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
+        createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
       };
 
       try {
         await updateDoc(activityDoc, newAct);
         console.log("docs updated");
+        setModal(false);
+        setUpdated(true);
       } catch (error) {
         console.log("could not update docs");
       }
     } else {
       console.log("invalid ID", id);
     }
-    setModal(false);
   };
 
   return (
@@ -114,6 +118,8 @@ const Activity = () => {
         iconType={A_ICON}
         deleteContentColor="bg-orange-400"
         modalCloseColor="bg-orange-400"
+        modalname="Activity"
+        updated={updated}
       />
 
       <AddTaskModal
@@ -124,13 +130,13 @@ const Activity = () => {
         }}
         createTask={createActivity}
         setTaskName={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setActivityName(e.target.value)
+          setActivityName(e.target?.value)
         }
         setDescription={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setDescription(e.target.value)
+          setDescription(e.target?.value)
         }
         setStatus={(e: React.ChangeEvent<HTMLSelectElement>) =>
-          setStatus(e.target.value)
+          setStatus(e.target?.value)
         }
         selectedTask={selectedActivity?.id}
         handleSelectedToUpdate={() =>

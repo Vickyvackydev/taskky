@@ -1,15 +1,20 @@
+import Image from "next/image";
 import React from "react";
 
 interface Props {
   text: string;
   btnStyles?: string;
   textStyles?: string;
-  handleClick?: React.MouseEventHandler<HTMLButtonElement>;
+  handleClick?: React.MouseEventHandler<HTMLButtonElement> | any;
   icon?: React.ReactNode;
   iconStyles?: string;
   loadingText?: string;
   disabled?: boolean;
   loading?: boolean;
+  showImg?: boolean;
+  image?: string;
+  loaderColor?: string;
+  loadingTextColor?: string;
 }
 const Button = ({
   text,
@@ -20,6 +25,11 @@ const Button = ({
   iconStyles,
   loading,
   loadingText,
+  showImg,
+  image,
+  disabled,
+  loaderColor,
+  loadingTextColor,
 }: Props) => {
   return (
     <div>
@@ -40,26 +50,35 @@ const Button = ({
                 cx={12}
                 cy={12}
                 r={10}
-                stroke="#fff"
+                stroke={loaderColor}
                 strokeWidth={4}
               />
               <path
                 className="opacity-75"
-                fill="#fff"
+                fill={loaderColor}
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            <span className="text-white">{loadingText}...</span>
+            <span className={loadingTextColor}>{loadingText}...</span>
           </>
         </button>
       ) : (
         <button
           type="button"
-          className={`flex gap-1 ${btnStyles} px-3 hover:scale-90 transition-all`}
+          className={`flex gap-1 ${btnStyles} px-3 hover:scale-90 transition-all ${
+            disabled ? "opacity-20" : ""
+          }`}
           onClick={handleClick}
+          disabled={disabled}
         >
           <span className={iconStyles}>{icon}</span>
           <span className={textStyles}>{text}</span>
+          <div>
+            {showImg && (
+              // @ts-ignore
+              <Image src={image} width={40} height={40} alt="image icon" />
+            )}
+          </div>
         </button>
       )}
     </div>

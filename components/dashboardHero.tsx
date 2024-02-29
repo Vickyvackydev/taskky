@@ -7,110 +7,30 @@ import React, { useEffect, useState } from "react";
 import { FaCommentDots, FaDotCircle, FaInfo } from "react-icons/fa";
 
 import TaskComponent, { TaskProps } from "./TaskComponent";
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "@/firebase/firebase.config";
+
 import { A_ICON, P_ICON, T_ICON } from "@/public";
 import PageHeader from "./pageHeader";
+import { useFetchFirestoreData } from "@/hooks";
 
 const DashboardHero = () => {
-  const [tasks, setTasks] = useState<any>([]);
-  const [plans, setPlans] = useState<any>([]);
-  const [activities, setActivities] = useState<any>([]);
-  const tasksCollectionRef = collection(db, "tasks");
-  const plansCollectionRef = collection(db, "plans");
-  const activitiesCollectionRef = collection(db, "activities");
   const [modal, setModal] = useState<boolean>(false);
 
-  const [taskName, setTaskName] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
   const [selectedTask, setSelectedTask] = useState<TaskProps | null | any>(
     null
   );
+  const plans = useFetchFirestoreData("plans");
+  const tasks = useFetchFirestoreData("tasks");
+  const activities = useFetchFirestoreData("activities");
   const [allTasks] = useState(false);
-
-  useEffect(() => {
-    const fetchTasks = async () => {
-      const data = getDocs(tasksCollectionRef);
-      const allTask = (await data).docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      setTasks(allTask);
-    };
-    fetchTasks();
-  }, []);
-
-  useEffect(() => {
-    const getPlans = async () => {
-      const data = await getDocs(plansCollectionRef);
-      const allPlans = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-
-      setPlans(allPlans);
-    };
-    getPlans();
-  }, []);
-
-  useEffect(() => {
-    const getActivity = async () => {
-      const data = await getDocs(activitiesCollectionRef);
-      const allActivity = data.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-
-      setActivities(allActivity);
-    };
-
-    getActivity();
-  }, []);
 
   const handleSelectedTask = (task: any) => {
     setSelectedTask(task);
   };
 
-  const handleDeleteTask = async (id: any) => {
-    const userDoc = doc(db, "Tasks", id);
-    await deleteDoc(userDoc);
-  };
-
-  const handleUpdateSelected = (task: any) => {
-    setSelectedTask(task);
-    setModal(true);
-  };
-
-  const handleSelectedToUpdate = async (id: any) => {
-    if (id) {
-      const taskDoc = doc(db, "Tasks", id.toString());
-      const newFields = {
-        name: taskName,
-        desc: description,
-        status: status,
-      };
-
-      try {
-        await updateDoc(taskDoc, newFields);
-        console.log("docs updated");
-      } catch (error) {
-        console.log("error updating docs", error);
-      }
-    } else {
-      console.error("Invalid ID:", id);
-    }
-    setModal(false);
-  };
-
   const allTaskies = allTasks ? tasks : tasks.slice(0, 4);
 
   return (
-    <div className="flex justify-between lg:pl-2 pl-9 lg:pr-6 pr-5 lg:pt-6 pt-0 lg:flex-row flex-col items-center ">
+    <div className="flex justify-between lg:pl-2 pl-0 lg:pr-6 pr-0 lg:pt-6 pt-0 lg:flex-row flex-col items-center ">
       <div>
         <div className="flex gap-5 lg:flex-row flex-col">
           {boxesDetails.map((item) => (
@@ -183,13 +103,14 @@ const DashboardHero = () => {
           btnTextStyle="text-purple-400"
           pathname="/Dashboard/tasks"
         />
+
         <TaskComponent
           tasks={tasks}
           emptyText={"tasks"}
           deleteText="task"
-          handleDelete={() => handleDeleteTask(selectedTask?.id)}
+          // handleDelete={() => handleDeleteTask(selectedTask?.id)}
           handleSelector={handleSelectedTask}
-          handleUpdate={handleUpdateSelected}
+          // handleUpdate={handleUpdateSelected}
           iconType={T_ICON}
           deleteContentColor="bg-purple-400"
           modalCloseColor="bg-purple-400"

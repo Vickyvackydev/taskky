@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useMediaQuery } from "@/hooks";
+import { motion } from "framer-motion";
 
 const Navbar = () => {
   const router = useRouter();
@@ -22,7 +23,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav
+    <motion.nav
+      initial={{ opacity: 0, y: -100 }}
+      whileInView={{ opacity: 1, y: 1 }}
+      viewport={{ once: false, amount: 0.25 }}
+      transition={{ duration: 2 }}
       className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500"
       id="navbar"
     >
@@ -32,11 +37,11 @@ const Navbar = () => {
 
       <div
         className={`lg:relative absolute lg:top-0 top-24 ${
-          navopen || isMobileScreen ? "lg:bg-none bg-white" : "bg-none"
+          navopen && isMobileScreen ? " bg-white left-0" : "bg-none"
         } lg:w-32 w-full `}
       >
         <ul
-          className={`flex flex-col gap-12 text-2xl text-center pt-10 lg:pr-0 pr-10 w-full overflow-hidden transition-all duration-500  ${
+          className={`flex flex-col gap-12 lg:text-2xl text-xl lg:text-center text-start lg:pl-0 pl-3 pt-10 lg:pr-0 pr-10 w-full overflow-hidden transition-all duration-500  ${
             navopen ? "navopen" : "navclose"
           } ${
             navopen && isMobileScreen
@@ -58,6 +63,7 @@ const Navbar = () => {
         </ul>
         <hr className={`lg:block hidden`} />
       </div>
+
       <div className="flex gap-5">
         <div>
           <Button
@@ -73,15 +79,12 @@ const Navbar = () => {
             navopen ? "rotateDown" : "rotateUp"
           }`}
         >
-          {/* <span className="text-gray-300">
-            {navopen ? <FaArrowDown /> : <FaArrowUp />}
-          </span> */}
           <span className="text-gray-300">
             {navopen ? <FaTimes /> : <FaBars />}
           </span>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

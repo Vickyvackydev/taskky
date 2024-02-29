@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 
 import Dashboardnav from "./dashboardnav";
-import SidebarLg from "./sidebarLg";
+import Sidebar from "./sidebar";
 import { useMediaQuery } from "@/hooks";
 import RightHero from "./rightHero";
 
@@ -12,7 +12,6 @@ type Props = {
 const Dashboard = ({ children }: Props) => {
   const isMobileView = useMediaQuery("(max-width: 640px)");
   const isTabletView = useMediaQuery("(max-width: 840px)");
-
   const [isSideBarVisible, setIsSideBarVisible] = useState(false);
   const [isRightSide, setIsRightSide] = useState(false);
 
@@ -26,7 +25,7 @@ const Dashboard = ({ children }: Props) => {
     }
   }, [isMobileView]);
   return (
-    <div className="lg:flex h-screen w-screen">
+    <div className="lg:flex h-screen w-screen ">
       {isMobileView || isTabletView ? (
         <div
           onClick={() => {
@@ -39,7 +38,7 @@ const Dashboard = ({ children }: Props) => {
         ></div>
       ) : null}
 
-      <SidebarLg
+      <Sidebar
         isOpen={isSideBarVisible}
         onClose={() => setIsSideBarVisible(false)}
       />

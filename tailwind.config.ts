@@ -14,7 +14,8 @@ module.exports = {
         backgrd: "#FAFAFA",
       },
       backgroundImage: {
-        gif: "url('/gif.gif')",
+        gif: "url('/blue_tick.gif')",
+        cartun: "url('/cartun.png')",
       },
       screens: {
         lg: "1250px",
@@ -27,5 +28,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };

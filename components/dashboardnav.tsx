@@ -1,40 +1,12 @@
 "use client";
-import { useAuth } from "@/context/AuthContext";
-import { A_ICON } from "@/public";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import {
-  FaArrowCircleDown,
-  FaArrowLeft,
-  FaArrowRight,
-  FaBars,
-  FaBell,
-  FaBook,
-  FaCommentDots,
-  FaListUl,
-  FaPencilAlt,
-  FaSearch,
-  FaTimes,
-  FaUser,
-} from "react-icons/fa";
-import UploadDetailsPop from "./uploadDetailsPop";
-import { getDownloadURL, listAll, ref, uploadBytes } from "firebase/storage";
-import { storage } from "@/firebase/firebase.config";
-
-const navlinks = [
-  {
-    link: "My Task",
-    href: "",
-  },
-  {
-    link: "Planning",
-    href: "",
-  },
-  {
-    link: "Activities",
-    href: "",
-  },
-];
+import { FaBars, FaListUl, FaSearch, FaUser } from "react-icons/fa";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { auth, db, storage } from "@/firebase/firebase.config";
+import Profile from "./profile";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { useFetchFirestoreData } from "@/hooks";
 
 type navBarType = {
   isOpen: () => void;
@@ -45,43 +17,51 @@ type navBarType = {
   isVisible: boolean;
   isRightSide: boolean;
 };
-const Dashboardnav = ({
-  onClose,
-  isOpen,
-  Close,
-  Open,
-  isRightSide,
-  mobileView,
-  isVisible,
-}: navBarType) => {
-  // const { fullName } = useAuth();
+const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   const [greeting, setGreeting] = useState("");
   const [uploadPopUp, setUploadPopUp] = useState(false);
-  const [imageUpload, setImageUpload] = useState(null);
-  const [imageList, setImageList] = useState<any>([]);
+  const [selectedImage, setSelectedImage] = useState<null | any>(null);
+  const [UploadUrl, setUploadUrl] = useState<null | any>(null);
+  const [uploading, setUploading] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [displayName, setDisplayName] = useState<string | null>("");
+  const [photoURL, setPhotoUrl] = useState<string | null>("");
+  const [UserEmail, setUserEmail] = useState<string | null>("");
+  const imagesCollectionRef = collection(db, "images");
+  const user_authname = useFetchFirestoreData("usernames");
 
-  const imageListRef = ref(storage, "imagess/");
-  const uploadImage = () => {
-    if (imageUpload === null) return;
+  const userName = user_authname.map((name: any) => name.name.split(" ")[0]);
 
-    const imageRef = ref(storage, `images/${imageUpload}`);
+  useEffect(() => {
+    // Retrieve uploadedURL from local storage when component mounts
+    const storedURL = localStorage.getItem("uploadedURL");
+    if (storedURL) {
+      setUploadUrl(storedURL);
+    }
+  }, []);
 
-    uploadBytes(imageRef, imageUpload).then(() => {
-      alert("image uploaded");
-    });
+  useEffect(() => {
+    // Save uploadedURL to local storage whenever it changes
+    if (UploadUrl) {
+      localStorage.setItem("uploadedURL", UploadUrl);
+    }
+  }, [UploadUrl]);
+
+  const handleImageChange = (e: any) => {
+    const imageFile = e.target.files[0];
+    setSelectedImage(imageFile);
   };
 
   useEffect(() => {
-    listAll(imageListRef).then((response) => {
-      // console.log(response);
+    if (auth?.currentUser) {
+      setDisplayName(auth?.currentUser?.displayName);
+      setPhotoUrl(auth?.currentUser?.photoURL);
+      setUserEmail(auth?.currentUser?.email);
+    } else {
+      console.log("loading");
+    }
+  }, [auth?.currentUser]);
 
-      response.items.forEach((item) => {
-        getDownloadURL(item).then((url) => {
-          setImageList((prev: any) => [...prev, url]);
-        });
-      });
-    });
-  }, []);
   useEffect(() => {
     const getCurrentTime = () => {
       const currentHour = new Date().getHours();
@@ -97,11 +77,38 @@ const Dashboardnav = ({
 
     setGreeting(getCurrentTime());
   }, []);
-  // const userName = localStorage.getItem("userName");
-  const maainName = () => {
-    if (localStorage !== undefined) {
-      const userName = localStorage.getItem("userName");
-      return userName;
+
+  const handleImageUpload = async () => {
+    if (!selectedImage) return;
+    setUploading(true);
+
+    try {
+      const currentUser = auth?.currentUser;
+
+      if (!currentUser) return;
+      const storageRef = ref(
+        storage,
+        `images/${currentUser?.uid}/${selectedImage.name}`
+      );
+
+      await uploadBytes(storageRef, selectedImage);
+
+      const imageUrl = await getDownloadURL(storageRef);
+
+      await addDoc(imagesCollectionRef, {
+        imageURL: imageUrl,
+        userId: currentUser?.uid,
+        uploadedAt: serverTimestamp(), // Add timestamp when image was uploaded
+      });
+
+      setUploadUrl(imageUrl);
+      setModal(false);
+      setUploadPopUp(false);
+      console.log("image uploaded", UploadUrl);
+    } catch (error) {
+      console.log("error uploading image", error);
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -116,7 +123,8 @@ const Dashboardnav = ({
       )}
       <div className="flex justify-between items-center ">
         <span className="pl-4 pr-[5rem]">
-          {greeting} {`${maainName()?.split(" ")[0]}`}
+          {greeting}{" "}
+          {`${displayName ? displayName?.split(" ")[0] : userName} 😊`}
         </span>
         <div className="border-2 border-border_color px-6 rounded-3xl w-[30rem] ml-[4rem] lg:flex hidden">
           <span className="pt-[0.9rem] text-orange-400 lg:block hidden">
@@ -132,15 +140,31 @@ const Dashboardnav = ({
           className="lg:block hidden  ml-[10rem] border-2 rounded-2xl p-1 cursor-pointer"
           onClick={() => setUploadPopUp((prev) => !prev)}
         >
-          <div className="flex justify-between">
-            <div className="flex gap-4">
-              <Image src={A_ICON} width={50} height={50} alt="profile" />
-              <div className="flex flex-col">
-                <span>Obioma Victor</span>
-                <span>Software Engineer</span>
+          <div className="flex justify-between ">
+            <div className="flex gap-4 items-center">
+              {photoURL || UploadUrl ? (
+                <Image
+                  src={photoURL || UploadUrl}
+                  width={50}
+                  height={50}
+                  alt="profile"
+                  className="border-2 border-border_color rounded-full"
+                />
+              ) : (
+                <Image
+                  src={"/profile.jpg"}
+                  width={50}
+                  height={50}
+                  alt="profile"
+                  className="border-2 border-border_color rounded-full"
+                />
+              )}
+
+              <div className="">
+                <span>My profile</span>
               </div>
 
-              <div className="pt-6">
+              <div className="pt-0">
                 <Image
                   src="/arrow_down.svg"
                   width={10}
@@ -151,11 +175,25 @@ const Dashboardnav = ({
             </div>
           </div>
         </div>
-        <div className="lg:hidden  flex gap-4 flex-auto">
+        <div className="lg:hidden  flex gap-4 flex-auto items-center">
           <div>
-            <span>
-              <FaUser />
-            </span>
+            {photoURL || UploadUrl ? (
+              <Image
+                src={photoURL || UploadUrl}
+                width={50}
+                height={50}
+                alt="profile"
+                className="border-2 border-border_color rounded-full"
+              />
+            ) : (
+              <Image
+                src={"/profile.jpg"}
+                width={50}
+                height={50}
+                alt="profile"
+                className="border-2 border-border_color rounded-full"
+              />
+            )}
           </div>
           <div className="cursor-pointer">
             <span onClick={() => Open()}>
@@ -164,7 +202,20 @@ const Dashboardnav = ({
           </div>
         </div>
       </div>
-      <UploadDetailsPop isOpen={uploadPopUp} isClose={() => {}} />
+      <Profile
+        isOpen={uploadPopUp}
+        isClose={() => {}}
+        image={photoURL}
+        userEmail={UserEmail}
+        userName={displayName}
+        handleUploadImage={handleImageUpload}
+        uploadedImage={UploadUrl}
+        uploadModal={modal}
+        closeUploadModal={() => setModal(false)}
+        uploading={uploading}
+        handleImageChange={handleImageChange}
+        setModalOpen={() => setModal(true)}
+      />
     </nav>
   );
 };

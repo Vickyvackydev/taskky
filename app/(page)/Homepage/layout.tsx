@@ -2,7 +2,7 @@ import "./globals.css";
 import Homepage from "@/components/homepage";
 
 export const metadata = {
-  title: "Tasky.com",
+  title: "Tasky",
   description: "Welcome to our page",
 };
 

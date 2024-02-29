@@ -2,44 +2,56 @@
 import React, { useEffect, useState } from "react";
 import PageHeader from "./pageHeader";
 import { maxWidth } from "./width";
-import Modal from "./modal";
-import Button from "./Button";
+
 import TaskComponent, { TaskProps } from "./TaskComponent";
 import {
   addDoc,
   collection,
   deleteDoc,
   doc,
-  getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { P_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
+import { useFetchFirestoreData } from "@/hooks";
 
 const Plans = () => {
   const [modal, setModal] = useState(false);
+  const [updated, setUpdated] = useState(false);
   const [planName, setPlanName] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
-  const [plans, setPlans] = useState<any>([]);
+
   const plansCollectionRef = collection(db, "plans");
   const [selectedPlan, setSelectedPlan] = useState<TaskProps | null | any>(
     null
   );
-
+  const plans = useFetchFirestoreData("plans");
   const [isLoading, setIsLoading] = useState(false);
 
   const createPlan = async () => {
     setIsLoading(true);
+
     try {
-      await addDoc(plansCollectionRef, {
-        name: planName,
-        desc: description,
-        status: status,
-        userId: auth?.currentUser?.uid,
-      });
-      setModal(true);
+      const currentUser = auth?.currentUser;
+      if (currentUser) {
+        if (planName && description && status) {
+          await addDoc(plansCollectionRef, {
+            name: planName,
+            desc: description,
+            status: status,
+            createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
+            createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+            userId: currentUser.uid,
+          });
+          setModal(true);
+        } else {
+          console.log("There is no details to display");
+        }
+      } else {
+        console.log("no user authenticated");
+      }
     } catch (error) {
       console.log("something went wrong");
     } finally {
@@ -48,15 +60,6 @@ const Plans = () => {
 
     setModal(false);
   };
-  useEffect(() => {
-    const getPlans = async () => {
-      const data = await getDocs(plansCollectionRef);
-      const allPlans = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-
-      setPlans(allPlans);
-    };
-    getPlans();
-  }, []);
 
   const handleSelectedPlan = (plan: any) => {
     setSelectedPlan(plan);
@@ -80,11 +83,14 @@ const Plans = () => {
         name: planName,
         desc: description,
         status: status,
+        createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
+        createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
       };
 
       try {
         await updateDoc(planDoc, newPlans);
         console.log("docs updated");
+        setUpdated(true);
       } catch (error) {
         console.log("could not update docs");
       }
@@ -115,6 +121,8 @@ const Plans = () => {
         iconType={P_ICON}
         deleteContentColor="bg-red-400"
         modalCloseColor="bg-red-400"
+        modalname="Plan"
+        updated={updated}
       />
 
       <AddTaskModal

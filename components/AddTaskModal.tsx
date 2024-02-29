@@ -37,6 +37,7 @@ const AddTaskModal = ({
       isOpen={openModal}
       isClose={closeModal}
       closeBtnColor={modalCloseColor}
+      maxWidth="w-[400px]"
     >
       <div>
         <span>Please fill in the details</span>

@@ -8,9 +8,15 @@ type ModalProps = {
   isClose: () => void;
   closeBtnColor: string;
   children: React.ReactNode;
+  maxWidth: string;
 };
-const Modal = ({ isOpen, isClose, children, closeBtnColor }: ModalProps) => {
-  const pathName = usePathname();
+const Modal = ({
+  isOpen,
+  isClose,
+  children,
+  closeBtnColor,
+  maxWidth,
+}: ModalProps) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -37,7 +43,9 @@ const Modal = ({ isOpen, isClose, children, closeBtnColor }: ModalProps) => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl text-center bg-white p-6 align-middle shadow-xl transition-all h-full">
+                <Dialog.Panel
+                  className={` ${maxWidth} transform overflow-hidden rounded-2xl text-center bg-white p-6 align-middle shadow-xl transition-all h-full`}
+                >
                   <button
                     type="button"
                     className={`flex items-center justify-center w-7 h-7 rounded-full ${closeBtnColor} hover:scale-90 transition-all `}
@@ -45,7 +53,7 @@ const Modal = ({ isOpen, isClose, children, closeBtnColor }: ModalProps) => {
                   >
                     <FaTimes />
                   </button>
-                  <div className="mt-2 max-h-[500px] overflow-y-auto">
+                  <div className="mt-2 max-h-[500px] overflow-y-auto ">
                     {children}
                   </div>
                 </Dialog.Panel>
