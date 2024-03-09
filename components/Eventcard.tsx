@@ -1,14 +1,19 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import {
   FaCalendar,
+  FaCheck,
   FaClock,
   FaDotCircle,
   FaMapMarker,
   FaPen,
+  FaTimes,
   FaTrash,
 } from "react-icons/fa";
 import Deletemodal from "./Deletemodal";
+// import Skeleton from "./skeleton";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 export interface eventCardDataProps {
   id: number;
@@ -34,6 +39,11 @@ interface eventCardProps {
   handleSelected: (id: any) => void;
   handleDelete: (id: any) => void;
   handleSelectedToUpdate: any;
+  loading: boolean;
+  doneTask: any;
+  // setdoneTask: React.Dispatch<React.SetStateAction<boolean>>;
+
+  handleCompletedEvent: (id: any) => void;
 }
 
 const Eventcard = ({
@@ -43,17 +53,61 @@ const Eventcard = ({
   handleSelected,
   handleDelete,
   handleSelectedToUpdate,
+  loading,
+  doneTask,
+  handleCompletedEvent,
 }: eventCardProps) => {
-  const data_Id = event_card_data.map((data) => data.id);
   return (
     <main className="lg:mt-0 mt-3">
       <span className="lg:text-xl text-lg font-semibold text-text_black lg:mt-0 pt-2">
         All Featured events available here
       </span>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 mt-5">
-        {event_card_data?.length > 0 ? (
-          event_card_data?.map((data: eventCardDataProps) => (
-            <div className="bg-backgrd w-full max-h-full rounded-lg shadow-md pb-5 hover:scale-10 relative">
+        {loading ? (
+          <div className="flex flex-col gap-6">
+            <div className="flex justify-between gap-8">
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+            </div>
+            <div className="flex justify-between gap-8">
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+              <div>
+                <Skeleton height={100} width={200} className="rounded-lg" />
+                <Skeleton count={5} width={200} />
+              </div>
+            </div>
+          </div>
+        ) : event_card_data?.length > 0 ? (
+          event_card_data?.map((data: eventCardDataProps, index: number) => (
+            <div
+              className="bg-backgrd w-full max-h-full rounded-lg shadow-md pb-5 hover:scale-10 relative"
+              key={index}
+            >
               <div>
                 <Image
                   src={data.eventImage}
@@ -84,23 +138,47 @@ const Eventcard = ({
                     <FaTrash />
                   </span>
                 </div>
+                <div
+                  className="hover:scale-90 transition-all duration-300"
+                  onClick={() => handleCompletedEvent(data.id)}
+                >
+                  {doneTask === data.id ? (
+                    <span
+                      className="flex justify-center items-center w-8 h-8 bg-white rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                      data-tip="Mark as undone"
+                    >
+                      <FaTimes />
+                    </span>
+                  ) : (
+                    <span
+                      className="flex justify-center items-center w-8 h-8 bg-white rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                      data-tip="Mark as done"
+                    >
+                      <FaCheck />
+                    </span>
+                  )}
+                </div>
               </div>
               <div className="px-6 mt-5 flex flex-col gap-4">
                 <div className=" flex flex-col gap-2">
-                  <span
-                    className={`${
-                      data.status === "active"
-                        ? "text-green-400"
-                        : data.status === "pending"
-                        ? "text-orange-400"
-                        : data.status === "canceled"
-                        ? "text-red-400"
-                        : ""
-                    } text-sm`}
-                  >
-                    {/* {data.event_status} */}
-                    {data.status}
-                  </span>
+                  {doneTask === data.id ? (
+                    <span className="text-green-300">Done</span>
+                  ) : (
+                    <span
+                      className={`${
+                        data.status === "active"
+                          ? "text-green-400"
+                          : data.status === "pending"
+                          ? "text-orange-400"
+                          : data.status === "canceled"
+                          ? "text-red-400"
+                          : ""
+                      } text-sm`}
+                    >
+                      {data.status}
+                    </span>
+                  )}
+
                   <span className="text-xl font-semibold text-text_black">
                     {data.eventName}
                   </span>

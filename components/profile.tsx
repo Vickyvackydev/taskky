@@ -1,8 +1,15 @@
 import { Transition } from "@headlessui/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "./Button";
-import { FaBox, FaPlus, FaUpload, FaUser, FaUserNinja } from "react-icons/fa";
+import {
+  FaBox,
+  FaPlus,
+  FaTrash,
+  FaUpload,
+  FaUser,
+  FaUserNinja,
+} from "react-icons/fa";
 import { auth, db } from "@/firebase/firebase.config";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { useFetchFirestoreData } from "@/hooks";
@@ -11,7 +18,7 @@ import Modal from "./modal";
 interface Props {
   isOpen: boolean;
   isClose: () => void;
-  image: string | any;
+  google_image: string | any;
   userName: string | any;
   userEmail: string | any;
   handleUploadImage: () => void;
@@ -21,10 +28,13 @@ interface Props {
   uploading: boolean;
   handleImageChange: (e: any) => void;
   setModalOpen: () => void;
+  previewImage: any;
+  selectedImageName: string;
+  removeimage: () => void;
 }
 const Profile = ({
   isOpen,
-  image,
+  google_image,
   userEmail,
   handleUploadImage,
   uploadModal,
@@ -33,12 +43,17 @@ const Profile = ({
   closeUploadModal,
   handleImageChange,
   setModalOpen,
+  selectedImageName,
+  previewImage,
+  removeimage,
 }: Props) => {
   const [profession, setProfession] = useState("");
   const [input, setInput] = useState(false);
   const userProfessionRef = collection(db, "profession");
-  const userProfession = useFetchFirestoreData("profession");
-  const user_authname = useFetchFirestoreData("usernames");
+  const { data: userProfession } = useFetchFirestoreData("profession");
+  const { data: user_authname } = useFetchFirestoreData("usernames");
+  // const googleAuthName = auth?.currentUser?.displayName
+  const [googleAuthName, setGoogleAuthName] = useState<any>("");
 
   const profile_name = user_authname.map((name: any) => name.name);
 
@@ -65,12 +80,21 @@ const Profile = ({
     (userProf: any) => userProf.profession
   );
 
+  useEffect(() => {
+    if (auth?.currentUser) {
+      setGoogleAuthName(auth?.currentUser?.displayName);
+    } else {
+      console.log("loading");
+    }
+  }, [auth?.currentUser]);
+
   // console.log(userProfessionName);
+  // console.log(googleAuthName);
 
   return (
     <Transition
       as={"div"}
-      className={`absolute lg:flex hidden bg-white shadow-md rounded-lg w-[19vw] h-[70vh] right-3 top-[7rem] justify-center items-center`}
+      className={`absolute lg:flex hidden bg-white shadow-md rounded-lg w-[20vw] h-[70vh] right-3 top-[7rem] justify-center items-center`}
       show={isOpen}
       enter="ease-out duration-300"
       enterFrom="opacity-0 scale-95"
@@ -81,13 +105,13 @@ const Profile = ({
     >
       <div className="flex flex-col items-center justify-center">
         <div className="flex justify-center items-center z-10 mt-5 max-w-full">
-          {image || uploadedImage ? (
+          {google_image || uploadedImage ? (
             <Image
-              src={image || uploadedImage}
+              src={google_image || uploadedImage}
               width={100}
               height={100}
               alt="profile image"
-              className={`rounded-full ${image ? "w-50%" : ""}`}
+              className={`rounded-full ${google_image ? "w-50%" : ""}`}
             />
           ) : (
             <Image
@@ -106,7 +130,11 @@ const Profile = ({
             </label>
             <div className="flex gap-2 items-center">
               <FaUserNinja className="text-gray-300" />
-              <span className="text-gray-300">{profile_name}</span>
+              {googleAuthName ? (
+                <span className="text-gray-300">{googleAuthName}</span>
+              ) : (
+                <span>{profile_name}</span>
+              )}
             </div>
           </div>
           <div className="flex flex-col gap-2 border-b border-border_color w-full">
@@ -150,7 +178,7 @@ const Profile = ({
           </div>
 
           <div
-            className="tooltip tooltip-bottom "
+            className={` ${google_image ? "tooltip tooltip-bottom" : ""}`}
             data-tip="can't upload google image"
           >
             <Button
@@ -159,7 +187,7 @@ const Profile = ({
               btnStyles={`justify-center w-full border border-border_color py-2 rounded-xl mt-[2rem] `}
               textStyles="text-purple-400"
               iconStyles="text-purple-400 pt-[1.8px]"
-              disabled={image || uploading}
+              disabled={google_image || uploading}
               handleClick={setModalOpen}
             />
           </div>
@@ -169,14 +197,30 @@ const Profile = ({
         isOpen={uploadModal}
         isClose={closeUploadModal}
         closeBtnColor=""
-        maxWidth=""
+        maxWidth="w-[350px]"
       >
         <div>
-          <input
-            type="file"
-            className="file-input w-full max-w-xs"
-            onChange={handleImageChange}
-          />
+          {previewImage ? (
+            <div className="flex gap-3 items-center">
+              <Image
+                src={previewImage}
+                width={100}
+                height={100}
+                alt="preview image"
+              />
+              <span>{selectedImageName}</span>
+              <button onClick={removeimage} className="text-red-400">
+                <FaTrash />
+              </button>
+            </div>
+          ) : (
+            <input
+              type="file"
+              className="file-input w-full max-w-xs"
+              onChange={handleImageChange}
+            />
+          )}
+
           <Button
             text={`${uploading ? "" : "upload now"}`}
             loading={uploading}

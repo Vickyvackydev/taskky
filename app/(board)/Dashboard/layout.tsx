@@ -1,6 +1,7 @@
 import Dashboard from "@/components/dashboard";
 import "./globals.css";
-import { AuthContextProvider } from "@/context/AuthContext";
+import AuthGuard from "@/context/AuthGuard";
+import { SearchProvider } from "@/context/searchContext";
 
 export const metadata = {
   title: "Dashboard",
@@ -15,11 +16,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthContextProvider>
-          <Dashboard>
-            <main className="transition-all duration-500">{children}</main>
-          </Dashboard>
-        </AuthContextProvider>
+        {/* <AuthContextProvider> */}
+
+        <AuthGuard>
+          <SearchProvider>
+            <Dashboard>
+              <main className="transition-all duration-500">{children}</main>
+            </Dashboard>
+          </SearchProvider>
+        </AuthGuard>
+        {/* </AuthContextProvider> */}
       </body>
     </html>
   );

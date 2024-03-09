@@ -7,6 +7,7 @@ import { auth, db, storage } from "@/firebase/firebase.config";
 import Profile from "./profile";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useFetchFirestoreData } from "@/hooks";
+import { useSearchQuery } from "@/context/searchContext";
 
 type navBarType = {
   isOpen: () => void;
@@ -18,6 +19,7 @@ type navBarType = {
   isRightSide: boolean;
 };
 const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
+  const { searchQuery, setSearchQuery, setShowTopContent } = useSearchQuery();
   const [greeting, setGreeting] = useState("");
   const [uploadPopUp, setUploadPopUp] = useState(false);
   const [selectedImage, setSelectedImage] = useState<null | any>(null);
@@ -28,10 +30,20 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   const [photoURL, setPhotoUrl] = useState<string | null>("");
   const [UserEmail, setUserEmail] = useState<string | null>("");
   const imagesCollectionRef = collection(db, "images");
-  const user_authname = useFetchFirestoreData("usernames");
+  const { data: user_authname, loading } = useFetchFirestoreData("usernames");
+  const [previewImg, setPreviewImg] = useState<any>(null);
 
   const userName = user_authname.map((name: any) => name.name.split(" ")[0]);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+
+    if (e.target.value.trim() !== "") {
+      setShowTopContent(false);
+    } else {
+      setShowTopContent(true);
+    }
+  };
   useEffect(() => {
     // Retrieve uploadedURL from local storage when component mounts
     const storedURL = localStorage.getItem("uploadedURL");
@@ -50,6 +62,16 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   const handleImageChange = (e: any) => {
     const imageFile = e.target.files[0];
     setSelectedImage(imageFile);
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      if (typeof reader.result === "string") {
+        setPreviewImg(reader.result);
+      }
+    };
+
+    reader.readAsDataURL(imageFile);
   };
 
   useEffect(() => {
@@ -109,6 +131,8 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
       console.log("error uploading image", error);
     } finally {
       setUploading(false);
+      setPreviewImg(null);
+      setSelectedImage(null);
     }
   };
 
@@ -133,11 +157,13 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
           <input
             type="text"
             placeholder={`Search task name`}
+            value={searchQuery}
+            onChange={handleChange}
             className="py-3 outline-none px-3 placeholder:text-lg bg-transparent placeholder:text-gray-300 lg:block hidden "
           />
         </div>
         <div
-          className="lg:block hidden  ml-[10rem] border-2 rounded-2xl p-1 cursor-pointer"
+          className="lg:block hidden  ml-[10rem] p-1 cursor-pointer"
           onClick={() => setUploadPopUp((prev) => !prev)}
         >
           <div className="flex justify-between ">
@@ -205,7 +231,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
       <Profile
         isOpen={uploadPopUp}
         isClose={() => {}}
-        image={photoURL}
+        google_image={photoURL}
         userEmail={UserEmail}
         userName={displayName}
         handleUploadImage={handleImageUpload}
@@ -215,6 +241,12 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
         uploading={uploading}
         handleImageChange={handleImageChange}
         setModalOpen={() => setModal(true)}
+        previewImage={previewImg}
+        selectedImageName={selectedImage?.name}
+        removeimage={() => {
+          setPreviewImg(null);
+          setSelectedImage(null);
+        }}
       />
     </nav>
   );

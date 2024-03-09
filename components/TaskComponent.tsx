@@ -6,6 +6,12 @@ import { usePathname } from "next/navigation";
 import DetailsBox from "./detailsBox";
 import Deletemodal from "./Deletemodal";
 import { useMediaQuery } from "@/hooks";
+import Preloader from "./preloader";
+import { THREE_DOTS } from "@/public";
+import DropDown from "./DropDown";
+import { useSearchQuery } from "@/context/searchContext";
+import { maxWidth } from "./width";
+import { doc } from "firebase/firestore";
 
 export interface TaskProps {
   id: number;
@@ -29,6 +35,8 @@ interface tasksMainProps {
   modalname?: any;
   allTasks?: any;
   updated: any;
+  loading: boolean;
+  markAsDone: any;
 }
 const TaskComponent = ({
   tasks,
@@ -39,10 +47,11 @@ const TaskComponent = ({
   handleUpdate,
   deleteContentColor,
   iconType,
-
   modalname,
   allTasks,
   updated,
+  loading,
+  markAsDone,
 }: tasksMainProps) => {
   const [hoverOption, setHoverOption] = useState<boolean | number>(false);
   const [actionModal, setActionModal] = useState<boolean>(false);
@@ -50,65 +59,67 @@ const TaskComponent = ({
   const [selectedTask, setSelectedTask] = useState(null);
   const pathnname = usePathname();
   const mobileScreen = useMediaQuery("(max-width: 640px)");
-  const laptopScreen = useMediaQuery("(max-width: 800px)");
+  const [dropDown, setDropDown] = useState<boolean>(false);
+  const [click, setClick] = useState<number>(0);
+
+  const { showTopContent } = useSearchQuery();
+  const [doneTask, setDoneTask] = useState<number | null>(0);
 
   const handleSelectedTask = (task: any) => {
     setSelectedTask(task);
   };
 
   const justCreated = `${new Date().getHours()}:${new Date().getMinutes()}`;
-  // const allTasks = tasks.splice(0, 4);
-
-  const truncateSentence = (sentence: any) => {
-    const words = sentence.split(" ");
-    if (words.length >= 4) {
-      // On mobile screen, show only the first word with three dots
-      return `${words[0]}...`;
-    } else if (words.length === 3 && laptopScreen) {
-      // On laptop screen, show first two words with three dots
-      return `${words.slice(0, 2).join(" ")}...`;
-    } else if (words.length === 2 && laptopScreen) {
-      // On laptop screen, show the two words without dots
-      return words.join(" ");
-    } else {
-      // For longer sentences or on mobile, no truncation needed
-      return sentence;
-    }
-  };
 
   return (
-    <div className="mt-4 max-h-[500px] overflow-y-scroll">
-      {tasks?.length > 0 ? (
+    <div
+      className={`mt-4 max-h-[500px] overflow-y-scroll ${
+        !showTopContent ? "w-[55rem]" : ""
+      }`}
+    >
+      {loading ? (
+        <Preloader />
+      ) : tasks?.length > 0 ? (
         tasks?.map((task: TaskProps) => (
-          <div
-            key={task.id}
-            className="flex justify-between items-center mt-6 rounded-xl bg-backgrd p-5 relative"
-            onMouseEnter={() => setHoverOption(task.id)}
-            onMouseLeave={() => setHoverOption(false)}
-          >
-            <div>
-              <Image src={iconType} width={50} height={50} alt="task image" />
-            </div>
-            <div className="">
-              <span className="lg:text-lg text-sm">
-                {task.name.split(" ").length > 3
-                  ? `${task.name.split(" ")[0]}...`
-                  : ` ${task.name}`}
-              </span>
-            </div>
-            <div>
-              <span className="lg:text-lg text-sm">
-                {truncateSentence(task.desc)}
-              </span>
-            </div>
-            <div className="flex flex-col gap-2 items-end">
+          <div className="flex flex-col">
+            <div
+              key={task.id}
+              className="flex flex-auto mt-6 rounded-xl bg-backgrd py-4 relative justify-between items-center pr-3"
+              onMouseEnter={() => setHoverOption(task.id)}
+              onMouseLeave={() => setHoverOption(false)}
+            >
               <div>
+                <Image src={iconType} width={50} height={50} alt="task image" />
+              </div>
+              <div className="">
+                <span className="lg:text-lg text-sm">
+                  {task.name.split(" ").length > 3
+                    ? `${task.name.split(" ")[0]}...`
+                    : ` ${task.name}`}
+                </span>
+              </div>
+              <div>
+                <span className="lg:text-lg text-sm">
+                  {!mobileScreen
+                    ? task.desc.split(" ").length >= 5
+                      ? `${task.desc.slice(0, 20)}...`
+                      : task.desc
+                    : mobileScreen
+                    ? task.desc.length >= 2
+                      ? `${task.desc.slice(0, 10)}...`
+                      : task.desc
+                    : null}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2 items-center">
                 <span
                   className={`lg:text-[0.85rem] text-xs  lg:p-2 p-1 rounded-xl text-white  ${
                     task.status === "active"
                       ? "bg-green-300"
-                      : task.status === "disabled"
-                      ? "bg-red-300"
+                      : task.status === "pending"
+                      ? "bg-orange-300"
+                      : task.status === "completed"
+                      ? "bg-green-300"
                       : ""
                   }`}
                 >
@@ -116,72 +127,58 @@ const TaskComponent = ({
                 </span>
               </div>
 
-              <div className="lg:flex hidden items-center gap-5  text-text_gray font-medium ">
-                {updated ? (
-                  <span className="lg:text-lg text-xs">{`${
-                    new Date().getHours() || new Date().getMinutes() > updated
-                      ? "Last updated: "
-                      : "updated at:"
-                  }`}</span>
-                ) : (
-                  <span className="lg:text-lg text-xs">{`${
-                    justCreated === task.createdTime
-                      ? "Just now"
-                      : "Date created:"
-                  }   `}</span>
-                )}
-
-                <span className="lg:text-sm text-xs">{task.createdDate}</span>
-                <span className="lg:text-sm text-xs">{task.createdTime}</span>
-              </div>
-            </div>
-            {hoverOption === task.id && (
-              <div className="bg-black hover:bg-opacity-5 hover:opacity-50 opacity-0 absolute w-full h-full left-0 overflow-hidden">
-                <div className="hover:opacity-100 flex justify-center mt-9 gap-5 ">
-                  <span
-                    className={`flex justify-center items-center ${deleteContentColor} rounded-full text-white w-10 h-10 text-lg pl-1 cursor-pointer tooltip tooltip-top"  ${
-                      pathnname === "/Dashboard" ||
-                      (pathnname !== "/Dashboard/tasks" &&
-                        pathnname !== "/Dashboard/plans" &&
-                        pathnname !== "/Dashboard/activities")
-                        ? "hidden"
-                        : "block"
-                    }`}
-                    onClick={() => handleUpdate(task)}
-                    data-tip="update"
-                  >
-                    <FaPencilAlt />
-                  </span>
-                  <span
-                    className={`flex justify-center items-center ${deleteContentColor} rounded-full text-white w-10 h-10 text-lg pl-1 cursor-pointer tooltip tooltip-top `}
-                    onClick={() => {
-                      handleSelectedTask(task);
-                      setDetailsModal(true);
-                    }}
-                    data-tip="details"
-                  >
-                    <FaInfo />
-                  </span>
-                  <span
-                    className={`flex justify-center items-center ${deleteContentColor} rounded-full text-white w-10 h-10 text-lg pl-1 cursor-pointer ${
-                      pathnname === "/Dashboard" ||
-                      (pathnname !== "/Dashboard/tasks" &&
-                        pathnname !== "/Dashboard/plans" &&
-                        pathnname !== "/Dashboard/activities")
-                        ? "hidden"
-                        : "block"
-                    } tooltip tooltip-top `}
-                    onClick={() => {
-                      setActionModal(true);
-                      handleSelector(task);
-                    }}
-                    data-tip="delete"
-                  >
-                    <FaTrash />
-                  </span>
+              {pathnname !== "/Dashboard" && (
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setDropDown((prev) => !prev);
+                    setClick(task.id);
+                  }}
+                >
+                  <Image
+                    src={THREE_DOTS}
+                    width={25}
+                    height={25}
+                    alt="dots icon"
+                  />
+                  {click === task.id && (
+                    <DropDown
+                      open={dropDown}
+                      handleDelete={() => {
+                        setActionModal(true);
+                        handleSelector(task);
+                      }}
+                      handleUpdate={() => handleUpdate(task)}
+                      handleView={() => {
+                        handleSelectedTask(task);
+                        setDetailsModal(true);
+                      }}
+                      handleComplete={() => markAsDone(task.id)}
+                      complete={doneTask}
+                    />
+                  )}
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
+            <div className="lg:flex hidden items-center gap-5  text-gray-300 font-medium ">
+              {updated ? (
+                <span className="lg:text-sm text-xs">{`${
+                  new Date().getHours() || new Date().getMinutes() > updated
+                    ? "Last updated: "
+                    : "updated at:"
+                }`}</span>
+              ) : (
+                <span className="lg:text-sm text-xs">{`${
+                  justCreated === task.createdTime
+                    ? "Just now"
+                    : "Date created:"
+                }   `}</span>
+              )}
+
+              <span className="lg:text-sm text-xs">{task.createdDate}</span>
+              <span className="lg:text-sm text-xs">{task.createdTime}</span>
+            </div>
           </div>
         ))
       ) : (

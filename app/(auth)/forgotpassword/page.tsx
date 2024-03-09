@@ -3,11 +3,12 @@ import Button from "@/components/Button";
 import Modal from "@/components/modal";
 import { auth } from "@/firebase/firebase.config";
 import { sendPasswordResetEmail } from "firebase/auth";
+import Image from "next/image";
 import React, { useState } from "react";
 
 const Forgot_Password = () => {
   const [email, setEmail] = useState("");
-  const [modal, setModal] = useState(false);
+  const [modal, setModal] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const handleResetPassword = async (
@@ -20,6 +21,7 @@ const Forgot_Password = () => {
       console.log("email sent");
       setLoading(false);
       setEmail("");
+      setModal(true);
     } catch (error) {
       console.log("error performing this action", error);
     } finally {
@@ -55,6 +57,8 @@ const Forgot_Password = () => {
             <Button
               text="Reset Password"
               loadingText="verifying"
+              loaderColor="#fff"
+              loadingTextColor="text-white"
               textStyles="text-white"
               btnStyles="bg-green-500 w-full flex justify-center py-2 rounded-lg"
               handleClick={handleResetPassword}
@@ -62,8 +66,14 @@ const Forgot_Password = () => {
             />
           </div>
         </div>
-        <Modal isOpen={modal} isClose={() => setModal(false)} closeBtnColor="">
-          <div className="">
+        <Modal
+          isOpen={modal}
+          isClose={() => setModal(false)}
+          closeBtnColor=""
+          maxWidth="w-[400px]"
+        >
+          <div className="flex justify-center items-center flex-col">
+            <Image src={"/mail_giffy.gif"} width={200} height={200} alt="gif" />
             <span>
               we have sent you a reset password link, kindly check your{" "}
               <span className="text-green-400">mail</span> to continue

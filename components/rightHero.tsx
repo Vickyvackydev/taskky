@@ -31,6 +31,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [teamTask, setTeamTask] = useState("");
   const [department, setDepartment] = useState("");
   const [status, setStatus] = useState("");
+  const [authGoogleImage, setAuthGoogleImage] = useState<any>(null);
 
   const teamCollectionRef = collection(db, "teams");
   const [hoverOption, setHoverOption] = useState(false);
@@ -39,7 +40,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
 
-  const teams = useFetchFirestoreData("teams");
+  const { data: teams, loading } = useFetchFirestoreData("teams");
 
   const createTeam = async () => {
     setIsLoading(true);
@@ -69,6 +70,9 @@ const RightHero = ({ rightSide }: RightSideProps) => {
     }
   };
 
+  useEffect(() => {
+    setAuthGoogleImage(auth?.currentUser?.photoURL);
+  }, [auth?.currentUser]);
   // useEffect(() => {
   //   const getTeams = async () => {
   //     const data = await getDocs(teamCollectionRef);
@@ -168,7 +172,11 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                   </div>
                   <div className="flex flex-col">
                     <span className="text-[0.9rem]">{item.dept}</span>
-                    <span>{item.task}</span>
+                    {/* <span>{item.task}</span>
+                     */}
+                    {item.task.split(" ").length >= 5
+                      ? `${item.task.slice(0, 10)}...`
+                      : item.task}
                   </div>
                 </div>
                 <div className="">
@@ -176,8 +184,8 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                     className={`text-[0.85rem] p-2 rounded-xl text-white ${
                       item.status === "active"
                         ? "bg-green-300"
-                        : item.status === "disabled"
-                        ? "bg-red-300"
+                        : item.status === "pending"
+                        ? "bg-orange-300"
                         : ""
                     }`}
                   >
@@ -206,6 +214,72 @@ const RightHero = ({ rightSide }: RightSideProps) => {
           )}
         </div>
         <Calendar />
+        <div className="flex flex-col gap-5">
+          <div className="stats shadow">
+            <div className="stat">
+              <div className="stat-figure text-primary">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="inline-block w-8 h-8 stroke-current"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                  ></path>
+                </svg>
+              </div>
+              <div className="stat-title">Total Likes</div>
+              <div className="stat-value text-primary">25.6K</div>
+              <div className="stat-desc">21% more than last month</div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-figure text-secondary">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="inline-block w-8 h-8 stroke-current"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  ></path>
+                </svg>
+              </div>
+              <div className="stat-title">Page Views</div>
+              <div className="stat-value text-secondary">2.6M</div>
+              <div className="stat-desc">21% more than last month</div>
+            </div>
+
+            <div className="stat">
+              <div className="stat-figure text-secondary">
+                <div className="avatar online">
+                  <div className="w-16 rounded-full">
+                    {/* <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" /> */}
+                    {authGoogleImage && (
+                      <Image
+                        src={authGoogleImage}
+                        width={50}
+                        height={50}
+                        alt="google image"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="stat-value">86%</div>
+              <div className="stat-title">Tasks done</div>
+              <div className="stat-desc text-secondary">31 tasks remaining</div>
+            </div>
+          </div>
+        </div>
       </div>
       <Modal
         isOpen={modal}
@@ -272,7 +346,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
               >
                 <option value="Select status">Select status</option>
                 <option value="active">active</option>
-                <option value="disabled">disabled</option>
+                <option value="pending">pending</option>
               </select>
             </div>
           </form>
@@ -312,7 +386,10 @@ const RightHero = ({ rightSide }: RightSideProps) => {
       <Deletemodal
         openModal={deleteModal}
         closeModal={() => setDeleteModal(false)}
-        handleDelete={() => handleDeleteTeam(selectedTeam?.id)}
+        handleDelete={() => {
+          handleDeleteTeam(selectedTeam?.id);
+          setDeleteModal(false);
+        }}
         componentText="team"
       />
     </Transition>

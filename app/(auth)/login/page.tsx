@@ -17,6 +17,7 @@ import {
   FaUserNinja,
 } from "react-icons/fa";
 import { motion } from "framer-motion";
+import PreloaderModal from "@/components/preloadermodal";
 
 const Login = () => {
   const router = useRouter();
@@ -28,15 +29,16 @@ const Login = () => {
   const [noUser, setNoUser] = useState(false);
   const [wrongDetailsPopUp, setWrongDetailsPopUp] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [preloader, setPreloader] = useState(false);
 
-  const auth_userName = useFetchFirestoreData("usernames");
+  const { data: auth_userName } = useFetchFirestoreData("usernames");
 
   const displayUserName = auth_userName.map((name: any) => name.name);
 
   const handleLogin = async () => {
     setLoading(true);
 
-    if (displayUserName || userName === displayUserName) {
+    if (displayUserName) {
       try {
         const userCredentials = await signInWithEmailAndPassword(
           auth,
@@ -50,6 +52,9 @@ const Login = () => {
           router.push("/Dashboard");
           setWrongDetailsPopUp(false);
           setErrorMessage("");
+          setEmail("");
+          setPassword("");
+          setPreloader(true);
         }
       } catch (error) {
         console.log("this user does not exist");
@@ -101,8 +106,21 @@ const Login = () => {
             Kindly login to continue
           </p>
           {wrongDetailsPopUp && (
-            <div className="w-full bg-red-400 flex items-center justify-center rounded-xl">
-              <span className="text-white">{errorMessage}</span>
+            <div role="alert" className="alert alert-error">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="stroke-current shrink-0 h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span>{errorMessage}</span>
             </div>
           )}
 
@@ -116,7 +134,7 @@ const Login = () => {
               </span>
               <input
                 type="text"
-                value={displayUserName || ""}
+                value={displayUserName || userName}
                 className="outline-none ml-3 border-l pl-3"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setUserName(e.target.value)
@@ -140,7 +158,7 @@ const Login = () => {
               </span>
               <input
                 type="email"
-                className="border-l outline-none ml-3 pl-3"
+                className="border-l outline-none ml-3 pl-3 w-full"
                 value={email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEmail(e.target.value)
@@ -199,6 +217,12 @@ const Login = () => {
             </Link>
           </div>
         </div>
+        <PreloaderModal
+          isOpen={preloader}
+          isClose={() => setPreloader(false)}
+          loaderColor="text-accent"
+          loadertext="please wait..."
+        />
       </motion.main>
     </section>
   );

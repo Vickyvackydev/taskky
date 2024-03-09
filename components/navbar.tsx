@@ -32,11 +32,16 @@ const Navbar = () => {
       id="navbar"
     >
       <Link href="/Homepage">
-        <Image src="/logo.png" width={150} height={150} alt="logo image" />
+        <Image
+          src="/logo.png"
+          width={isMobileScreen ? 70 : 150}
+          height={150}
+          alt="logo image"
+        />
       </Link>
 
       <div
-        className={`lg:relative absolute lg:top-0 top-24 ${
+        className={`lg:relative absolute lg:top-0 top-24 z-auto ${
           navopen && isMobileScreen ? " bg-white left-0" : "bg-none"
         } lg:w-32 w-full `}
       >

@@ -75,7 +75,7 @@ const AddTaskModal = ({
             >
               <option value="Select status">Select status</option>
               <option value="active">active</option>
-              <option value="disabled">disabled</option>
+              <option value="pending">pending</option>
             </select>
           </div>
         </form>

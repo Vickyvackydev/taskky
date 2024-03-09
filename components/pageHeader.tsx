@@ -28,7 +28,7 @@ const PageHeader = ({
   pathname,
 }: Props) => {
   return (
-    <div className={`flex justify-between pt-6 ${style}`}>
+    <div className={`flex justify-between pt-6 ${style} `}>
       <span className={textStyle}>{text}</span>
 
       {button === true ? (

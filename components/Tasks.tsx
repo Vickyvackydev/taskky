@@ -29,7 +29,7 @@ const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState<TaskProps | null | any>(
     null
   );
-  const tasks = useFetchFirestoreData("tasks");
+  const { data: tasks, loading } = useFetchFirestoreData("tasks");
 
   const createTask = async () => {
     setIsLoading(true);
@@ -110,6 +110,17 @@ const Tasks = () => {
     setModal(false);
     setSelectedTask(null);
   };
+
+  const markAsDone = async (taskId: any) => {
+    try {
+      const taskDocRef = doc(db, "tasks", taskId.toString());
+      await updateDoc(taskDocRef, { status: "completed" });
+
+      console.log("status has being updated");
+    } catch (error) {
+      console.log("error marking task as done", error);
+    }
+  };
   return (
     <div className={maxWidth}>
       <PageHeader
@@ -133,6 +144,8 @@ const Tasks = () => {
         modalCloseColor="bg-purple-400"
         modalname="Task"
         updated={updated}
+        loading={loading}
+        markAsDone={() => markAsDone(tasks)}
       />
       <AddTaskModal
         openModal={modal}

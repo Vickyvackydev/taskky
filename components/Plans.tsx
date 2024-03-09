@@ -27,7 +27,7 @@ const Plans = () => {
   const [selectedPlan, setSelectedPlan] = useState<TaskProps | null | any>(
     null
   );
-  const plans = useFetchFirestoreData("plans");
+  const { data: plans, loading } = useFetchFirestoreData("plans");
   const [isLoading, setIsLoading] = useState(false);
 
   const createPlan = async () => {
@@ -123,6 +123,7 @@ const Plans = () => {
         modalCloseColor="bg-red-400"
         modalname="Plan"
         updated={updated}
+        loading={loading}
       />
 
       <AddTaskModal

@@ -5,6 +5,7 @@ import { auth, db } from "@/firebase/firebase.config";
 export const useFetchFirestoreData = (collectionName: string) => {
   const [data, setData] = useState<any>([]);
   const collectionRef = collection(db, collectionName);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,17 +21,20 @@ export const useFetchFirestoreData = (collectionName: string) => {
             id: doc.id,
             ...doc.data(),
           }));
+
           setData(tasksData);
         } else {
           console.log("no data");
         }
       } catch (error) {
         console.log("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [collectionRef]);
 
-  return data;
+  return { data, loading };
 };

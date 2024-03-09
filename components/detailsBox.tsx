@@ -18,7 +18,6 @@ const DetailsBox = ({
   open,
   close,
   items,
-
   handleUpdate,
   modalname,
   actionBtns,
@@ -30,7 +29,7 @@ const DetailsBox = ({
       isOpen={open}
       isClose={close}
       closeBtnColor="w-8 h-8 rounded-full hover:bg-backgrd text-text_gray"
-      maxWidth="w-[450px]"
+      maxWidth="w-[500px]"
     >
       <div>
         <div className="w-full bg-backgrd rounded-lg  h-16 items-center flex justify-center">
@@ -56,8 +55,8 @@ const DetailsBox = ({
                   className={`text-[0.85rem] p-2 rounded-xl text-white ${
                     items.status === "active"
                       ? "bg-green-300"
-                      : items.status === "disabled"
-                      ? "bg-red-300"
+                      : items.status === "pending"
+                      ? "bg-orange-300"
                       : ""
                   }`}
                 >
@@ -71,7 +70,7 @@ const DetailsBox = ({
             <div className="flex flex-col gap-5 items-start">
               <span>Name:</span>
               <span>Description:</span>
-              <span>Team Status:</span>
+              <span>Task Status:</span>
             </div>
             <div className="flex flex-col gap-5 text-right font-medium">
               <span>{items?.name}</span>
@@ -81,8 +80,8 @@ const DetailsBox = ({
                   className={`text-[0.85rem] p-2 rounded-xl text-white ${
                     items?.status === "active"
                       ? "bg-green-300"
-                      : items?.status === "disabled"
-                      ? "bg-red-300"
+                      : items?.status === "pending"
+                      ? "bg-orange-300"
                       : ""
                   }`}
                 >

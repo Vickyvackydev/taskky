@@ -31,7 +31,7 @@ const Events = () => {
   const [hostName, setHostName] = useState("");
   const [other_details, setOtherDetails] = useState("");
   const [uploadedImage, setUploadedImage]: any = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const eventCollectionRef = collection(db, "events");
   const [selectedEventType, setSelectedEventType] = useState<string | null>(
     null
@@ -40,8 +40,9 @@ const Events = () => {
   const [selectedEvent, setSelectedEvent] = useState<eventCardDataProps | any>(
     null
   );
+  const [done, setDone] = useState<any>(null);
 
-  const events_data = useFetchFirestoreData("events");
+  const { data: events_data, loading } = useFetchFirestoreData("events");
 
   const handleSelectEventType = (eventType: string) => {
     setSelectedEventType(eventType);
@@ -53,7 +54,7 @@ const Events = () => {
     setUploadedImage(e.target.files[0]);
   };
   const createEvent = async () => {
-    setLoading(true);
+    setIsLoading(true);
 
     try {
       const currentUser = auth?.currentUser;
@@ -100,7 +101,7 @@ const Events = () => {
     } catch (error) {
       console.log("error creating events", error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -126,8 +127,13 @@ const Events = () => {
     setDeleteModal(false);
   };
 
+  const handleCompletedEvent = (event: any) => {
+    setSelectedEvent(event);
+    // setDone((prev) => !prev);
+  };
+
   const handleUpdate = async (id: any) => {
-    setLoading(true);
+    setIsLoading(true);
 
     if (id) {
       const currentUser = auth?.currentUser;
@@ -167,7 +173,7 @@ const Events = () => {
       } catch (error) {
         console.log("error; could not update doc", error);
       } finally {
-        setLoading(false);
+        setIsLoading(false);
       }
     } else {
       console.log("there is no user");
@@ -231,6 +237,9 @@ const Events = () => {
         closeDeleteModal={() => setDeleteModal(false)}
         handleDelete={() => handleDeleteEvent(selectedEvent?.id)}
         handleSelectedToUpdate={handleSelectedToUpdate}
+        loading={loading}
+        doneTask={done}
+        handleCompletedEvent={() => handleCompletedEvent(selectedEvent?.id)}
       />
     </div>
   );

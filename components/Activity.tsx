@@ -24,7 +24,7 @@ const Activity = () => {
   const [selectedActivity, setSelectedActivity] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const activities = useFetchFirestoreData("activities");
+  const { data: activities, loading } = useFetchFirestoreData("activities");
   const [updated, setUpdated] = useState(false);
 
   const createActivity = async () => {
@@ -120,6 +120,7 @@ const Activity = () => {
         modalCloseColor="bg-orange-400"
         modalname="Activity"
         updated={updated}
+        loading={loading}
       />
 
       <AddTaskModal

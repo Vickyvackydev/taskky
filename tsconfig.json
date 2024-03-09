@@ -30,7 +30,7 @@
     "utils/index.js",
     "hooks/useHeaderShadow.jsx",
     "components/CartProvider.tsx",
-    "context/AuthContext.jsx"
+    "context/searchContext.tsx"
   ],
   "exclude": ["node_modules"]
 }

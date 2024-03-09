@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 const Hero = () => {
   const router = useRouter();
   return (
-    <main className="flex flex-col justify-center items-center mt-10 gap-10">
+    <main className="flex flex-col justify-center items-center mt-10 gap-10 ">
       <motion.div
         initial={{ opacity: 0, scale: 0 }}
         whileInView={{ opacity: 1, scale: 1 }}
@@ -44,7 +44,7 @@ const Hero = () => {
         whileInView={{ opacity: 1, y: 1 }}
         viewport={{ once: false, amount: 0.25 }}
         transition={{ duration: 0.5 }}
-        className="flex gap-10"
+        className="flex gap-10 "
       >
         <Button
           text="Get started"

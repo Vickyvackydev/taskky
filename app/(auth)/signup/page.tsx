@@ -42,7 +42,6 @@ const Signup = () => {
           password
         );
 
-        localStorage.setItem("userName", userName);
         const user = userCredentials.user;
         await sendEmailVerification(user);
         if (user) {
@@ -260,6 +259,8 @@ const Signup = () => {
                 text={"Create account"}
                 loadingText="creating"
                 textStyles="text-white"
+                loaderColor="#fff"
+                loadingTextColor="text-white"
                 btnStyles="bg-green-500 w-full flex justify-center py-2 rounded-lg"
                 handleClick={handleRegister}
                 loading={logging}
@@ -312,6 +313,7 @@ const Signup = () => {
               textStyles="text-text_gray text-lg"
               btnStyles=" rounded-lg px-3 py-2"
               // handleClick={() => router.push("/login")}
+
               handleClick={() => setModal(false)}
             />
           </div>
