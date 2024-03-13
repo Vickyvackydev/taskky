@@ -28,8 +28,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "utils/index.js",
-    "hooks/useHeaderShadow.jsx",
-    "components/CartProvider.tsx",
     "context/searchContext.tsx"
   ],
   "exclude": ["node_modules"]

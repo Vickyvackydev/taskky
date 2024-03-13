@@ -11,8 +11,8 @@ import {
   FaTrash,
 } from "react-icons/fa";
 import Deletemodal from "./Deletemodal";
-// import Skeleton from "./skeleton";
-import Skeleton from "react-loading-skeleton";
+import Skeleton from "./skeleton";
+// import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export interface eventCardDataProps {
@@ -42,6 +42,7 @@ interface eventCardProps {
   loading: boolean;
   doneTask: any;
   // setdoneTask: React.Dispatch<React.SetStateAction<boolean>>;
+  markEventDone: (id: any) => void;
 
   handleCompletedEvent: (id: any) => void;
 }
@@ -56,56 +57,20 @@ const Eventcard = ({
   loading,
   doneTask,
   handleCompletedEvent,
+  markEventDone,
 }: eventCardProps) => {
   return (
     <main className="lg:mt-0 mt-3">
-      <span className="lg:text-xl text-lg font-semibold text-text_black lg:mt-0 pt-2">
+      <span className="lg:text-xl text-lg font-semibold text-text_black lg:mt-0 pt-2 dark:text-gray-300">
         All Featured events available here
       </span>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 mt-5">
         {loading ? (
-          <div className="flex flex-col gap-6">
-            <div className="flex justify-between gap-8">
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-            </div>
-            <div className="flex justify-between gap-8">
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-              <div>
-                <Skeleton height={100} width={200} className="rounded-lg" />
-                <Skeleton count={5} width={200} />
-              </div>
-            </div>
-          </div>
+          <Skeleton />
         ) : event_card_data?.length > 0 ? (
           event_card_data?.map((data: eventCardDataProps, index: number) => (
             <div
-              className="bg-backgrd w-full max-h-full rounded-lg shadow-md pb-5 hover:scale-10 relative"
+              className="bg-backgrd dark:bg-gray-900 w-full max-h-full rounded-lg shadow-md pb-5 hover:scale-10 relative"
               key={index}
             >
               <div>
@@ -120,7 +85,7 @@ const Eventcard = ({
               <div className="flex items-center gap-5 absolute right-4 top-28">
                 <div className="hover:scale-90 transition-all duration-300">
                   <span
-                    className="flex justify-center items-center w-8 h-8 bg-white rounded-full text-gray-400 shadow-md cursor-pointer  tooltip tooltip-bottom"
+                    className="flex justify-center items-center w-8 h-8 bg-white dark:bg-bg_black dark:text-gray-300 rounded-full text-gray-400 shadow-md cursor-pointer  tooltip tooltip-bottom"
                     onClick={() => {
                       handleSelectedToUpdate(data);
                     }}
@@ -131,55 +96,42 @@ const Eventcard = ({
                 </div>
                 <div className="hover:scale-90 transition-all duration-300">
                   <span
-                    className="flex justify-center items-center w-8 h-8 bg-white rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
                     onClick={() => handleSelected(data)}
                     data-tip="Delete"
                   >
                     <FaTrash />
                   </span>
                 </div>
-                <div
-                  className="hover:scale-90 transition-all duration-300"
-                  onClick={() => handleCompletedEvent(data.id)}
-                >
-                  {doneTask === data.id ? (
-                    <span
-                      className="flex justify-center items-center w-8 h-8 bg-white rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
-                      data-tip="Mark as undone"
-                    >
-                      <FaTimes />
-                    </span>
-                  ) : (
-                    <span
-                      className="flex justify-center items-center w-8 h-8 bg-white rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
-                      data-tip="Mark as done"
-                    >
-                      <FaCheck />
-                    </span>
-                  )}
+                <div className="hover:scale-90 transition-all duration-300">
+                  <span
+                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                    onClick={() => {
+                      markEventDone(data.id);
+                    }}
+                    data-tip="Mark as done"
+                  >
+                    <FaCheck />
+                  </span>
                 </div>
               </div>
               <div className="px-6 mt-5 flex flex-col gap-4">
                 <div className=" flex flex-col gap-2">
-                  {doneTask === data.id ? (
-                    <span className="text-green-300">Done</span>
-                  ) : (
-                    <span
-                      className={`${
-                        data.status === "active"
-                          ? "text-green-400"
-                          : data.status === "pending"
-                          ? "text-orange-400"
-                          : data.status === "canceled"
-                          ? "text-red-400"
-                          : ""
-                      } text-sm`}
-                    >
-                      {data.status}
-                    </span>
-                  )}
+                  <span
+                    className={`${
+                      data.status === "active"
+                        ? "text-green-400 dark:text-green-500"
+                        : data.status === "pending"
+                        ? "text-orange-400 dark:text-orange-500"
+                        : data.status === "Done"
+                        ? "text-green-400  dark:text-green-500"
+                        : ""
+                    } text-sm`}
+                  >
+                    {data.status}
+                  </span>
 
-                  <span className="text-xl font-semibold text-text_black">
+                  <span className="text-xl font-semibold text-text_black dark:text-gray-300">
                     {data.eventName}
                   </span>
                   <span className="text-green-400 text-lg flex gap-2 items-center">
@@ -187,7 +139,7 @@ const Eventcard = ({
                     <span>{data.location}</span>
                   </span>
                   <div className="w-full h-[90px]">
-                    <span className="texy-sm text-text_gray font-medium ">
+                    <span className="texy-sm text-text_gray font-medium dark:text-gray-300">
                       {/* <FaDotCircle className="text-green-400 " /> */}
                       {data.description}.
                     </span>
@@ -209,7 +161,7 @@ const Eventcard = ({
                     <span>{data.endTime}</span>
                   </div>
                 </div>
-                <div className="text-xs flex justify-between items-center font-semibold text-text_black">
+                <div className="text-xs flex justify-between items-center font-semibold dark:text-gray-300 text-text_black">
                   <div>
                     <span>Host: </span>
                     <span>{data.hostName}</span>
@@ -221,7 +173,9 @@ const Eventcard = ({
                 <div className="flex flex-col gap-3">
                   <span className="text-center text-sm flex items-center gap-2 justify-center">
                     <FaDotCircle className="text-green-400" />
-                    {data.otherDetails}
+                    <span className="dark:text-gray-300">
+                      {data.otherDetails}
+                    </span>
                   </span>
                   <span className="text-center text-xs font-medium flex  gap-1 justify-center text-orange-300">
                     <FaCalendar />
@@ -233,7 +187,7 @@ const Eventcard = ({
           ))
         ) : (
           <div>
-            <span>No events currently</span>
+            <span className="dark:text-gray-300">No events currently</span>
           </div>
         )}
       </div>

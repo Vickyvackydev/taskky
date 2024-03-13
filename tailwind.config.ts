@@ -13,6 +13,7 @@ module.exports = {
         text_gray: "#3A3F51",
         border_color: "#EDF2F7",
         backgrd: "#FAFAFA",
+        bg_black: "#26282C",
       },
       backgroundImage: {
         gif: "url('/blue_tick.gif')",
@@ -30,4 +31,5 @@ module.exports = {
     },
   },
   plugins: [require("daisyui")],
+  darkMode: "class",
 };

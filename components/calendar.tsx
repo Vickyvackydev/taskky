@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import React, { useState } from "react";
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -44,9 +45,15 @@ const Calendar = () => {
       <div className="flex justify-between mt-5">
         <button
           onClick={handlePreviousMonth}
-          className="w-8 h-8 flex justify-center items-center rounded-full border-2  border-border_color text-purple-400 text-lg font-semibold hover:scale-75 transition-all duration-150"
+          className="w-8 h-8 flex justify-center items-center rounded-full border-2  border-border_color dark:border-gray-700 text-purple-400 text-lg font-semibold hover:scale-75 transition-all duration-150"
         >
-          {"<"}
+          <Image
+            src={"/right-arrow.svg"}
+            width={10}
+            height={10}
+            alt="right-arrow"
+            className="scale-x-[-1]"
+          />
         </button>
         <span className="text-lg font-semibold text-gray-500">{`${selectedDate.getDate()} ${selectedDate.toLocaleString(
           "default",
@@ -57,9 +64,14 @@ const Calendar = () => {
 
         <button
           onClick={handleNextMonth}
-          className="w-8 h-8 flex justify-center items-center rounded-full border-2  border-border_color text-purple-400 text-lg font-semibold hover:scale-75 transition-all duration-150"
+          className="w-8 h-8 flex justify-center items-center rounded-full border-2  border-border_color dark:border-gray-700 text-purple-400 text-lg font-semibold hover:scale-75 transition-all duration-150"
         >
-          {">"}
+          <Image
+            src={"/right-arrow.svg"}
+            width={10}
+            height={10}
+            alt="right-arrow"
+          />
         </button>
       </div>
       <div className="mt-3 ml-5">
@@ -67,7 +79,7 @@ const Calendar = () => {
           <thead>
             <tr>
               {daysOfWeek.map((days) => (
-                <th className="px-1 py-2">{days}</th>
+                <th className="px-1 py-2 dark:text-gray-400">{days}</th>
               ))}
             </tr>
           </thead>
@@ -79,9 +91,9 @@ const Calendar = () => {
                     key={i}
                     className={`${
                       days === selectedDate.getDate()
-                        ? "flex justify-center items-center w-8 h-8 border-2  border-border_color text-purple-400 rounded-full"
+                        ? "flex justify-center items-center w-8 h-8 border-2  border-border_color dark:border-gray-700 text-purple-400 rounded-full"
                         : ""
-                    }`}
+                    } dark:text-gray-400`}
                   >
                     {days !== null ? days : ""}
                   </td>

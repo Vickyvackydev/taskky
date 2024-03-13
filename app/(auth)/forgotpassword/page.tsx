@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 const Forgot_Password = () => {
   const [email, setEmail] = useState("");
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleResetPassword = async (

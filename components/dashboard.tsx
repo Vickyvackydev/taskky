@@ -1,19 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-
 import Dashboardnav from "./dashboardnav";
 import Sidebar from "./sidebar";
 import { useMediaQuery } from "@/hooks";
 import RightHero from "./rightHero";
-import { auth } from "@/firebase/firebase.config";
-import { useRouter } from "next/navigation";
 
 type Props = {
   children: React.ReactNode;
 };
 const Dashboard = ({ children }: Props) => {
   const isMobileView = useMediaQuery("(max-width: 640px)");
-  const router = useRouter();
   const isTabletView = useMediaQuery("(max-width: 840px)");
   const [isSideBarVisible, setIsSideBarVisible] = useState(false);
   const [isRightSide, setIsRightSide] = useState(false);

@@ -8,15 +8,18 @@ import PageHeader from "./pageHeader";
 import { maxWidth } from "./width";
 import { useFetchFirestoreData } from "@/hooks";
 import {
+  FieldValue,
   addDoc,
   collection,
   deleteDoc,
   doc,
+  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { T_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
+import MarkAsDone from "@/utils/markasdone";
 
 const Tasks = () => {
   const [modal, setModal] = useState<boolean>(false);
@@ -44,6 +47,7 @@ const Tasks = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
+            createdAt: serverTimestamp(),
           });
           setModal(false);
         } else {
@@ -89,6 +93,8 @@ const Tasks = () => {
         status: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        updatedTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        createdAt: serverTimestamp(),
       };
 
       try {
@@ -111,24 +117,25 @@ const Tasks = () => {
     setSelectedTask(null);
   };
 
-  const markAsDone = async (taskId: any) => {
-    try {
-      const taskDocRef = doc(db, "tasks", taskId.toString());
-      await updateDoc(taskDocRef, { status: "completed" });
+  // const markAsDone = async (taskId: any) => {
+  //   try {
+  //     const taskDocRef = doc(db, "tasks", taskId);
+  //     await updateDoc(taskDocRef, { status: "completed" });
 
-      console.log("status has being updated");
-    } catch (error) {
-      console.log("error marking task as done", error);
-    }
-  };
+  //     console.log("status has being updated");
+  //   } catch (error) {
+  //     console.log("error marking task as done", error);
+  //   }
+  // };
   return (
     <div className={maxWidth}>
       <PageHeader
         text="Your Task Page"
+        textStyle="dark:text-gray-300"
         button={true}
         setState={setModal}
         btnText="Add task"
-        btnStyle="border-2 border-border_color"
+        btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-purple-400"
         btnTextStyle="text-purple-400"
       />
@@ -145,7 +152,7 @@ const Tasks = () => {
         modalname="Task"
         updated={updated}
         loading={loading}
-        markAsDone={() => markAsDone(tasks)}
+        markAsDone={() => MarkAsDone("tasks", selectedTask?.id)}
       />
       <AddTaskModal
         openModal={modal}
@@ -163,8 +170,10 @@ const Tasks = () => {
         }
         btnStyle="border-border_color border"
         selectedTask={selectedTask?.id}
-        taskName="task"
-        modalCloseColor={"border-border_color border text-purple-400"}
+        taskName="Task"
+        modalCloseColor={
+          "border-border_color border text-purple-400 dark:border-gray-700"
+        }
         loading={isLoading}
         textColor="text-purple-400"
       />

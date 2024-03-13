@@ -8,12 +8,14 @@ import {
   collection,
   deleteDoc,
   doc,
+  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { A_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
 import { useFetchFirestoreData } from "@/hooks";
+import MarkAsDone from "@/utils/markasdone";
 
 const Activity = () => {
   const [modal, setModal] = useState(false);
@@ -42,6 +44,7 @@ const Activity = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser?.uid,
+            createdAt: serverTimestamp(),
           });
           setModal(false);
         } else {
@@ -81,6 +84,7 @@ const Activity = () => {
         status: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        createdAt: serverTimestamp(),
       };
 
       try {
@@ -96,14 +100,26 @@ const Activity = () => {
     }
   };
 
+  const markAsDone = async (taskId: any) => {
+    try {
+      const taskDocRef = doc(db, "activities", taskId);
+      await updateDoc(taskDocRef, { status: "completed" });
+
+      console.log("status has being updated");
+    } catch (error) {
+      console.log("error marking task as done", error);
+    }
+  };
+
   return (
     <div className={maxWidth}>
       <PageHeader
         text="Your activities here"
+        textStyle="dark:text-gray-300"
         button={true}
         setState={setModal}
         btnText="Add activity"
-        btnStyle="border-2 border-border_color"
+        btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-orange-400"
         btnTextStyle="text-orange-400"
       />
@@ -121,6 +137,7 @@ const Activity = () => {
         modalname="Activity"
         updated={updated}
         loading={loading}
+        markAsDone={() => MarkAsDone("activities", selectedActivity?.id)}
       />
 
       <AddTaskModal
@@ -145,7 +162,9 @@ const Activity = () => {
         }
         taskName="activity"
         btnStyle="border-border_color border"
-        modalCloseColor={"border-border_color text-orange-400 border"}
+        modalCloseColor={
+          " border border-border_color text-red-400 dark:border-gray-700"
+        }
         loading={isLoading}
         textColor="text-orange-400"
       />

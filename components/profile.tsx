@@ -4,7 +4,10 @@ import React, { useEffect, useState } from "react";
 import Button from "./Button";
 import {
   FaBox,
+  FaMoon,
   FaPlus,
+  FaSun,
+  FaTools,
   FaTrash,
   FaUpload,
   FaUser,
@@ -14,6 +17,7 @@ import { auth, db } from "@/firebase/firebase.config";
 import { collection, doc, setDoc } from "firebase/firestore";
 import { useFetchFirestoreData } from "@/hooks";
 import Modal from "./modal";
+import { useTheme } from "next-themes";
 
 interface Props {
   isOpen: boolean;
@@ -48,6 +52,8 @@ const Profile = ({
   removeimage,
 }: Props) => {
   const [profession, setProfession] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const { resolvedTheme, setTheme } = useTheme();
   const [input, setInput] = useState(false);
   const userProfessionRef = collection(db, "profession");
   const { data: userProfession } = useFetchFirestoreData("profession");
@@ -80,6 +86,8 @@ const Profile = ({
     (userProf: any) => userProf.profession
   );
 
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     if (auth?.currentUser) {
       setGoogleAuthName(auth?.currentUser?.displayName);
@@ -94,7 +102,7 @@ const Profile = ({
   return (
     <Transition
       as={"div"}
-      className={`absolute lg:flex hidden bg-white shadow-md rounded-lg w-[20vw] h-[70vh] right-3 top-[7rem] justify-center items-center`}
+      className={`absolute lg:flex hidden bg-white shadow-md rounded-lg w-[20vw] h-[70vh] right-3 top-[7rem] justify-center items-center dark:bg-gray-900`}
       show={isOpen}
       enter="ease-out duration-300"
       enterFrom="opacity-0 scale-95"
@@ -124,34 +132,43 @@ const Profile = ({
           )}
         </div>
         <div className="flex flex-col items-start py-5 gap-4">
-          <div className="flex flex-col gap-2 border-b border-border_color w-full">
-            <label htmlFor="text" className="text-text_gray">
+          <div className="flex flex-col gap-2  w-full">
+            <label
+              htmlFor="text"
+              className="text-text_gray dark:text-gray-300 text-sm"
+            >
               Name
             </label>
             <div className="flex gap-2 items-center">
-              <FaUserNinja className="text-gray-300" />
+              <FaUserNinja className="text-green-300" />
               {googleAuthName ? (
-                <span className="text-gray-300">{googleAuthName}</span>
+                <span className="text-gray-300 text-sm">{googleAuthName}</span>
               ) : (
                 <span>{profile_name}</span>
               )}
             </div>
           </div>
-          <div className="flex flex-col gap-2 border-b border-border_color w-full">
-            <label htmlFor="text " className="text-text_gray">
+          <div className="flex flex-col gap-2  w-full">
+            <label
+              htmlFor="text "
+              className="text-text_gray dark:text-gray-300 text-sm"
+            >
               Email
             </label>
             <div className="flex gap-2 items-center">
-              <FaUser className="text-gray-300" />
-              <span className="text-gray-300">{userEmail ?? null}</span>
+              <FaUser className="text-green-300 " />
+              <span className="text-gray-300 text-sm">{userEmail ?? null}</span>
             </div>
           </div>
-          <div className="flex flex-col gap-2 border-b border-border_color w-full">
-            <label htmlFor="text " className="text-text_gray">
+          <div className="flex flex-col gap-2  w-full">
+            <label
+              htmlFor="text "
+              className="text-text_gray dark:text-gray-300 text-sm"
+            >
               Profession
             </label>
             <div className="flex gap-2 items-center justify-between">
-              <FaBox className="text-gray-300" />
+              <FaBox className="text-green-300" />
               {input ? (
                 <input
                   type="text"
@@ -161,7 +178,7 @@ const Profile = ({
                   className="outline-none w-full ml-3 "
                 />
               ) : (
-                <span className="text-gray-300">
+                <span className="text-gray-300 text-sm">
                   {userProfessionName ?? "add profession"}
                 </span>
               )}
@@ -176,7 +193,32 @@ const Profile = ({
               )}
             </div>
           </div>
+          <div className="flex flex-col gap-2  w-full mt-5">
+            <div className="flex justify-between items-center">
+              <div className="flex gap-2 text-xs">
+                <FaTools className="text-green-300" />
+                <span className="text-gray-300 ">Settings</span>
+              </div>
+              <div className="flex gap-2 rounded-2xl border dark:border-gray-700 border-border_color px-1 py-2">
+                <button
+                  onClick={() => setTheme("dark")}
+                  className={`text-lg dark:text-green-300 text-gray-300`}
+                >
+                  <FaMoon />
+                </button>
+                <button
+                  onClick={() => setTheme("light")}
+                  className={`text-lg ${
+                    resolvedTheme === "light" ? "text-green-300" : ""
+                  } `}
+                >
+                  <FaSun />
+                </button>
+              </div>
+            </div>
+          </div>
 
+          {/* <span onClick={() => setTheme("light")}>light mode </span> */}
           <div
             className={` ${google_image ? "tooltip tooltip-bottom" : ""}`}
             data-tip="can't upload google image"
@@ -184,7 +226,7 @@ const Profile = ({
             <Button
               text={`${uploading ? "uploading..." : "upload image"}`}
               icon={<FaUpload />}
-              btnStyles={`justify-center w-full border border-border_color py-2 rounded-xl mt-[2rem] `}
+              btnStyles={`justify-center w-full border border-border_color py-2 rounded-xl mt-[1rem] `}
               textStyles="text-purple-400"
               iconStyles="text-purple-400 pt-[1.8px]"
               disabled={google_image || uploading}
@@ -208,7 +250,7 @@ const Profile = ({
                 height={100}
                 alt="preview image"
               />
-              <span>{selectedImageName}</span>
+              <span className="dark:text-gray-300">{selectedImageName}</span>
               <button onClick={removeimage} className="text-red-400">
                 <FaTrash />
               </button>
@@ -228,7 +270,7 @@ const Profile = ({
             loadingTextColor="text-purple-400"
             loaderColor={"#A695C7"}
             icon={<FaUpload />}
-            btnStyles={`justify-center w-full border border-border_color py-2 rounded-xl mt-[2rem]`}
+            btnStyles={`justify-center w-full border border-border_color py-2 rounded-xl mt-[2rem] dark:border-gray-700`}
             textStyles="text-purple-400"
             iconStyles="text-purple-400 pt-[1.8px]"
             handleClick={handleUploadImage}

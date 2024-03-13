@@ -1,17 +1,14 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import { FaInfo, FaPencilAlt, FaTrash } from "react-icons/fa";
-
 import { usePathname } from "next/navigation";
 import DetailsBox from "./detailsBox";
 import Deletemodal from "./Deletemodal";
 import { useMediaQuery } from "@/hooks";
 import Preloader from "./preloader";
-import { THREE_DOTS } from "@/public";
+import { THREE_DOTS, THREE_DOTS_GRAY } from "@/public";
 import DropDown from "./DropDown";
 import { useSearchQuery } from "@/context/searchContext";
-import { maxWidth } from "./width";
-import { doc } from "firebase/firestore";
+import { useTheme } from "next-themes";
 
 export interface TaskProps {
   id: number;
@@ -20,6 +17,7 @@ export interface TaskProps {
   status: string;
   createdDate: string;
   createdTime: string;
+  updatedTime: string;
 }
 
 interface tasksMainProps {
@@ -45,14 +43,14 @@ const TaskComponent = ({
   handleDelete,
   handleSelector,
   handleUpdate,
-  deleteContentColor,
   iconType,
   modalname,
-  allTasks,
   updated,
   loading,
   markAsDone,
 }: tasksMainProps) => {
+  const { resolvedTheme } = useTheme();
+  const { showTopContent } = useSearchQuery();
   const [hoverOption, setHoverOption] = useState<boolean | number>(false);
   const [actionModal, setActionModal] = useState<boolean>(false);
   const [detailsModal, setDetailsModal] = useState(false);
@@ -61,9 +59,6 @@ const TaskComponent = ({
   const mobileScreen = useMediaQuery("(max-width: 640px)");
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [click, setClick] = useState<number>(0);
-
-  const { showTopContent } = useSearchQuery();
-  const [doneTask, setDoneTask] = useState<number | null>(0);
 
   const handleSelectedTask = (task: any) => {
     setSelectedTask(task);
@@ -84,7 +79,7 @@ const TaskComponent = ({
           <div className="flex flex-col">
             <div
               key={task.id}
-              className="flex flex-auto mt-6 rounded-xl bg-backgrd py-4 relative justify-between items-center pr-3"
+              className="flex flex-auto mt-6 rounded-xl bg-backgrd dark:bg-gray-900 dark:text-gray-300 py-4 relative justify-between items-center pr-3"
               onMouseEnter={() => setHoverOption(task.id)}
               onMouseLeave={() => setHoverOption(false)}
             >
@@ -115,11 +110,11 @@ const TaskComponent = ({
                 <span
                   className={`lg:text-[0.85rem] text-xs  lg:p-2 p-1 rounded-xl text-white  ${
                     task.status === "active"
-                      ? "bg-green-300"
+                      ? "bg-green-300 dark:bg-green-500"
                       : task.status === "pending"
-                      ? "bg-orange-300"
+                      ? "bg-orange-300 dark:bg-orange-500"
                       : task.status === "completed"
-                      ? "bg-green-300"
+                      ? "bg-green-300 dark:bg-green-500"
                       : ""
                   }`}
                 >
@@ -131,16 +126,26 @@ const TaskComponent = ({
                 <div
                   className="cursor-pointer"
                   onClick={() => {
+                    handleSelector(task);
                     setDropDown((prev) => !prev);
                     setClick(task.id);
                   }}
                 >
-                  <Image
-                    src={THREE_DOTS}
-                    width={25}
-                    height={25}
-                    alt="dots icon"
-                  />
+                  {resolvedTheme === "dark" ? (
+                    <Image
+                      src={THREE_DOTS_GRAY}
+                      width={25}
+                      height={25}
+                      alt="dots icon"
+                    />
+                  ) : (
+                    <Image
+                      src={THREE_DOTS}
+                      width={25}
+                      height={25}
+                      alt="dots icon"
+                    />
+                  )}
                   {click === task.id && (
                     <DropDown
                       open={dropDown}
@@ -153,21 +158,24 @@ const TaskComponent = ({
                         handleSelectedTask(task);
                         setDetailsModal(true);
                       }}
-                      handleComplete={() => markAsDone(task.id)}
-                      complete={doneTask}
+                      handleComplete={() => {
+                        markAsDone(task?.id);
+                      }}
+                      complete={task.status !== "completed" ? null : task.id}
                     />
                   )}
                 </div>
               )}
             </div>
 
-            <div className="lg:flex hidden items-center gap-5  text-gray-300 font-medium ">
+            <div className="lg:flex hidden items-center gap-5  text-gray-300 dark:text-gray-500 font-medium ">
               {updated ? (
-                <span className="lg:text-sm text-xs">{`${
-                  new Date().getHours() || new Date().getMinutes() > updated
-                    ? "Last updated: "
-                    : "updated at:"
-                }`}</span>
+                <span>
+                  {`${new Date().getHours}:${new Date().getMinutes()}` !==
+                  task.updatedTime
+                    ? "Last updated"
+                    : "just updated"}
+                </span>
               ) : (
                 <span className="lg:text-sm text-xs">{`${
                   justCreated === task.createdTime

@@ -83,14 +83,14 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
     >
       <main>
         <div
-          className="absolute lg:hidden  z-50 right-[5rem] w-10 h-10 rounded-full flex justify-center items-center border-2 top-3"
+          className="absolute lg:hidden  z-50 right-[5rem] w-10 h-10 rounded-full flex justify-center items-center border-2 top-3 dark:border-gray-700"
           onClick={onClose}
         >
-          <span className="text-lg ">
+          <span className="text-lg dark:text-gray-300">
             <FaTimes />
           </span>
         </div>
-        <div className="flex flex-col gap-10  bg-gray-50 h-screen fixed">
+        <div className="flex flex-col gap-10  bg-gray-50 h-screen fixed dark:bg-gray-900">
           <Link
             href="/Dashboard"
             className="flex justify-center items-center p-10"
@@ -133,7 +133,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
               </Link>
             ))}
           </div>
-          <div className="absolute bottom-8 ml-4 flex items-center gap-5 hover:text-purple-400 cursor-pointer">
+          <div className="absolute bottom-8 ml-4 flex items-center gap-5 hover:text-purple-400 cursor-pointer dark:text-gray-300 dark:hover:text-green-500">
             <span>
               <FaSignOutAlt />
             </span>

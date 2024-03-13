@@ -106,10 +106,10 @@ const Login = () => {
             Kindly login to continue
           </p>
           {wrongDetailsPopUp && (
-            <div role="alert" className="alert alert-error">
+            <div className="bg-red-400 flex gap-3 items-center px-3 rounded-lg lg:text-lg text-xs">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="stroke-current shrink-0 h-6 w-6"
+                className="stroke-current shrink-0 h-4 w-4"
                 fill="none"
                 viewBox="0 0 24 24"
               >

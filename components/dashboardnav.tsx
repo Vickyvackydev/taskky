@@ -8,6 +8,8 @@ import Profile from "./profile";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { useFetchFirestoreData } from "@/hooks";
 import { useSearchQuery } from "@/context/searchContext";
+import SmallScreenPopup from "./smallscreenpopup";
+import { useTheme } from "next-themes";
 
 type navBarType = {
   isOpen: () => void;
@@ -19,6 +21,7 @@ type navBarType = {
   isRightSide: boolean;
 };
 const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
+  const { resolvedTheme } = useTheme();
   const { searchQuery, setSearchQuery, setShowTopContent } = useSearchQuery();
   const [greeting, setGreeting] = useState("");
   const [uploadPopUp, setUploadPopUp] = useState(false);
@@ -32,8 +35,13 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   const imagesCollectionRef = collection(db, "images");
   const { data: user_authname, loading } = useFetchFirestoreData("usernames");
   const [previewImg, setPreviewImg] = useState<any>(null);
+  const [mobilePopUp, setMobilePopUp] = useState(false);
+  const { data: userProfession } = useFetchFirestoreData("profession");
 
   const userName = user_authname.map((name: any) => name.name.split(" ")[0]);
+  const userProfessionName = userProfession.map(
+    (userProf: any) => userProf.profession
+  );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -137,20 +145,20 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   };
 
   return (
-    <nav className="border-b-2 lg:w-[85vw] w-full lg:p-5 lg:fixed relative bg-white z-30 shadow-sm lg:left-[14.4rem] left-0 lg:block flex p-5">
+    <nav className="border-b-2 lg:w-[85vw] w-full lg:p-5 lg:fixed relative bg-white dark:bg-bg_black z-30 shadow-sm lg:left-[14.4rem] left-0 lg:block flex p-5 dark:border-gray-700">
       {mobileView && (
         <div onClick={() => isOpen()}>
           <span className="cursor-pointer">
-            <FaBars />
+            <FaBars className="dark:text-gray-300" />
           </span>
         </div>
       )}
       <div className="flex justify-between items-center ">
-        <span className="pl-4 pr-[5rem]">
+        <span className="pl-4 pr-[5rem] dark:text-gray-300  ">
           {greeting}{" "}
           {`${displayName ? displayName?.split(" ")[0] : userName} 😊`}
         </span>
-        <div className="border-2 border-border_color px-6 rounded-3xl w-[30rem] ml-[4rem] lg:flex hidden">
+        <div className="border-2 border-border_color dark:border-gray-700 px-6 rounded-3xl w-[30rem] ml-[4rem] lg:flex hidden">
           <span className="pt-[0.9rem] text-orange-400 lg:block hidden">
             <FaSearch />
           </span>
@@ -159,7 +167,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
             placeholder={`Search task name`}
             value={searchQuery}
             onChange={handleChange}
-            className="py-3 outline-none px-3 placeholder:text-lg bg-transparent placeholder:text-gray-300 lg:block hidden "
+            className="py-3 outline-none px-3 placeholder:text-lg bg-transparent placeholder:text-gray-300 lg:block hidden dark:text-gray-300 "
           />
         </div>
         <div
@@ -174,7 +182,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
                   width={50}
                   height={50}
                   alt="profile"
-                  className="border-2 border-border_color rounded-full"
+                  className="border-2 border-border_color rounded-full dark:border-gray-700"
                 />
               ) : (
                 <Image
@@ -182,27 +190,38 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
                   width={50}
                   height={50}
                   alt="profile"
-                  className="border-2 border-border_color rounded-full"
+                  className="border-2 border-border_color rounded-full dark:border-green-300"
                 />
               )}
 
               <div className="">
-                <span>My profile</span>
+                <span className="dark:text-gray-300">My profile</span>
               </div>
 
               <div className="pt-0">
-                <Image
-                  src="/arrow_down.svg"
-                  width={10}
-                  height={10}
-                  alt="arrow down"
-                />
+                {resolvedTheme === "dark" ? (
+                  <div>
+                    <Image
+                      src="/white-down-arrow-png-2.png"
+                      width={10}
+                      height={10}
+                      alt="arrow down"
+                    />
+                  </div>
+                ) : (
+                  <Image
+                    src="/arrow_down.svg"
+                    width={10}
+                    height={10}
+                    alt="arrow down"
+                  />
+                )}
               </div>
             </div>
           </div>
         </div>
         <div className="lg:hidden  flex gap-4 flex-auto items-center">
-          <div>
+          <div onClick={() => setMobilePopUp((prev) => !prev)}>
             {photoURL || UploadUrl ? (
               <Image
                 src={photoURL || UploadUrl}
@@ -223,7 +242,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
           </div>
           <div className="cursor-pointer">
             <span onClick={() => Open()}>
-              <FaListUl />
+              <FaListUl className="dark:text-gray-300" />
             </span>
           </div>
         </div>
@@ -247,6 +266,15 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
           setPreviewImg(null);
           setSelectedImage(null);
         }}
+      />
+
+      <SmallScreenPopup
+        openPopUp={mobilePopUp}
+        closePopUp={() => setMobilePopUp(false)}
+        userEmail={UserEmail || ""}
+        userName={displayName || userName}
+        userProfession={userProfessionName}
+        profileimage={photoURL || UploadUrl}
       />
     </nav>
   );

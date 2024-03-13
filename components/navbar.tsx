@@ -27,7 +27,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -100 }}
       whileInView={{ opacity: 1, y: 1 }}
       viewport={{ once: false, amount: 0.25 }}
-      transition={{ duration: 2 }}
+      transition={{ duration: 0.5 }}
       className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500"
       id="navbar"
     >

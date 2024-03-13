@@ -88,7 +88,6 @@ const Events = () => {
             status: status,
             hostName: hostName,
             eventType: selectedEventType,
-
             createdAt: serverTimestamp().toString(),
           });
           setModal(false);
@@ -159,7 +158,6 @@ const Events = () => {
           location: location,
           eventImage: imageUrl,
           otherDetails: other_details,
-
           status: status,
           hostName: hostName,
           eventType: selectedEventType,
@@ -180,14 +178,25 @@ const Events = () => {
     }
   };
 
+  const markEventDone = async (event_id: any) => {
+    try {
+      const eventDoc = doc(db, "events", event_id);
+      await updateDoc(eventDoc, { status: "Done" });
+      console.log("event has being updated");
+    } catch (error) {
+      console.log("could not update evnt status", error);
+    }
+  };
+
   return (
     <div className={maxWidth}>
       <PageHeader
         text="Your events here"
+        textStyle="dark:text-gray-300"
         button={true}
         setState={setModal}
         btnText="Add event"
-        btnStyle="border-2 border-border_color"
+        btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-blue-400"
         btnTextStyle="text-blue-400"
       />
@@ -240,6 +249,7 @@ const Events = () => {
         loading={loading}
         doneTask={done}
         handleCompletedEvent={() => handleCompletedEvent(selectedEvent?.id)}
+        markEventDone={() => markEventDone(selectedEvent?.id)}
       />
     </div>
   );

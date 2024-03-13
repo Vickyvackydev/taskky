@@ -9,12 +9,14 @@ import {
   collection,
   deleteDoc,
   doc,
+  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
 import { P_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
 import { useFetchFirestoreData } from "@/hooks";
+import MarkAsDone from "@/utils/markasdone";
 
 const Plans = () => {
   const [modal, setModal] = useState(false);
@@ -44,6 +46,7 @@ const Plans = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
+            createdAt: serverTimestamp(),
           });
           setModal(true);
         } else {
@@ -85,6 +88,7 @@ const Plans = () => {
         status: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        createdAt: serverTimestamp(),
       };
 
       try {
@@ -99,14 +103,26 @@ const Plans = () => {
     }
     setModal(false);
   };
+
+  const markAsDone = async (taskId: any) => {
+    try {
+      const taskDocRef = doc(db, "plans", taskId);
+      await updateDoc(taskDocRef, { status: "completed" });
+
+      console.log("status has being updated");
+    } catch (error) {
+      console.log("error marking task as done", error);
+    }
+  };
   return (
     <div className={maxWidth}>
       <PageHeader
         text="Your plans here"
+        textStyle="dark:text-gray-300"
         button={true}
         setState={setModal}
         btnText="Add plan"
-        btnStyle="border-2 border-border_color"
+        btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-red-400"
         btnTextStyle="text-red-400"
       />
@@ -124,6 +140,7 @@ const Plans = () => {
         modalname="Plan"
         updated={updated}
         loading={loading}
+        markAsDone={() => MarkAsDone("plans", selectedPlan?.id)}
       />
 
       <AddTaskModal
@@ -146,7 +163,9 @@ const Plans = () => {
         }
         taskName="plan"
         btnStyle="border border-border_color"
-        modalCloseColor={"border border-border_color text-red-400"}
+        modalCloseColor={
+          "border border-border_color text-red-400 dark:border-gray-700"
+        }
         loading={isLoading}
         textColor="text-red-400"
       />

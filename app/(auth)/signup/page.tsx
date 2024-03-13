@@ -14,6 +14,7 @@ import { FaCheck, FaCheckSquare, FaEye, FaEyeSlash } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Modal from "@/components/modal";
 import { collection, doc, setDoc } from "firebase/firestore";
+import { useMediaQuery } from "@/hooks";
 
 const Signup = () => {
   const router = useRouter();
@@ -30,6 +31,7 @@ const Signup = () => {
   const [check, setCheck] = useState<boolean | string>(false);
   const [modal, setModal] = useState(false);
   const userCollectionRef = collection(db, "usernames");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleRegister = async () => {
     setLogging(true);
@@ -53,6 +55,7 @@ const Signup = () => {
           setUserName("");
           setChecked(false);
           setNoPassword(false);
+          setErrorMessage("");
 
           await setDoc(doc(userCollectionRef, auth?.currentUser?.uid), {
             name: userName,
@@ -64,6 +67,7 @@ const Signup = () => {
         setModal(true);
       } catch (error: any) {
         console.log("Registration failed", error.message);
+        setErrorMessage("email already exist");
       } finally {
         setLogging(false);
       }
@@ -164,6 +168,7 @@ const Signup = () => {
                 placeholder="josh@gmail.com"
                 className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm"
               />
+              <span className="text-red-400">{errorMessage}</span>
             </div>
             <div>
               <label htmlFor="password" className="text-gray-500">
@@ -328,11 +333,17 @@ export default Signup;
 export const TopBar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const isMobileScreen = useMediaQuery("(max-width: 640px)");
   return (
     <div className=" h-[7rem]">
       <div className="fixed top-0 flex w-full justify-between items-center pb-3 px-5 pt-5 shadow-sm bg-white z-30">
         <Link href="/Homepage">
-          <Image src="/logo.png" width={150} height={150} alt="logo image" />
+          <Image
+            src="/logo.png"
+            width={isMobileScreen ? 70 : 150}
+            height={150}
+            alt="logo image"
+          />
         </Link>
 
         {pathname.includes("/login") ? (

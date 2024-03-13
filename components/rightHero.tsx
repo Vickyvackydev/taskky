@@ -13,7 +13,6 @@ import {
   collection,
   deleteDoc,
   doc,
-  getDocs,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
@@ -39,6 +38,9 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [selectedTeam, setSelectedTeam] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
+  const { data: tasks } = useFetchFirestoreData("tasks");
+
+  const doneTasks = tasks.map((task: any) => task.status);
 
   const { data: teams, loading } = useFetchFirestoreData("teams");
 
@@ -126,7 +128,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   };
   return (
     <Transition
-      className={`flex-none h-full w-80 lg:w-[20vw] fixed lg:right-0  top-0 lg:z-10 z-30 lg:mt-[8rem] mt-0 bg-white lg:px-0 px-5 lg:pt-0 pt-2 lg:mr-6 mr-0 shadow-md lg:shadow-none`}
+      className={`flex-none h-full w-80 lg:w-[20vw] fixed lg:right-0  top-0 lg:z-10 z-30 lg:mt-[8rem] mt-0 bg-white lg:px-0 px-5 lg:pt-0 pt-2 lg:mr-6 mr-0 shadow-md lg:shadow-none dark:bg-bg_black`}
       as={"div"}
       show={rightSide}
       enter="transition-all ease-in duration-500"
@@ -138,7 +140,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
     >
       <div className="">
         <div className="flex justify-between ">
-          <span className="lg:text-xl text-sm">
+          <span className="lg:text-xl text-sm dark:text-gray-400">
             My Team{" "}
             <span className="text-purple-400 font-medium">
               {`(${teams.length})`}
@@ -149,7 +151,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
             data-tip="Add team"
           >
             <button
-              className="text-sm border-2 border-border_color text-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full  pt-3 hover:scale-90 transition-all duration-300"
+              className="text-sm border-2 border-border_color dark:border-gray-700 text-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full  pt-3 hover:scale-90 transition-all duration-300"
               onClick={() => {
                 setModal(true);
               }}
@@ -158,7 +160,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
             </button>
           </div>
         </div>
-        <div className="max-h-[200px] border-b-2 pb-4  overflow-y-scroll">
+        <div className="max-h-[200px] border-b-2 pb-4 dark:border-gray-700 overflow-y-scroll">
           {teams.length > 0 ? (
             teams.map((item: any, i: number) => (
               <div
@@ -171,21 +173,25 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                     <Image src={T_ICON} width={40} height={40} alt="image" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[0.9rem]">{item.dept}</span>
+                    <span className="text-[0.9rem] dark:text-gray-300">
+                      {item.dept}
+                    </span>
                     {/* <span>{item.task}</span>
                      */}
-                    {item.task.split(" ").length >= 5
-                      ? `${item.task.slice(0, 10)}...`
-                      : item.task}
+                    <span className="dark:text-gray-300">
+                      {item.task.split(" ").length >= 5
+                        ? `${item.task.slice(0, 10)}...`
+                        : item.task}
+                    </span>
                   </div>
                 </div>
                 <div className="">
                   <span
                     className={`text-[0.85rem] p-2 rounded-xl text-white ${
                       item.status === "active"
-                        ? "bg-green-300"
-                        : item.status === "pending"
-                        ? "bg-orange-300"
+                        ? "bg-green-300 dark:bg-green-500"
+                        : item.status === "disabled"
+                        ? "bg-red-400 dark:bg-red-500"
                         : ""
                     }`}
                   >
@@ -209,13 +215,15 @@ const RightHero = ({ rightSide }: RightSideProps) => {
             ))
           ) : (
             <div className="flex justify-center items-center ">
-              <span className="text-gray-300 text-lg">no team to display</span>
+              <span className="text-gray-300 text-lg dark:text-gray-700">
+                no team to display
+              </span>
             </div>
           )}
         </div>
         <Calendar />
-        <div className="flex flex-col gap-5">
-          <div className="stats shadow">
+        <div className="flex flex-col gap-5 ">
+          <div className="stats shadow dark:bg-gray-900 ">
             <div className="stat">
               <div className="stat-figure text-primary">
                 <svg
@@ -232,12 +240,14 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                   ></path>
                 </svg>
               </div>
-              <div className="stat-title">Total Likes</div>
+              <div className="stat-title dark:text-gray-300">Total Likes</div>
               <div className="stat-value text-primary">25.6K</div>
-              <div className="stat-desc">21% more than last month</div>
+              <div className="stat-desc dark:text-gray-300">
+                21% more than last month
+              </div>
             </div>
 
-            <div className="stat">
+            <div className="stat dark:bg-gray-900">
               <div className="stat-figure text-secondary">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -253,7 +263,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                   ></path>
                 </svg>
               </div>
-              <div className="stat-title">Page Views</div>
+              <div className="stat-title dark:text-gray-300">Page Views</div>
               <div className="stat-value text-secondary">2.6M</div>
               <div className="stat-desc">21% more than last month</div>
             </div>
@@ -262,7 +272,6 @@ const RightHero = ({ rightSide }: RightSideProps) => {
               <div className="stat-figure text-secondary">
                 <div className="avatar online">
                   <div className="w-16 rounded-full">
-                    {/* <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" /> */}
                     {authGoogleImage && (
                       <Image
                         src={authGoogleImage}
@@ -274,9 +283,13 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                   </div>
                 </div>
               </div>
-              <div className="stat-value">86%</div>
-              <div className="stat-title">Tasks done</div>
-              <div className="stat-desc text-secondary">31 tasks remaining</div>
+              <div className="stat-value">
+                {doneTasks === "completed".length}
+              </div>
+              <div className="stat-title dark:text-gray-300">Tasks done</div>
+              <div className="stat-desc text-secondary">
+                {doneTasks === "active" || "pending".length} tasks remaining
+              </div>
             </div>
           </div>
         </div>
@@ -287,15 +300,19 @@ const RightHero = ({ rightSide }: RightSideProps) => {
           setModal(false);
           setSelectedTeam(null);
         }}
-        closeBtnColor=" text-purple-400 border border-border_color"
+        closeBtnColor=" text-purple-400 border border-border_color dark:border-gray-700"
         maxWidth="w-[450px]"
       >
         <div>
-          <span>Please fill in the details.</span>
+          <span className="dark:text-gray-300">
+            Please fill in the details.
+          </span>
 
           <form className="flex flex-col gap-5 mt-5">
             <div className="flex flex-col items-start gap-1">
-              <label htmlFor="">Team name</label>
+              <label htmlFor="" className="dark:text-gray-300">
+                Team name
+              </label>
               <input
                 type="text"
                 name="title"
@@ -303,12 +320,14 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setTeamName(e.target.value)
                 }
-                className="w-full border h-12 outline-none rounded-lg pl-3"
+                className="w-full border h-12 outline-none rounded-lg pl-3 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
               />
             </div>
 
             <div className="flex flex-col items-start gap-1">
-              <label htmlFor="">Team task</label>
+              <label htmlFor="" className="dark:text-gray-300">
+                Team task
+              </label>
               <input
                 type="text"
                 name="title"
@@ -316,17 +335,19 @@ const RightHero = ({ rightSide }: RightSideProps) => {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setTeamTask(e.target.value)
                 }
-                className="w-full border h-12 outline-none rounded-lg pl-3"
+                className="w-full border h-12 outline-none rounded-lg pl-3 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
               />
             </div>
             <div className="flex flex-col items-start gap-1">
-              <label htmlFor="">Department</label>
+              <label htmlFor="" className="dark:text-gray-300">
+                Department
+              </label>
               <select
                 name="Select department"
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setDepartment(e.target.value)
                 }
-                className="w-full border h-12 outline-none rounded-lg pl-3"
+                className="w-full border h-12 outline-none rounded-lg pl-3 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
               >
                 <option value="">Select department </option>
                 {departments.map((item) => (
@@ -335,18 +356,20 @@ const RightHero = ({ rightSide }: RightSideProps) => {
               </select>
             </div>
             <div className="flex flex-col items-start gap-1">
-              <label htmlFor="">Status</label>
+              <label htmlFor="" className="dark:text-gray-300">
+                Status
+              </label>
 
               <select
                 name="status"
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                   setStatus(e.target.value)
                 }
-                className="w-full border h-12 outline-none rounded-lg pl-3"
+                className="w-full border h-12 outline-none rounded-lg pl-3 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
               >
                 <option value="Select status">Select status</option>
                 <option value="active">active</option>
-                <option value="pending">pending</option>
+                <option value="disabled">disabled</option>
               </select>
             </div>
           </form>
@@ -354,14 +377,14 @@ const RightHero = ({ rightSide }: RightSideProps) => {
             <Button
               text={`${isLoading ? "updating..." : "Update team"}`}
               textStyles=" text-purple-400 "
-              btnStyles="rounded-3xl border-border_color py-3 mt-5"
+              btnStyles="rounded-3xl border border-border_color py-3 mt-5 dark:border-gray-700"
               handleClick={() => handleUpdateSelected(selectedTeam)}
             />
           ) : (
             <Button
               text={`${isLoading ? "creating..." : "Add team"}`}
               textStyles=" text-purple-400"
-              btnStyles="rounded-3xl border-border_color border py-3 mt-5"
+              btnStyles="rounded-3xl border border-border_color py-3 mt-5 dark:border-gray-700"
               handleClick={createTeam}
             />
           )}

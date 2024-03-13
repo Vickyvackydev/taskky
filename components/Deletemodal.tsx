@@ -1,6 +1,6 @@
 import React from "react";
 import Modal from "./modal";
-import { FaTimes, FaTimesCircle } from "react-icons/fa";
+import { FaTimes } from "react-icons/fa";
 import Button from "./Button";
 
 interface DeletemodalProps {
@@ -27,8 +27,10 @@ const Deletemodal = ({
           <FaTimes />
         </span>
 
-        <span className="text-2xl font-medium">Are You Sure?</span>
-        <div>
+        <span className="text-2xl font-medium dark:text-gray-300">
+          Are You Sure?
+        </span>
+        <div className="dark:text-gray-300">
           <span>{`Do you really want to delete this ${componentText}?`} </span>
           <span>This process cannot be undone.</span>
         </div>
@@ -37,13 +39,13 @@ const Deletemodal = ({
           <Button
             text="cancel"
             textStyles="text-white"
-            btnStyles={`rounded-md  py-3 mt-4 bg-gray-300`}
+            btnStyles={`rounded-md  py-3 mt-4 bg-gray-300 dark:bg-gray-900`}
             handleClick={closeModal}
           />
           <Button
             text={`Delete`}
             textStyles="text-white"
-            btnStyles={`rounded-md  py-3 mt-4 bg-red-400 `}
+            btnStyles={`rounded-md  py-3 mt-4 bg-red-400 dark:bg-red-600`}
             handleClick={handleDelete}
           />
         </div>

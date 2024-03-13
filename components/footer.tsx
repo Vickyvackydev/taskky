@@ -3,7 +3,7 @@ import Image from "next/image";
 import React from "react";
 import { motion } from "framer-motion";
 
-const Footer = () => {
+function Footer() {
   return (
     <motion.footer
       initial={{ opacity: 0, scale: 0 }}
@@ -19,6 +19,7 @@ const Footer = () => {
           <br />
           Providing reliable task management assistance since 2024
         </p>
+        <p>{`Copyright © task management team ${new Date().getFullYear()}`}</p>
       </aside>
       <nav>
         <h6 className="footer-title">Services</h6>
@@ -31,8 +32,8 @@ const Footer = () => {
         <h6 className="footer-title">Company</h6>
         <a className="link link-hover">About us</a>
         <a className="link link-hover">Contact</a>
-        <a className="link link-hover">Jobs</a>
-        <a className="link link-hover">Press kit</a>
+        <a className="link link-hover">Faqs</a>
+        <a className="link link-hover">Blog</a>
       </nav>
       <nav>
         <h6 className="footer-title">Legal</h6>
@@ -42,6 +43,6 @@ const Footer = () => {
       </nav>
     </motion.footer>
   );
-};
+}
 
 export default Footer;

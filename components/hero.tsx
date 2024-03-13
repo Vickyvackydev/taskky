@@ -39,9 +39,10 @@ const Hero = () => {
           </p>
         </div>
       </motion.div>
+
       <motion.div
-        initial={{ opacity: 0, y: -100 }}
-        whileInView={{ opacity: 1, y: 1 }}
+        initial={{ opacity: 0, scale: 0 }}
+        whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: false, amount: 0.25 }}
         transition={{ duration: 0.5 }}
         className="flex gap-10 "

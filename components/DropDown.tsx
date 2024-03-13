@@ -31,23 +31,23 @@ const DropDown = ({
       leaveFrom="transform opacity-100 scale-100"
       leaveTo="transform opacity-0 scale-95"
     >
-      <div className="absolute right-1 bg-white px-3 py-2 rounded-xl shadow-md top-10 flex flex-col gap-2 z-50">
+      <div className="absolute right-1 bg-white dark:bg-bg_black px-3 py-2 rounded-xl shadow-md top-10 flex flex-col gap-2 z-50">
         <div
-          className={`flex gap-2 items-center hover:bg-green-100 rounded-lg p-1 cursor-pointer`}
+          className={`flex gap-2 items-center hover:bg-green-100 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer`}
           onClick={handleView}
         >
           <FaInfo className={`text-gray-500 text-sm hover:text-green-500`} />
           <span>Info</span>
         </div>
         <div
-          className={`flex gap-2 items-center hover:bg-green-100 rounded-lg p-1 cursor-pointer`}
+          className={`flex gap-2 items-center hover:bg-green-100 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer`}
           onClick={handleUpdate}
         >
           <FaPen className={`text-gray-500 text-sm hover:text-green-500`} />
           <span>Update</span>
         </div>
         <div
-          className={`flex gap-2 items-center hover:bg-green-100 rounded-lg p-1 cursor-pointer`}
+          className={`flex gap-2 items-center hover:bg-green-100 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer`}
           onClick={handleDelete}
         >
           <FaTrash className={`text-gray-500 text-sm hover:text-green-500`} />
