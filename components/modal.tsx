@@ -4,12 +4,15 @@ import React, { Fragment } from "react";
 import { FaTimes } from "react-icons/fa";
 
 type ModalProps = {
+  // state modal params types
   isOpen: boolean;
   isClose: () => void;
   closeBtnColor: string;
   children: React.ReactNode;
   maxWidth: string;
 };
+
+// Modal component reusable in all component
 const Modal = ({
   isOpen,
   isClose,
@@ -67,3 +70,5 @@ const Modal = ({
 };
 
 export default Modal;
+
+// end..

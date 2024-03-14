@@ -1,3 +1,5 @@
+/* rotating event of the navigation in the homepage */
+
 .navopen {
   max-height: 500px;
   transition: max-height 0.5s ease-in;

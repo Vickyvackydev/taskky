@@ -16,6 +16,7 @@ interface Props {
   loaderColor?: string;
   loadingTextColor?: string;
 }
+// Button compoent, resuable in all components
 const Button = ({
   text,
   btnStyles,
@@ -33,6 +34,7 @@ const Button = ({
 }: Props) => {
   return (
     <div>
+      {/* Button in its loading state */}
       {loading ? (
         <button
           type="button"
@@ -63,6 +65,8 @@ const Button = ({
           </>
         </button>
       ) : (
+        // end..
+        // Button in it normal state
         <button
           type="button"
           className={`flex gap-1 ${btnStyles} px-3 hover:scale-90 transition-all ${
@@ -86,3 +90,5 @@ const Button = ({
 };
 
 export default Button;
+
+// end..

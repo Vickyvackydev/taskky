@@ -11,6 +11,7 @@ import { useSearchQuery } from "@/context/searchContext";
 import { useTheme } from "next-themes";
 
 export interface TaskProps {
+  // state the tasks data types coming from firestore
   id: number;
   name: string;
   desc: string;
@@ -21,6 +22,7 @@ export interface TaskProps {
 }
 
 interface tasksMainProps {
+  // state the task component params types
   tasks: TaskProps[];
   emptyText: string;
   deleteText: string;
@@ -36,6 +38,8 @@ interface tasksMainProps {
   loading: boolean;
   markAsDone: any;
 }
+
+// The todo/task component that is reusable to in all todo components
 const TaskComponent = ({
   tasks,
   emptyText,
@@ -61,10 +65,11 @@ const TaskComponent = ({
   const [click, setClick] = useState<number>(0);
 
   const handleSelectedTask = (task: any) => {
+    // select a particular task
     setSelectedTask(task);
   };
 
-  const justCreated = `${new Date().getHours()}:${new Date().getMinutes()}`;
+  const justCreated = `${new Date().getHours()}:${new Date().getMinutes()}`; // state when a task has being created
 
   return (
     <div
@@ -146,6 +151,8 @@ const TaskComponent = ({
                       alt="dots icon"
                     />
                   )}
+
+                  {/* displays dropdown when a specific task is selected */}
                   {click === task.id && (
                     <DropDown
                       open={dropDown}
@@ -207,6 +214,7 @@ const TaskComponent = ({
         }}
       />
 
+      {/* show selected task details in the details box */}
       <DetailsBox
         open={detailsModal}
         close={() => setDetailsModal(false)}
@@ -220,3 +228,4 @@ const TaskComponent = ({
 };
 
 export default TaskComponent;
+//  end..

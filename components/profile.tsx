@@ -55,15 +55,15 @@ const Profile = ({
   const [mounted, setMounted] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
   const [input, setInput] = useState(false);
-  const userProfessionRef = collection(db, "profession");
-  const { data: userProfession } = useFetchFirestoreData("profession");
-  const { data: user_authname } = useFetchFirestoreData("usernames");
-  // const googleAuthName = auth?.currentUser?.displayName
+  const userProfessionRef = collection(db, "profession"); // collection of user profession from firestore
+  const { data: userProfession } = useFetchFirestoreData("profession"); // fetch user profession
+  const { data: user_authname } = useFetchFirestoreData("usernames"); // fetch the user name
   const [googleAuthName, setGoogleAuthName] = useState<any>("");
 
-  const profile_name = user_authname.map((name: any) => name.name);
+  const profile_name = user_authname.map((name: any) => name.name); // map out the user name
 
   const handleAddProfession = async () => {
+    // add a profession
     try {
       const currentUser = auth?.currentUser;
 
@@ -83,11 +83,13 @@ const Profile = ({
   };
 
   const userProfessionName = userProfession.map(
+    // map out user profession
     (userProf: any) => userProf.profession
   );
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => setMounted(true), []); // mounts theme (dark or light mode)
 
+  // fetch google auth name
   useEffect(() => {
     if (auth?.currentUser) {
       setGoogleAuthName(auth?.currentUser?.displayName);
@@ -95,9 +97,6 @@ const Profile = ({
       console.log("loading");
     }
   }, [auth?.currentUser]);
-
-  // console.log(userProfessionName);
-  // console.log(googleAuthName);
 
   return (
     <Transition
@@ -113,6 +112,7 @@ const Profile = ({
     >
       <div className="flex flex-col items-center justify-center">
         <div className="flex justify-center items-center z-10 mt-5 max-w-full">
+          {/* display user's google image or the uploaded image from a user */}
           {google_image || uploadedImage ? (
             <Image
               src={google_image || uploadedImage}
@@ -141,10 +141,11 @@ const Profile = ({
             </label>
             <div className="flex gap-2 items-center">
               <FaUserNinja className="text-green-300" />
+              {/* displays user name from google auth or the created name from firestore */}
               {googleAuthName ? (
-                <span className="text-gray-300 text-sm">{googleAuthName}</span>
+                <span className="text-gray-300 text-sm ">{googleAuthName}</span>
               ) : (
-                <span>{profile_name}</span>
+                <span className="text-gray-300">{profile_name}</span>
               )}
             </div>
           </div>
@@ -157,6 +158,7 @@ const Profile = ({
             </label>
             <div className="flex gap-2 items-center">
               <FaUser className="text-green-300 " />
+              {/* user email */}
               <span className="text-gray-300 text-sm">{userEmail ?? null}</span>
             </div>
           </div>
@@ -175,7 +177,7 @@ const Profile = ({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setProfession(e.target.value)
                   }
-                  className="outline-none w-full ml-3 "
+                  className="outline-none w-full ml-3 dark:bg-transparent dark:text-gray-300"
                 />
               ) : (
                 <span className="text-gray-300 text-sm">
@@ -200,12 +202,14 @@ const Profile = ({
                 <span className="text-gray-300 ">Settings</span>
               </div>
               <div className="flex gap-2 rounded-2xl border dark:border-gray-700 border-border_color px-1 py-2">
+                {/* set dashboard theme to dark mode */}
                 <button
                   onClick={() => setTheme("dark")}
                   className={`text-lg dark:text-green-300 text-gray-300`}
                 >
                   <FaMoon />
                 </button>
+                {/* set dashboard theme to light mode */}
                 <button
                   onClick={() => setTheme("light")}
                   className={`text-lg ${
@@ -218,7 +222,6 @@ const Profile = ({
             </div>
           </div>
 
-          {/* <span onClick={() => setTheme("light")}>light mode </span> */}
           <div
             className={` ${google_image ? "tooltip tooltip-bottom" : ""}`}
             data-tip="can't upload google image"
@@ -235,6 +238,8 @@ const Profile = ({
           </div>
         </div>
       </div>
+
+      {/* modal to upload user profile image */}
       <Modal
         isOpen={uploadModal}
         isClose={closeUploadModal}
@@ -242,7 +247,7 @@ const Profile = ({
         maxWidth="w-[350px]"
       >
         <div>
-          {previewImage ? (
+          {previewImage ? ( // displays the selected image
             <div className="flex gap-3 items-center">
               <Image
                 src={previewImage}
@@ -258,7 +263,7 @@ const Profile = ({
           ) : (
             <input
               type="file"
-              className="file-input w-full max-w-xs"
+              className="file-input w-full max-w-xs dark:bg-transparent dark:text-gray-300"
               onChange={handleImageChange}
             />
           )}
@@ -282,3 +287,4 @@ const Profile = ({
 };
 
 export default Profile;
+//  end..

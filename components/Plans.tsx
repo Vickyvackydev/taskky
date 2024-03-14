@@ -25,14 +25,15 @@ const Plans = () => {
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
 
-  const plansCollectionRef = collection(db, "plans");
+  const plansCollectionRef = collection(db, "plans"); // the plans collection from firestore
   const [selectedPlan, setSelectedPlan] = useState<TaskProps | null | any>(
     null
   );
-  const { data: plans, loading } = useFetchFirestoreData("plans");
+  const { data: plans, loading } = useFetchFirestoreData("plans"); // fetch plans data from firestore
   const [isLoading, setIsLoading] = useState(false);
 
   const createPlan = async () => {
+    // create a plans
     setIsLoading(true);
 
     try {
@@ -46,7 +47,6 @@ const Plans = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
-            createdAt: serverTimestamp(),
           });
           setModal(true);
         } else {
@@ -65,20 +65,24 @@ const Plans = () => {
   };
 
   const handleSelectedPlan = (plan: any) => {
+    // select a particular plan
     setSelectedPlan(plan);
   };
 
   const handleDeletePlan = async (id: any) => {
+    // delete a selected plan
     const planDoc = doc(db, "plans", id);
     await deleteDoc(planDoc);
   };
 
   const handleUpdate = (plan: any) => {
+    // selected a plan to update
     setSelectedPlan(plan);
     setModal(true);
   };
 
   const handleUpdateSelected = async (id: any) => {
+    // update the selected plan
     setIsLoading(true);
     if (id) {
       const planDoc = doc(db, "plans", id.toString());
@@ -88,7 +92,6 @@ const Plans = () => {
         status: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
-        createdAt: serverTimestamp(),
       };
 
       try {
@@ -104,23 +107,16 @@ const Plans = () => {
     setModal(false);
   };
 
-  const markAsDone = async (taskId: any) => {
-    try {
-      const taskDocRef = doc(db, "plans", taskId);
-      await updateDoc(taskDocRef, { status: "completed" });
-
-      console.log("status has being updated");
-    } catch (error) {
-      console.log("error marking task as done", error);
-    }
-  };
   return (
     <div className={maxWidth}>
       <PageHeader
         text="Your plans here"
         textStyle="dark:text-gray-300"
         button={true}
-        setState={setModal}
+        setState={() => {
+          setModal(true);
+          setSelectedPlan(null);
+        }}
         btnText="Add plan"
         btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-red-400"

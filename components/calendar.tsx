@@ -1,16 +1,24 @@
 "use client";
 import Image from "next/image";
 import React, { useState } from "react";
+
+// Calender component , no external library integrated
 const Calendar = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const daysOfWeek = ["Sun", "Mon", "Tues", "Wed", "Thu", "Fri", "Sat"];
+
+  // Function to map the months data from each month and year
   const getMonths = (year: number, month: number) => {
-    const firstDayOfMonth = new Date(year, month, 1);
-    const lastDayOfMonth = new Date(year, month + 1, 0);
-    const daysInMonth = lastDayOfMonth.getDate();
-    const startDayOfWeek = firstDayOfMonth.getDay();
-    const monthData = [];
-    let dayCounter = 1;
+    const firstDayOfMonth = new Date(year, month, 1); // gets the first day of the month
+    const lastDayOfMonth = new Date(year, month + 1, 0); // gets the last day of the month
+    const daysInMonth = lastDayOfMonth.getDate(); // All the days in the month
+    const startDayOfWeek = firstDayOfMonth.getDay(); // starting of the week days
+
+    const monthData = []; // assuming monthdata is an empty array at its initial state
+
+    let dayCounter = 1; // let day be equal to a day before its added more days state
+
+    // loop in the days of the week
     for (let i = 0; i < 6; i++) {
       const week = [];
       for (let j = 0; j < 7; j++) {
@@ -23,24 +31,32 @@ const Calendar = () => {
       }
       monthData.push(week);
     }
+
+    // let the array be passed into the monthdata array
     return monthData;
   };
+
+  // show previous month
   const handlePreviousMonth = () => {
     setSelectedDate(
       new Date(selectedDate.getFullYear(), selectedDate.getMonth() - 1, 1)
     );
   };
+
+  // show next month
   const handleNextMonth = () => {
     setSelectedDate(
       new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 1)
     );
   };
+
+  // The function getting the data from each months in a particular year
   const monthData = getMonths(
     selectedDate.getFullYear(),
     selectedDate.getMonth()
   );
   return (
-    <div className="mt-4 border-b-2 pb-6  ">
+    <div className="mt-4 border-b-2 pb-6 dark:border-gray-700 ">
       <span className="text-xl text-gray-400">Calendar</span>
       <div className="flex justify-between mt-5">
         <button
@@ -108,3 +124,4 @@ const Calendar = () => {
 };
 
 export default Calendar;
+// end..

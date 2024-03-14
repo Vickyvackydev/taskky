@@ -16,6 +16,7 @@ const Navbar = () => {
   const isMobileScreen = useMediaQuery("(max-width: 640px)");
 
   const scrollToComponent = (component: string) => {
+    // scroll function to scroll user to a component
     const element = document.getElementById(component);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -27,7 +28,7 @@ const Navbar = () => {
       initial={{ opacity: 0, y: -100 }}
       whileInView={{ opacity: 1, y: 1 }}
       viewport={{ once: false, amount: 0.25 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 1 }}
       className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500"
       id="navbar"
     >
@@ -78,6 +79,7 @@ const Navbar = () => {
             handleClick={() => router.push("/login")}
           />
         </div>
+        {/* displays navigation bar */}
         <div
           onClick={() => setNavOpen((prev) => !prev)}
           className={`arrow bg-gray-50 w-12 h-12 rounded-full flex justify-center items-center ${
@@ -94,3 +96,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+// end..

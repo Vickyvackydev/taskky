@@ -1,5 +1,4 @@
 import DashboardHero from "@/components/dashboardHero";
-import Hero from "@/components/hero";
 import { marginTop } from "@/components/width";
 import React from "react";
 

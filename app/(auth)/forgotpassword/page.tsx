@@ -18,7 +18,6 @@ const Forgot_Password = () => {
     setLoading(true);
     try {
       await sendPasswordResetEmail(auth, email);
-      console.log("email sent");
       setLoading(false);
       setEmail("");
       setModal(true);

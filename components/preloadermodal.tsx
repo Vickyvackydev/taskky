@@ -10,6 +10,8 @@ type ModalProps = {
 
   loadertext: string;
 };
+
+// preloader spinner for the login after successfull authentication
 const PreloaderModal = ({
   isOpen,
   isClose,

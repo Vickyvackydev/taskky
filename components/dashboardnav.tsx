@@ -12,6 +12,7 @@ import SmallScreenPopup from "./smallscreenpopup";
 import { useTheme } from "next-themes";
 
 type navBarType = {
+  // state types of the navbar params
   isOpen: () => void;
   onClose: () => void;
   Open: () => void;
@@ -22,7 +23,7 @@ type navBarType = {
 };
 const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   const { resolvedTheme } = useTheme();
-  const { searchQuery, setSearchQuery, setShowTopContent } = useSearchQuery();
+  const { searchQuery, setSearchQuery, setShowTopContent } = useSearchQuery(); //coming from useSreachContext
   const [greeting, setGreeting] = useState("");
   const [uploadPopUp, setUploadPopUp] = useState(false);
   const [selectedImage, setSelectedImage] = useState<null | any>(null);
@@ -33,17 +34,19 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   const [photoURL, setPhotoUrl] = useState<string | null>("");
   const [UserEmail, setUserEmail] = useState<string | null>("");
   const imagesCollectionRef = collection(db, "images");
-  const { data: user_authname, loading } = useFetchFirestoreData("usernames");
+  const { data: user_authname, loading } = useFetchFirestoreData("usernames"); // fetch usersnames from firestore
   const [previewImg, setPreviewImg] = useState<any>(null);
   const [mobilePopUp, setMobilePopUp] = useState(false);
-  const { data: userProfession } = useFetchFirestoreData("profession");
+  const { data: userProfession } = useFetchFirestoreData("profession"); // fetch users profession from firestore
 
-  const userName = user_authname.map((name: any) => name.name.split(" ")[0]);
+  const userName = user_authname.map((name: any) => name.name.split(" ")[0]); // get the user name
   const userProfessionName = userProfession.map(
+    // get the user profession
     (userProf: any) => userProf.profession
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // handle the search
     setSearchQuery(e.target.value);
 
     if (e.target.value.trim() !== "") {
@@ -68,6 +71,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   }, [UploadUrl]);
 
   const handleImageChange = (e: any) => {
+    // onchange for the image upload
     const imageFile = e.target.files[0];
     setSelectedImage(imageFile);
 
@@ -83,6 +87,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   };
 
   useEffect(() => {
+    // fetch users data from google auth
     if (auth?.currentUser) {
       setDisplayName(auth?.currentUser?.displayName);
       setPhotoUrl(auth?.currentUser?.photoURL);
@@ -93,6 +98,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   }, [auth?.currentUser]);
 
   useEffect(() => {
+    // state tiem and hour to greet user
     const getCurrentTime = () => {
       const currentHour = new Date().getHours();
 
@@ -109,16 +115,17 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
   }, []);
 
   const handleImageUpload = async () => {
+    // upload imge to firestore for a particular user
     if (!selectedImage) return;
     setUploading(true);
 
     try {
-      const currentUser = auth?.currentUser;
+      const currentUser = auth?.currentUser; // gets the particular authenticated
 
       if (!currentUser) return;
       const storageRef = ref(
         storage,
-        `images/${currentUser?.uid}/${selectedImage.name}`
+        `images/${currentUser?.uid}/${selectedImage.name}` // upload user image
       );
 
       await uploadBytes(storageRef, selectedImage);
@@ -146,7 +153,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
 
   return (
     <nav className="border-b-2 lg:w-[85vw] w-full lg:p-5 lg:fixed relative bg-white dark:bg-bg_black z-30 shadow-sm lg:left-[14.4rem] left-0 lg:block flex p-5 dark:border-gray-700">
-      {mobileView && (
+      {mobileView && ( // shows bar to open the navbar when on mobile screen
         <div onClick={() => isOpen()}>
           <span className="cursor-pointer">
             <FaBars className="dark:text-gray-300" />
@@ -172,7 +179,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
         </div>
         <div
           className="lg:block hidden  ml-[10rem] p-1 cursor-pointer"
-          onClick={() => setUploadPopUp((prev) => !prev)}
+          onClick={() => setUploadPopUp((prev) => !prev)} // displays when on larger screen
         >
           <div className="flex justify-between ">
             <div className="flex gap-4 items-center">
@@ -222,7 +229,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
         </div>
         <div className="lg:hidden  flex gap-4 flex-auto items-center">
           <div onClick={() => setMobilePopUp((prev) => !prev)}>
-            {photoURL || UploadUrl ? (
+            {photoURL || UploadUrl ? ( // hides on large screen displays on mobile screen
               <Image
                 src={photoURL || UploadUrl}
                 width={50}
@@ -241,12 +248,14 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
             )}
           </div>
           <div className="cursor-pointer">
+            {/* opens the righthero component on mobile screen */}
             <span onClick={() => Open()}>
               <FaListUl className="dark:text-gray-300" />
             </span>
           </div>
         </div>
       </div>
+      {/* displays popup for user details */}
       <Profile
         isOpen={uploadPopUp}
         isClose={() => {}}
@@ -267,10 +276,9 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
           setSelectedImage(null);
         }}
       />
-
+      {/* display users details only on mobile screens */}
       <SmallScreenPopup
         openPopUp={mobilePopUp}
-        closePopUp={() => setMobilePopUp(false)}
         userEmail={UserEmail || ""}
         userName={displayName || userName}
         userProfession={userProfessionName}
@@ -281,3 +289,5 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
 };
 
 export default Dashboardnav;
+
+// end..

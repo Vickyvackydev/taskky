@@ -7,15 +7,14 @@ import {
   FaDotCircle,
   FaMapMarker,
   FaPen,
-  FaTimes,
   FaTrash,
 } from "react-icons/fa";
 import Deletemodal from "./Deletemodal";
 import Skeleton from "./skeleton";
-// import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 export interface eventCardDataProps {
+  // state event data types from firestore
   id: number;
   eventName: string;
   date: string;
@@ -33,6 +32,7 @@ export interface eventCardDataProps {
 }
 
 interface eventCardProps {
+  // state event card data types
   event_card_data: eventCardDataProps[];
   deleteModal: boolean;
   closeDeleteModal: () => void;
@@ -43,8 +43,8 @@ interface eventCardProps {
   doneTask: any;
   // setdoneTask: React.Dispatch<React.SetStateAction<boolean>>;
   markEventDone: (id: any) => void;
-
   handleCompletedEvent: (id: any) => void;
+  markSelected: any;
 }
 
 const Eventcard = ({
@@ -55,9 +55,8 @@ const Eventcard = ({
   handleDelete,
   handleSelectedToUpdate,
   loading,
-  doneTask,
-  handleCompletedEvent,
   markEventDone,
+  markSelected,
 }: eventCardProps) => {
   return (
     <main className="lg:mt-0 mt-3">
@@ -65,6 +64,7 @@ const Eventcard = ({
         All Featured events available here
       </span>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 mt-5">
+        {/* loads when data is fetching */}
         {loading ? (
           <Skeleton />
         ) : event_card_data?.length > 0 ? (
@@ -85,7 +85,7 @@ const Eventcard = ({
               <div className="flex items-center gap-5 absolute right-4 top-28">
                 <div className="hover:scale-90 transition-all duration-300">
                   <span
-                    className="flex justify-center items-center w-8 h-8 bg-white dark:bg-bg_black dark:text-gray-300 rounded-full text-gray-400 shadow-md cursor-pointer  tooltip tooltip-bottom"
+                    className="flex justify-center items-center w-8 h-8 bg-white dark:bg-bg_black dark:text-gray-300 dark:hover:text-green-500 rounded-full text-gray-400 shadow-md cursor-pointer  tooltip tooltip-bottom"
                     onClick={() => {
                       handleSelectedToUpdate(data);
                     }}
@@ -96,7 +96,7 @@ const Eventcard = ({
                 </div>
                 <div className="hover:scale-90 transition-all duration-300">
                   <span
-                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 dark:hover:text-green-500 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
                     onClick={() => handleSelected(data)}
                     data-tip="Delete"
                   >
@@ -105,8 +105,9 @@ const Eventcard = ({
                 </div>
                 <div className="hover:scale-90 transition-all duration-300">
                   <span
-                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 dark:hover:text-green-500 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
                     onClick={() => {
+                      markSelected(data);
                       markEventDone(data.id);
                     }}
                     data-tip="Mark as done"
@@ -191,7 +192,7 @@ const Eventcard = ({
           </div>
         )}
       </div>
-      <Deletemodal
+      <Deletemodal // delete selected todo by id
         openModal={deleteModal}
         closeModal={closeDeleteModal}
         handleDelete={() =>
@@ -204,3 +205,4 @@ const Eventcard = ({
 };
 
 export default Eventcard;
+// end..

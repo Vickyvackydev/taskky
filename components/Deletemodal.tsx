@@ -9,6 +9,8 @@ interface DeletemodalProps {
   handleDelete: () => void;
   componentText: string;
 }
+
+//  resuable delete component to delete an todo data with the id
 const Deletemodal = ({
   openModal,
   closeModal,
@@ -55,3 +57,4 @@ const Deletemodal = ({
 };
 
 export default Deletemodal;
+// end...

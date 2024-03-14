@@ -1,8 +1,8 @@
-import { auth } from "@/firebase/firebase.config";
 import { useEffect, useState } from "react";
+import { auth } from "@/firebase/firebase.config";
 
 export const useAuth = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(null); // set user state to null at initial
   const [loading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,8 +15,8 @@ export const useAuth = () => {
         setIsLoading(false);
       }
     });
-    return () => unsubscribe();
+    return () => unsubscribe(); // render on user auth
   }, []);
 
-  return { user, loading };
+  return { user, loading }; // returns the state when it is rendered
 };

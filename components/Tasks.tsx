@@ -1,19 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import Button from "./Button";
-import { FaPlus } from "react-icons/fa";
-import Modal from "./modal";
+import React, { useState } from "react";
+
 import TaskComponent, { TaskProps } from "./TaskComponent";
 import PageHeader from "./pageHeader";
 import { maxWidth } from "./width";
 import { useFetchFirestoreData } from "@/hooks";
 import {
-  FieldValue,
   addDoc,
   collection,
   deleteDoc,
   doc,
-  serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/firebase/firebase.config";
@@ -32,9 +28,10 @@ const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState<TaskProps | null | any>(
     null
   );
-  const { data: tasks, loading } = useFetchFirestoreData("tasks");
+  const { data: tasks, loading } = useFetchFirestoreData("tasks"); // fetch task data from firstore
 
   const createTask = async () => {
+    // create task
     setIsLoading(true);
     try {
       const currentUser = auth.currentUser;
@@ -47,7 +44,6 @@ const Tasks = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
-            createdAt: serverTimestamp(),
           });
           setModal(false);
         } else {
@@ -64,15 +60,18 @@ const Tasks = () => {
   };
 
   const handleSelectedTask = (task: any) => {
+    // select a task
     setSelectedTask(task);
   };
 
   const handleDeleteTask = async (id: any) => {
+    // delete a selected task
     const taskDoc = doc(db, "tasks", id);
     await deleteDoc(taskDoc);
   };
 
   const handleUpdateSelected = (task: any) => {
+    // select task to update
     setSelectedTask(task);
 
     setDescription(description);
@@ -83,6 +82,7 @@ const Tasks = () => {
   };
 
   const handleSelectedToUpdate = async (id: any) => {
+    // update selected task
     setIsLoading(true);
 
     if (id) {
@@ -94,7 +94,6 @@ const Tasks = () => {
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
         updatedTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
-        createdAt: serverTimestamp(),
       };
 
       try {
@@ -117,23 +116,16 @@ const Tasks = () => {
     setSelectedTask(null);
   };
 
-  // const markAsDone = async (taskId: any) => {
-  //   try {
-  //     const taskDocRef = doc(db, "tasks", taskId);
-  //     await updateDoc(taskDocRef, { status: "completed" });
-
-  //     console.log("status has being updated");
-  //   } catch (error) {
-  //     console.log("error marking task as done", error);
-  //   }
-  // };
   return (
     <div className={maxWidth}>
       <PageHeader
         text="Your Task Page"
         textStyle="dark:text-gray-300"
         button={true}
-        setState={setModal}
+        setState={() => {
+          setModal(true);
+          setSelectedTask(null);
+        }}
         btnText="Add task"
         btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-purple-400"
@@ -182,3 +174,5 @@ const Tasks = () => {
 };
 
 export default Tasks;
+
+// end..

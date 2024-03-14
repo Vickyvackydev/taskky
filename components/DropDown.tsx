@@ -1,10 +1,10 @@
-import { Menu, Transition } from "@headlessui/react";
+import { Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
 import { FaCheckCircle, FaInfo, FaPen, FaTrash } from "react-icons/fa";
 
 interface Props {
+  // state dropdown types
   open: boolean;
-  close?: () => void;
   handleView: () => void;
   handleDelete: () => void;
   handleUpdate: () => void;
@@ -13,13 +13,13 @@ interface Props {
 }
 const DropDown = ({
   open,
-  close,
   handleView,
   handleDelete,
   handleComplete,
   handleUpdate,
   complete,
 }: Props) => {
+  // dropdown menu for the taskcomponent
   return (
     <Transition
       as={Fragment}
@@ -33,24 +33,24 @@ const DropDown = ({
     >
       <div className="absolute right-1 bg-white dark:bg-bg_black px-3 py-2 rounded-xl shadow-md top-10 flex flex-col gap-2 z-50">
         <div
-          className={`flex gap-2 items-center hover:bg-green-100 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer`}
+          className={`flex gap-2 items-center hover:bg-green-300 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer hover:text-white dark:hover:text-white  text-bg_black dark:text-gray-300`}
           onClick={handleView}
         >
-          <FaInfo className={`text-gray-500 text-sm hover:text-green-500`} />
-          <span>Info</span>
+          <FaInfo className={` text-sm `} />
+          <span className="">Info</span>
         </div>
         <div
-          className={`flex gap-2 items-center hover:bg-green-100 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer`}
+          className={`flex gap-2 items-center hover:bg-green-300 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer hover:text-white dark:hover:text-white  text-bg_black dark:text-gray-300`}
           onClick={handleUpdate}
         >
-          <FaPen className={`text-gray-500 text-sm hover:text-green-500`} />
+          <FaPen />
           <span>Update</span>
         </div>
         <div
-          className={`flex gap-2 items-center hover:bg-green-100 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer`}
+          className={`flex gap-2 items-center hover:bg-green-300 dark:hover:bg-green-500 rounded-lg p-1 cursor-pointer hover:text-white dark:hover:text-white  text-bg_black dark:text-gray-300`}
           onClick={handleDelete}
         >
-          <FaTrash className={`text-gray-500 text-sm hover:text-green-500`} />
+          <FaTrash />
           <span>Delete</span>
         </div>
         <div
@@ -74,3 +74,4 @@ const DropDown = ({
 };
 
 export default DropDown;
+// end..

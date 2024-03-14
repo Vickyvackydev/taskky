@@ -1,3 +1,4 @@
+// custom data for the homepage
 export const navLinks = [
   {
     label: "About Us",

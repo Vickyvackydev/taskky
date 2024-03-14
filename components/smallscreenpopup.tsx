@@ -6,8 +6,8 @@ import React from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 
 interface Props {
+  // state smallpopup params types
   openPopUp: boolean;
-  closePopUp: () => void;
   profileimage: any;
   userName: string;
   userEmail: string;
@@ -15,15 +15,12 @@ interface Props {
 }
 const SmallScreenPopup = ({
   openPopUp,
-  closePopUp,
   profileimage,
   userName,
   userEmail,
   userProfession,
 }: Props) => {
-  //   const ismobileScreen = useMediaQuery("(max-width: 640px)");
-
-  const { resolvedTheme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme(); // set states of the dashboard theme
   return (
     <Transition
       show={openPopUp}

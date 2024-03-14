@@ -4,7 +4,7 @@ import React from "react";
 import { FaArrowAltCircleUp } from "react-icons/fa";
 
 const ScrollBtn = () => {
-  const ScrollToTop: boolean = useScroll();
+  const ScrollToTop: boolean = useScroll(); // useScroll hooks mounted when triggered
 
   const handleScrollBackToTop = (elem: string) => {
     const component = document.getElementById(elem);
@@ -25,6 +25,7 @@ const ScrollBtn = () => {
       leaveTo="transform translate-x-full"
       className="fixed bottom-9 lg:right-4 right-9 z-50 lg:w-[4rem] lg:h-[4rem] w-12 h-12  flex justify-center items-center rounded-full bg-green-400 lg:text-3xl text-2xl text-white cursor-pointer hover:scale-100 transition-all duration-200"
     >
+      {/* scroll user back to top */}
       <span onClick={() => handleScrollBackToTop("navbar")}>
         <FaArrowAltCircleUp />
       </span>
@@ -33,3 +34,4 @@ const ScrollBtn = () => {
 };
 
 export default ScrollBtn;
+// end..

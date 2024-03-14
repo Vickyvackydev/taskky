@@ -4,6 +4,8 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const blogPosts = ["/ui_1.jpg", "/ui_2.png", "/ui_3.png", "/taskky.png"];
+
+// Blogs Component
 const Blogs = () => {
   return (
     <main className="lg:px-24 px-10 my-10" id="blogs">
@@ -50,3 +52,4 @@ const Blogs = () => {
 };
 
 export default Blogs;
+// end..

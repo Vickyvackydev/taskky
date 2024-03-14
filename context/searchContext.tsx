@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface SearchQueryProps {
+  // set params types for the context
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   showTopContent: boolean;
@@ -10,6 +11,7 @@ interface SearchQueryProps {
 }
 
 const SearchContext = createContext<SearchQueryProps>({
+  // define the context state
   searchQuery: "",
   setSearchQuery: () => {},
   showTopContent: true,
@@ -31,4 +33,4 @@ export const SearchProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-export const useSearchQuery = (): SearchQueryProps => useContext(SearchContext);
+export const useSearchQuery = (): SearchQueryProps => useContext(SearchContext); // export useSearchQuery as hook to render the state

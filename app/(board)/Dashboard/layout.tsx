@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="dark:bg-bg_black">
+      <body className="dark:bg-bg_black transition-all duration-500">
         <AuthGuard>
           <SearchProvider>
             <ThemeProviders>

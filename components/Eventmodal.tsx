@@ -12,6 +12,7 @@ import "react-time-picker/dist/TimePicker.css";
 import "react-clock/dist/Clock.css";
 
 interface EventProps {
+  // state the eventmodal params types
   openModal: boolean;
   closeModal: () => void;
   createEvent: () => void;
@@ -303,3 +304,4 @@ const Eventmodal = ({
 };
 
 export default Eventmodal;
+// end..

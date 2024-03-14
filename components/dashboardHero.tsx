@@ -6,20 +6,23 @@ import { FaDotCircle } from "react-icons/fa";
 import TaskComponent, { TaskProps } from "./TaskComponent";
 import { A_ICON, P_ICON, T_ICON } from "@/public";
 import PageHeader from "./pageHeader";
-import { useFetchFirestoreData } from "@/hooks";
+import { useFetchFirestoreData, useMediaQuery } from "@/hooks";
 import { useSearchQuery } from "@/context/searchContext";
 import { Transition } from "@headlessui/react";
 
 const DashboardHero = () => {
-  const { showTopContent, searchQuery } = useSearchQuery();
+  const { showTopContent, searchQuery } = useSearchQuery(); // coming from useQueryContext to handle search from navbar to the dashboardHero
   const [modal, setModal] = useState<boolean>(false);
   const [selectedTask, setSelectedTask] = useState<TaskProps | null | any>(
     null
   );
-  const { data: plans } = useFetchFirestoreData("plans");
-  const { data: tasks } = useFetchFirestoreData("tasks");
-  const { data: activities } = useFetchFirestoreData("activities");
+  const { data: plans } = useFetchFirestoreData("plans"); // fetching data from the plans data from firebase firestore
+  const { data: tasks } = useFetchFirestoreData("tasks"); // fetching data from the tasks data from firebase firestore
+  const { data: activities } = useFetchFirestoreData("activities"); // fetching data from the activitiess data from firebase firestore
 
+  const mobileScreen = useMediaQuery("(max-width: 640px)");
+
+  // filter the task data when searched by task name
   const filteredTasks = tasks.filter((task: any) =>
     task.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -28,6 +31,7 @@ const DashboardHero = () => {
     setSelectedTask(task);
   };
 
+  // function to in use but generated to detect time task was created
   const formatTimeElapsed = (timestamp: any) => {
     const now: any = new Date();
     const taskDate: any = new Date(timestamp);
@@ -109,35 +113,12 @@ const DashboardHero = () => {
                       ? activities.length
                       : item.num}
                   </span>
-                  <span>
-                    {item.id === 1
-                      ? tasks.find((task: any) =>
-                          formatTimeElapsed(task.createdAt.toDate())
-                        ) // Assuming `createdAt` exists in `task`
-                      : item.id === 2
-                      ? plans.find((plan: any) =>
-                          formatTimeElapsed(plan.createdAt.toDate())
-                        ) // Assuming `createdAt` exists in `plan`
-                      : item.id === 3
-                      ? activities.find((act: any) =>
-                          formatTimeElapsed(act.createdAt.toDate())
-                        ) // Assuming `createdAt` exists in `act`
-                      : null}
-                  </span>
                 </div>
               </div>
             ))}
           </div>
         )}
-        <Transition
-          show={filteredTasks.length > 0}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0 scale-95"
-          enterTo="opacity-100 scale-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100 scale-100"
-          leaveTo="opacity-0 scale-95"
-        >
+        {searchQuery === "" && ( //component mounts if search is empty
           <PageHeader
             text="Tasks"
             btnText="Add task"
@@ -150,7 +131,17 @@ const DashboardHero = () => {
             btnTextStyle="text-purple-400"
             pathname="/Dashboard/tasks"
           />
+        )}
 
+        <Transition
+          show={filteredTasks.length > 0} // would show the filtered task when there is filteredtask
+          enter="ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+        >
           <TaskComponent
             tasks={filteredTasks.slice(0, 4)}
             emptyText={"tasks"}
@@ -172,9 +163,35 @@ const DashboardHero = () => {
             markAsDone={undefined} // allTasks={allTaskies}
           />
         </Transition>
+
+        <Transition // displays when there is no task found
+          enter="ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
+          show={filteredTasks.length === 0}
+          className={`flex justify-center items-center flex-col gap-3 ${
+            !showTopContent ? "w-[55rem]" : ""
+          }`}
+        >
+          <Image
+            src={"/no_tasks_found.png"}
+            width={mobileScreen ? 50 : 200}
+            height={200}
+            alt="no task"
+            className="opacity-25"
+          />
+          <span className="lg:text-2xl text-lg  text-gray-400 ">
+            Oops!! No Task Found
+          </span>
+        </Transition>
       </div>
     </div>
   );
 };
 
 export default DashboardHero;
+
+// end..

@@ -10,7 +10,7 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (!user && !loading) {
-      router.push("/login");
+      router.push("/login"); // routes users back when there is no user auth
     }
   }, [user, loading, router]);
 

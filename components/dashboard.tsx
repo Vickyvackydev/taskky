@@ -9,11 +9,12 @@ type Props = {
   children: React.ReactNode;
 };
 const Dashboard = ({ children }: Props) => {
-  const isMobileView = useMediaQuery("(max-width: 640px)");
-  const isTabletView = useMediaQuery("(max-width: 840px)");
+  const isMobileView = useMediaQuery("(max-width: 640px)"); //state handling the size of the device screen
+  const isTabletView = useMediaQuery("(max-width: 840px)"); //state handling the size of device screen
   const [isSideBarVisible, setIsSideBarVisible] = useState(false);
   const [isRightSide, setIsRightSide] = useState(false);
 
+  // take effect when the component mounts
   useEffect(() => {
     if (isMobileView) {
       setIsSideBarVisible(false);
@@ -22,11 +23,11 @@ const Dashboard = ({ children }: Props) => {
       setIsSideBarVisible(true);
       setIsRightSide(true);
     }
-  }, [isMobileView]);
+  }, [isMobileView]); // set the mobileview as its dependency
 
   return (
     <div className="lg:flex h-screen w-screen ">
-      {isMobileView || isTabletView ? (
+      {isMobileView || isTabletView ? ( // overlay effect for only tablet and mobile screens
         <div
           onClick={() => {
             setIsSideBarVisible(false);
@@ -38,12 +39,14 @@ const Dashboard = ({ children }: Props) => {
         ></div>
       ) : null}
 
+      {/* side bar component */}
       <Sidebar
         isOpen={isSideBarVisible}
         onClose={() => setIsSideBarVisible(false)}
       />
 
       <div className="flex-1 ">
+        {/* navigation bar for the dashboard */}
         <Dashboardnav
           isOpen={() => setIsSideBarVisible(true)}
           onClose={() => setIsSideBarVisible(false)}
@@ -56,6 +59,7 @@ const Dashboard = ({ children }: Props) => {
         <div>{children}</div>
       </div>
       <div>
+        {/* right segmant of the dashboard */}
         <RightHero rightSide={isRightSide} />
       </div>
     </div>

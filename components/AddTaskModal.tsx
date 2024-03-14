@@ -17,6 +17,8 @@ type ModalProps = {
   loading: boolean;
   textColor: string;
 };
+
+//  Add Task Modal, reusable component in all to-do component
 const AddTaskModal = ({
   openModal,
   closeModal,
@@ -65,6 +67,7 @@ const AddTaskModal = ({
               type="text"
               name="description"
               placeholder="Enter description"
+              minLength={40}
               onChange={setDescription}
               className="w-full border h-12 outline-none rounded-lg pl-3  dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900"
             />
@@ -109,3 +112,5 @@ const AddTaskModal = ({
 };
 
 export default AddTaskModal;
+
+// end..

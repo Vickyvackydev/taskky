@@ -3,6 +3,7 @@ import Modal from "./modal";
 import Button from "./Button";
 
 type Props = {
+  // state the details type
   open: boolean;
   close: () => void;
   items: any;
@@ -37,7 +38,8 @@ const DetailsBox = ({
             {`${modalname}'s Details`}
           </span>
         </div>
-        {items && tasksdeatils === false ? (
+        {/* show team details */}
+        {items && tasksdeatils === false ? ( // shows two states with the type of details required team or todo
           <div className="flex justify-between px-5 mt-3">
             <div className="flex flex-col gap-5 items-start ">
               <span className="dark:text-gray-300">Team Name:</span>
@@ -65,7 +67,8 @@ const DetailsBox = ({
               </div>
             </div>
           </div>
-        ) : tasksdeatils === true ? (
+        ) : // show todo details
+        tasksdeatils === true ? (
           <div className="flex justify-between px-5 mt-3">
             <div className="flex flex-col gap-5 items-start">
               <span className="dark:text-gray-300">Name:</span>
@@ -94,7 +97,7 @@ const DetailsBox = ({
           </div>
         ) : null}
 
-        {actionBtns ? (
+        {actionBtns ? ( //shows if it's the team details
           <div className="flex justify-evenly items-center mt-5">
             <Button
               text="Update"
@@ -110,6 +113,7 @@ const DetailsBox = ({
             />
           </div>
         ) : (
+          // displays if it is the todo details
           <div className="flex justify-center items-center">
             <Button
               text="Close"
@@ -125,3 +129,4 @@ const DetailsBox = ({
 };
 
 export default DetailsBox;
+// end..

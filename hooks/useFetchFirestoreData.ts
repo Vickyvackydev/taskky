@@ -7,14 +7,16 @@ export const useFetchFirestoreData = (collectionName: string) => {
   const collectionRef = collection(db, collectionName);
   const [loading, setLoading] = useState(true);
 
+  // this hooks render to fetch the data from a specific authenticated user
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const currentUser = auth.currentUser;
+        const currentUser = auth.currentUser; // get the currentuser
         if (currentUser?.uid) {
+          // render when there is a user uid from firebase
           const userTasksQuery = query(
             collectionRef,
-            where("userId", "==", currentUser.uid)
+            where("userId", "==", currentUser.uid) // query and render the data that has the userId
           );
           const querySnapshot = await getDocs(userTasksQuery);
           const tasksData = querySnapshot.docs.map((doc) => ({
@@ -22,7 +24,7 @@ export const useFetchFirestoreData = (collectionName: string) => {
             ...doc.data(),
           }));
 
-          setData(tasksData);
+          setData(tasksData); // get the data from the authenticated userId
         } else {
           console.log("no data");
         }
@@ -36,5 +38,5 @@ export const useFetchFirestoreData = (collectionName: string) => {
     fetchData();
   }, [collectionRef]);
 
-  return { data, loading };
+  return { data, loading }; // return the state to fetch the data and loading state when data is fetching
 };

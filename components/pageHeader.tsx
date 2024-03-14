@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa";
 import Link from "next/link";
 
 interface Props {
+  // state the page header params types
   text: string;
   button: boolean;
   setState: any;
@@ -15,6 +16,8 @@ interface Props {
   btnIconStyle: string;
   pathname?: any;
 }
+
+// The page header component reusable in all dashboard to do component
 const PageHeader = ({
   text,
   button,
@@ -41,6 +44,7 @@ const PageHeader = ({
           handleClick={() => setState(true)}
         />
       ) : button === false ? (
+        // displays if the button is set not to display
         <div>
           <Link href={pathname} className={btnTextStyle}>
             View all
@@ -52,3 +56,4 @@ const PageHeader = ({
 };
 
 export default PageHeader;
+// end..

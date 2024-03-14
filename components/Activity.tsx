@@ -25,11 +25,11 @@ const Activity = () => {
   const activitiesCollectionRef = collection(db, "activities");
   const [selectedActivity, setSelectedActivity] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-
   const { data: activities, loading } = useFetchFirestoreData("activities");
   const [updated, setUpdated] = useState(false);
 
   const createActivity = async () => {
+    // create activity
     setIsLoading(true);
 
     try {
@@ -44,7 +44,6 @@ const Activity = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser?.uid,
-            createdAt: serverTimestamp(),
           });
           setModal(false);
         } else {
@@ -61,19 +60,24 @@ const Activity = () => {
   };
 
   const handleSelectedActivity = (act: any) => {
+    // select an activity listed
     setSelectedActivity(act);
   };
 
   const handleDeleteAct = async (id: any) => {
+    //  delete an activity
     const actDoc = doc(db, "activities", id.toString());
     await deleteDoc(actDoc);
   };
 
   const handleUpdate = (act: any) => {
+    // select a particular activity to update
     setSelectedActivity(act);
     setModal(true);
   };
+
   const handleUpdateSelected = async (id: any) => {
+    // update the selcted activity
     setIsLoading(true);
     if (id) {
       const activityDoc = doc(db, "activities", id.toString());
@@ -84,7 +88,6 @@ const Activity = () => {
         status: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
-        createdAt: serverTimestamp(),
       };
 
       try {
@@ -100,29 +103,24 @@ const Activity = () => {
     }
   };
 
-  const markAsDone = async (taskId: any) => {
-    try {
-      const taskDocRef = doc(db, "activities", taskId);
-      await updateDoc(taskDocRef, { status: "completed" });
-
-      console.log("status has being updated");
-    } catch (error) {
-      console.log("error marking task as done", error);
-    }
-  };
-
   return (
     <div className={maxWidth}>
+      {/* page-header component */}
       <PageHeader
         text="Your activities here"
         textStyle="dark:text-gray-300"
         button={true}
-        setState={setModal}
+        setState={() => {
+          setModal(true);
+          setSelectedActivity(null);
+        }}
         btnText="Add activity"
         btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-orange-400"
         btnTextStyle="text-orange-400"
       />
+
+      {/* task component mapping activities data */}
 
       <TaskComponent
         tasks={activities}
@@ -139,6 +137,8 @@ const Activity = () => {
         loading={loading}
         markAsDone={() => MarkAsDone("activities", selectedActivity?.id)}
       />
+
+      {/* task modal to add task and update task */}
 
       <AddTaskModal
         openModal={modal}
@@ -173,3 +173,5 @@ const Activity = () => {
 };
 
 export default Activity;
+
+// end..

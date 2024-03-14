@@ -66,30 +66,27 @@ const Signup = () => {
         // router.push("/login");
         setModal(true);
       } catch (error: any) {
-        console.log("Registration failed", error.message);
         setErrorMessage("email already exist");
       } finally {
         setLogging(false);
       }
     } else if (password !== confirmPassword) {
-      console.log("password is not the same");
       setNoPassword(true);
       setLogging(false);
     } else if (userName === "") {
-      console.log("no username added");
       setNoUser(true);
       setLogging(false);
     } else if (!checked) {
       setCheck(true);
-      console.log("pls check the box");
+
       setLogging(false);
     } else if (userName === "") {
       setNoUser(true);
-      console.log("pls add a username");
     }
   };
 
   const handleSignInWithGoogle = async () => {
+    // authentication for google auth
     try {
       const userCredentials = await signInWithPopup(auth, googleProvider);
 
@@ -283,7 +280,7 @@ const Signup = () => {
               />
             </div>
             <span className="lg:text-lg text-sm">
-              Already have an account?{" "}
+              Already have an account?
               <Link href={"/login"} className="underline text-green-400">
                 Login here
               </Link>
@@ -309,7 +306,7 @@ const Signup = () => {
             </div>
             <span>
               We've sent you your email verification, <br />
-              please verify your{" "}
+              please verify your
             </span>
             <span className="text-green-400 font-medium">email address</span>
 
@@ -331,6 +328,7 @@ const Signup = () => {
 export default Signup;
 
 export const TopBar = () => {
+  // topbar for the login and sign up layout
   const router = useRouter();
   const pathname = usePathname();
   const isMobileScreen = useMediaQuery("(max-width: 640px)");

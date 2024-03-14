@@ -42,18 +42,21 @@ const Events = () => {
   );
   const [done, setDone] = useState<any>(null);
 
-  const { data: events_data, loading } = useFetchFirestoreData("events");
+  const { data: events_data, loading } = useFetchFirestoreData("events"); // fetch the events data from firestore
 
   const handleSelectEventType = (eventType: string) => {
+    // select the type of event
     setSelectedEventType(eventType);
   };
 
   const handleImageChange = (e: any) => {
+    // select an image to upload to firestore
     e.preventDefault();
 
     setUploadedImage(e.target.files[0]);
   };
   const createEvent = async () => {
+    // create an event
     setIsLoading(true);
 
     try {
@@ -104,6 +107,8 @@ const Events = () => {
     }
   };
 
+  // delete an event from firestore
+
   const handleDeleteEvent = async (id: any) => {
     try {
       const eventDoc = doc(db, "events", id.toString());
@@ -114,12 +119,17 @@ const Events = () => {
       console.log("error", error);
     }
   };
-
+  // select an event to delete
   const handleSelected = (event: any) => {
     setSelectedEvent(event);
     setDeleteModal(true);
   };
 
+  // mark the event to mark as done
+  const MarkSelected = (event: any) => {
+    setSelectedEvent(event);
+  };
+  // select the event to update
   const handleSelectedToUpdate = (event: any) => {
     setSelectedEvent(event);
     setModal(true);
@@ -132,6 +142,7 @@ const Events = () => {
   };
 
   const handleUpdate = async (id: any) => {
+    // update the selected event
     setIsLoading(true);
 
     if (id) {
@@ -161,7 +172,6 @@ const Events = () => {
           status: status,
           hostName: hostName,
           eventType: selectedEventType,
-
           createdAt: serverTimestamp().toString(),
         };
 
@@ -179,6 +189,7 @@ const Events = () => {
   };
 
   const markEventDone = async (event_id: any) => {
+    // mark selected event and set the status from the initial state to done
     try {
       const eventDoc = doc(db, "events", event_id);
       await updateDoc(eventDoc, { status: "Done" });
@@ -190,17 +201,21 @@ const Events = () => {
 
   return (
     <div className={maxWidth}>
+      {/* page header component */}
       <PageHeader
         text="Your events here"
         textStyle="dark:text-gray-300"
         button={true}
-        setState={setModal}
+        setState={() => {
+          setModal(true);
+          setSelectedEvent(null);
+        }}
         btnText="Add event"
         btnStyle="border-2 border-border_color dark:border-gray-700"
         btnIconStyle="text-blue-400"
         btnTextStyle="text-blue-400"
       />
-
+      {/* event modal component */}
       <Eventmodal
         openModal={modal}
         closeModal={() => {
@@ -239,6 +254,7 @@ const Events = () => {
         handleUpdate={() => handleUpdate(selectedEvent?.id)}
         selectedEvent={selectedEvent?.id}
       />
+      {/* event card component to map event data */}
       <Eventcard
         event_card_data={events_data}
         handleSelected={handleSelected}
@@ -250,9 +266,12 @@ const Events = () => {
         doneTask={done}
         handleCompletedEvent={() => handleCompletedEvent(selectedEvent?.id)}
         markEventDone={() => markEventDone(selectedEvent?.id)}
+        markSelected={MarkSelected}
       />
     </div>
   );
 };
 
 export default Events;
+
+// end...

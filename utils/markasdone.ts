@@ -2,6 +2,7 @@ import { db } from "@/firebase/firebase.config";
 import { doc, updateDoc } from "firebase/firestore";
 
 const MarkAsDone = async (collectionName: string, taskId: any) => {
+  // mark as done function for all task component
   try {
     const taskDocRef = doc(db, collectionName, taskId);
     await updateDoc(taskDocRef, { status: "completed" });

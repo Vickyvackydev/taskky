@@ -1,6 +1,7 @@
 import React from "react";
 
 const Skeleton = () => {
+  // skeleton loader
   return (
     <div className="flex justify-between gap-4">
       <div className="flex flex-col gap-4 w-52">
@@ -32,3 +33,4 @@ const Skeleton = () => {
 };
 
 export default Skeleton;
+// end..

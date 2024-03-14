@@ -1,10 +1,8 @@
 "use client";
 import Button from "@/components/Button";
-
 import { auth } from "@/firebase/firebase.config";
 import { useFetchFirestoreData } from "@/hooks";
 import { signInWithEmailAndPassword } from "firebase/auth/cordova";
-
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -57,7 +55,6 @@ const Login = () => {
           setPreloader(true);
         }
       } catch (error) {
-        console.log("this user does not exist");
         setErrorMessage("Email does not exist or password is incorrect");
         setWrongDetailsPopUp(true);
         setLoading(false);
@@ -65,14 +62,10 @@ const Login = () => {
         setLoading(false);
       }
     } else if (userName !== displayUserName) {
-      console.log("user name does not exist");
-      // setNoUser(true);
       setErrorMessage("Username does not exist");
       setWrongDetailsPopUp(true);
       setLoading(false);
     } else if (userName !== "") {
-      console.log("no user name");
-      // setNoUser(true);
       setErrorMessage("Username is required");
       setWrongDetailsPopUp(true);
       setLoading(false);

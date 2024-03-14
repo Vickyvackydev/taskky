@@ -11,6 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { A_ICON, E_ICON, P_ICON, T_ICON } from "@/public";
 
 const sidebarLinks = [
+  // side bar links
   {
     id: 1,
     label: "Tasks",
@@ -38,6 +39,7 @@ const sidebarLinks = [
 ];
 
 type sideBaTypes = {
+  // sidebar types
   isOpen: boolean;
   onClose: () => void;
 };
@@ -48,6 +50,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
   const smallScreen = useMediaQuery("(max-width: 600px)");
 
   const handleSidebarClose = () => {
+    // closes the sidebar when triggered
     if (smallScreen) {
       onClose();
     } else {
@@ -56,6 +59,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
   };
 
   const handleLogOut = async () => {
+    // log users out
     try {
       if (auth?.currentUser) {
         await signOut(auth);
@@ -71,7 +75,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
 
   return (
     <Transition
-      className={`flex-none h-full w-full lg:w-[18vw] fixed z-40 lg:z-0 `}
+      className={`flex-none h-full w-full lg:w-[18vw] fixed z-40 lg:z-0 dark:border-gray-700 transition-all duration-500`}
       as={"div"}
       show={isOpen}
       enter="transition-all ease-in duration-500"
@@ -83,7 +87,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
     >
       <main>
         <div
-          className="absolute lg:hidden  z-50 right-[5rem] w-10 h-10 rounded-full flex justify-center items-center border-2 top-3 dark:border-gray-700"
+          className="absolute lg:hidden  z-50 right-[5rem] w-10 h-10 rounded-full flex justify-center items-center border-2 top-3 "
           onClick={onClose}
         >
           <span className="text-lg dark:text-gray-300">
@@ -146,3 +150,4 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
 };
 
 export default SidebarLg;
+// end..

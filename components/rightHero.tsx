@@ -30,19 +30,15 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [teamTask, setTeamTask] = useState("");
   const [department, setDepartment] = useState("");
   const [status, setStatus] = useState("");
-  const [authGoogleImage, setAuthGoogleImage] = useState<any>(null);
-
-  const teamCollectionRef = collection(db, "teams");
+  const teamCollectionRef = collection(db, "teams"); // collection for the team data from firestore
   const [hoverOption, setHoverOption] = useState(false);
   const [selectedModal, setSelectedModal] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const { data: tasks } = useFetchFirestoreData("tasks");
-
   const doneTasks = tasks.map((task: any) => task.status);
-
-  const { data: teams, loading } = useFetchFirestoreData("teams");
+  const { data: teams } = useFetchFirestoreData("teams");
 
   const createTeam = async () => {
     setIsLoading(true);
@@ -72,9 +68,9 @@ const RightHero = ({ rightSide }: RightSideProps) => {
     }
   };
 
-  useEffect(() => {
-    setAuthGoogleImage(auth?.currentUser?.photoURL);
-  }, [auth?.currentUser]);
+  // useEffect(() => {
+  //   setAuthGoogleImage(auth?.currentUser?.photoURL);
+  // }, [auth?.currentUser]);
   // useEffect(() => {
   //   const getTeams = async () => {
   //     const data = await getDocs(teamCollectionRef);
@@ -86,10 +82,12 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   // }, []);
 
   const handleSelectedTeam = (team: any) => {
+    // select a team from the data
     setSelectedTeam(team);
   };
 
   const handleDeleteTeam = async (id: any) => {
+    // delete a team from the data
     const teamDoc = doc(db, "teams", id);
     await deleteDoc(teamDoc);
 
@@ -97,12 +95,14 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   };
 
   const handleUpdate = (team: any) => {
+    // select a team to update
     setSelectedTeam(team);
     setModal(true);
     setSelectedModal(false);
   };
 
   const handleUpdateSelected = async (id: any) => {
+    // update the selected team
     setIsLoading(true);
     if (id) {
       const teamDoc = doc(db, "teams", id.toString());
@@ -141,7 +141,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
       <div className="">
         <div className="flex justify-between ">
           <span className="lg:text-xl text-sm dark:text-gray-400">
-            My Team{" "}
+            My Team
             <span className="text-purple-400 font-medium">
               {`(${teams.length})`}
             </span>
@@ -154,6 +154,7 @@ const RightHero = ({ rightSide }: RightSideProps) => {
               className="text-sm border-2 border-border_color dark:border-gray-700 text-purple-400 font-medium w-10 h-10 flex item-center justify-center rounded-full  pt-3 hover:scale-90 transition-all duration-300"
               onClick={() => {
                 setModal(true);
+                setSelectedTeam(null);
               }}
             >
               <FaPlus />
@@ -269,26 +270,14 @@ const RightHero = ({ rightSide }: RightSideProps) => {
             </div>
 
             <div className="stat">
-              <div className="stat-figure text-secondary">
-                <div className="avatar online">
-                  <div className="w-16 rounded-full">
-                    {authGoogleImage && (
-                      <Image
-                        src={authGoogleImage}
-                        width={50}
-                        height={50}
-                        alt="google image"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-              <div className="stat-value">
-                {doneTasks === "completed".length}
+              <div className="stat-value dark:text-gray-300">
+                {doneTasks === "completed".length > 0
+                  ? doneTasks === "completed".length
+                  : 0}
               </div>
               <div className="stat-title dark:text-gray-300">Tasks done</div>
-              <div className="stat-desc text-secondary">
-                {doneTasks === "active" || "pending".length} tasks remaining
+              <div className="stat-desc text-secondary ">
+                {doneTasks === "active" + "pending".length || 0} tasks remaining
               </div>
             </div>
           </div>
@@ -420,3 +409,4 @@ const RightHero = ({ rightSide }: RightSideProps) => {
 };
 
 export default RightHero;
+//  end ..

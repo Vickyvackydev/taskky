@@ -1,6 +1,7 @@
 import React from "react";
 
 const Preloader = () => {
+  //  preloader component with spinners
   return (
     <div className="flex justify-center items-center">
       <span className="loading loading-spinner text-primary"></span>
