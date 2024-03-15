@@ -105,12 +105,18 @@ const Eventcard = ({
                 </div>
                 <div className="hover:scale-90 transition-all duration-300">
                   <span
-                    className="flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 dark:hover:text-green-500 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom"
+                    className={`flex justify-center items-center w-8 h-8 bg-white  dark:bg-bg_black dark:text-gray-300 dark:hover:text-green-500 rounded-full text-gray-400 shadow-md cursor-pointer hover:scale-100 duration-300 transition-all tooltip tooltip-bottom ${
+                      data.status === "Done"
+                        ? "text-green-500 cursor-not-allowed"
+                        : ""
+                    }`}
                     onClick={() => {
                       markSelected(data);
                       markEventDone(data.id);
                     }}
-                    data-tip="Mark as done"
+                    data-tip={` ${
+                      data.status === "Done" ? "Marked as done" : "Mark as done"
+                    }`}
                   >
                     <FaCheck />
                   </span>

@@ -66,7 +66,7 @@ const AddTaskModal = ({
             <input
               type="text"
               name="description"
-              placeholder="Enter description"
+              placeholder="Enter description: min of 5 words"
               minLength={40}
               onChange={setDescription}
               className="w-full border h-12 outline-none rounded-lg pl-3  dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900"

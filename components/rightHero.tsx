@@ -37,9 +37,14 @@ const RightHero = ({ rightSide }: RightSideProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [deleteModal, setDeleteModal] = useState(false);
   const { data: tasks } = useFetchFirestoreData("tasks");
+  const { data: plans } = useFetchFirestoreData("plans");
+  const { data: activities } = useFetchFirestoreData("activities");
   const doneTasks = tasks.map((task: any) => task.status);
   const { data: teams } = useFetchFirestoreData("teams");
 
+  // console.log(doneTasks === "completed".length);
+
+  const allTaskLength = tasks.length + plans.length + activities.length;
   const createTeam = async () => {
     setIsLoading(true);
 
@@ -271,14 +276,9 @@ const RightHero = ({ rightSide }: RightSideProps) => {
 
             <div className="stat">
               <div className="stat-value dark:text-gray-300">
-                {doneTasks === "completed".length > 0
-                  ? doneTasks === "completed".length
-                  : 0}
+                {allTaskLength}
               </div>
-              <div className="stat-title dark:text-gray-300">Tasks done</div>
-              <div className="stat-desc text-secondary ">
-                {doneTasks === "active" + "pending".length || 0} tasks remaining
-              </div>
+              <div className="stat-title dark:text-gray-300">Total tasks</div>
             </div>
           </div>
         </div>
