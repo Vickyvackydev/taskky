@@ -21,7 +21,7 @@ const PreloaderModal = ({
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" onClose={isClose} className="relative z-50">
+        <Dialog as="div" onClose={() => {}} className="relative z-50">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

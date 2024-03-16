@@ -165,8 +165,8 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
           {greeting}{" "}
           {`${displayName ? displayName?.split(" ")[0] : userName} 😊`}
         </span>
-        <div className="border-2 border-border_color dark:border-gray-700 px-6 rounded-3xl w-[30rem] ml-[4rem] lg:flex hidden">
-          <span className="pt-[0.9rem] text-orange-400 lg:block hidden">
+        <div className="border-2 border-border_color dark:border-gray-700 px-6 rounded-3xl w-[30rem] ml-[4rem] lg:flex hidden py-4">
+          <span className=" text-orange-400 lg:block hidden">
             <FaSearch />
           </span>
           <input
@@ -174,7 +174,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
             placeholder={`Search task name`}
             value={searchQuery}
             onChange={handleChange}
-            className="py-3 outline-none px-3 placeholder:text-lg bg-transparent placeholder:text-gray-300 lg:block hidden dark:text-gray-300 "
+            className=" outline-none px-3  bg-transparent placeholder:text-gray-300 lg:block hidden dark:text-gray-300 w-full text-xs placeholder:text-sm"
           />
         </div>
         <div

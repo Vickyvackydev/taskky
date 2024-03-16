@@ -180,7 +180,7 @@ const Eventmodal = ({
               rows={10}
               className="outline-none border rounded-lg w-[25vw] px-4 pt-3 dark:text-gray-300 dark:border-gray-700 dark:bg-gray-900"
               onChange={setDescription}
-              placeholder="enter description..."
+              placeholder="enter description...: min of 20 words"
             />
           </div>
           <div className="flex flex-col items-start">

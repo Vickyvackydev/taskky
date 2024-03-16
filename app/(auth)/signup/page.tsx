@@ -54,6 +54,7 @@ const Signup = () => {
           setConfirmPassword("");
           setUserName("");
           setChecked(false);
+          setCheck(false);
           setNoPassword(false);
           setErrorMessage("");
 

@@ -23,10 +23,10 @@ function Footer() {
       </aside>
       <nav>
         <h6 className="footer-title">Services</h6>
-        <a className="link link-hover">Branding</a>
-        <a className="link link-hover">Design</a>
-        <a className="link link-hover">Marketing</a>
-        <a className="link link-hover">Advertisement</a>
+        <a className="link link-hover">Speed</a>
+        <a className="link link-hover">Safety</a>
+        <a className="link link-hover">Time Management</a>
+        <a className="link link-hover">Best Security</a>
       </nav>
       <nav>
         <h6 className="footer-title">Company</h6>

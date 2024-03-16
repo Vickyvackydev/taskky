@@ -47,6 +47,7 @@ const Plans = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
+            createdAt: new Date().getMinutes(),
           });
           setModal(true);
         } else {
@@ -92,6 +93,7 @@ const Plans = () => {
         status: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        createdAt: new Date().getMinutes(),
       };
 
       try {

@@ -57,13 +57,11 @@ const DropDown = ({
           className={`flex gap-2 items-center  rounded-lg p-1  ${
             complete
               ? "hover:bg-none cursor-default"
-              : "hover:bg-green-100 cursor-pointer"
+              : "hover:bg-green-100 cursor-pointer dark:hover:bg-green-500 dark:hover:text-white"
           }`}
           onClick={handleComplete}
         >
-          <FaCheckCircle
-            className={`${complete ? "text-green-300" : "text-gray-500"}`}
-          />
+          <FaCheckCircle />
           <span className={`${complete ? "text-green-300" : ""}`}>
             {complete ? "Marked as done" : "Mark as done"}
           </span>

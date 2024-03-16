@@ -9,19 +9,12 @@ import Image from "next/image";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useMediaQuery } from "@/hooks";
 import { motion } from "framer-motion";
+import { scrollToComponent } from "@/utils/ScrollToComponent";
 
 const Navbar = () => {
   const router = useRouter();
   const [navopen, setNavOpen] = useState(false);
   const isMobileScreen = useMediaQuery("(max-width: 640px)");
-
-  const scrollToComponent = (component: string) => {
-    // scroll function to scroll user to a component
-    const element = document.getElementById(component);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   return (
     <motion.nav
@@ -55,17 +48,26 @@ const Navbar = () => {
               : "border-none max-w-[10rem]"
           }`}
         >
-          {navLinks.map((links) => (
-            <li
-              className="hover:text-green-500 transition-all duration-300 cursor-pointer "
-              onClick={() => {
-                scrollToComponent(links.href);
-                setNavOpen(false);
-              }}
-            >
-              {links.label}
-            </li>
-          ))}
+          {navLinks.map((links) => {
+            if (links.href === "/Homepage/contactUs") {
+              return (
+                <Link href={links.href} onClick={() => setNavOpen(false)}>
+                  Contact
+                </Link>
+              );
+            } else
+              return (
+                <li
+                  className="hover:text-green-500 transition-all duration-300 cursor-pointer "
+                  onClick={() => {
+                    scrollToComponent(links.href);
+                    setNavOpen(false);
+                  }}
+                >
+                  {links.label}
+                </li>
+              );
+          })}
         </ul>
         <hr className={`lg:block hidden`} />
       </div>

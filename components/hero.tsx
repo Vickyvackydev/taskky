@@ -4,6 +4,7 @@ import Button from "./Button";
 import { useRouter } from "next/navigation";
 import { ReactTyped } from "react-typed";
 import { motion } from "framer-motion";
+import { scrollToComponent } from "@/utils/ScrollToComponent";
 
 const Hero = () => {
   const router = useRouter();
@@ -57,6 +58,7 @@ const Hero = () => {
           text="Learn more"
           textStyles="text-green-500"
           btnStyles="bg-white px-3 py-2 rounded-lg shadow-md"
+          handleClick={() => scrollToComponent("services")}
         />
       </motion.div>
     </main>

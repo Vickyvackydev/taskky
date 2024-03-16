@@ -44,6 +44,7 @@ const Tasks = () => {
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
+            createdAt: new Date().getMinutes(),
           });
           setModal(false);
         } else {
@@ -94,6 +95,7 @@ const Tasks = () => {
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
         updatedTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
+        createdAt: new Date().getMinutes(),
       };
 
       try {

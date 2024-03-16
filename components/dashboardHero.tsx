@@ -20,6 +20,8 @@ const DashboardHero = () => {
   const { data: tasks } = useFetchFirestoreData("tasks"); // fetching data from the tasks data from firebase firestore
   const { data: activities } = useFetchFirestoreData("activities"); // fetching data from the activitiess data from firebase firestore
 
+  // console.log(tasks.createdAt);
+
   const mobileScreen = useMediaQuery("(max-width: 640px)");
 
   // filter the task data when searched by task name
@@ -33,6 +35,9 @@ const DashboardHero = () => {
 
   // function to in use but generated to detect time task was created
   const formatTimeElapsed = (timestamp: any) => {
+    if (!timestamp) {
+      return "no data yet";
+    }
     const now: any = new Date();
     const taskDate: any = new Date(timestamp);
 
@@ -112,6 +117,21 @@ const DashboardHero = () => {
                       : item.id === 3
                       ? activities.length
                       : item.num}
+                  </span>
+                  <span className="dark:text-gray-300">
+                    {item.id === 1
+                      ? formatTimeElapsed(
+                          tasks.map((task: any) => task.createdAt)
+                        )
+                      : item.id === 2
+                      ? formatTimeElapsed(
+                          plans.map((plan: any) => plan.createdAt)
+                        )
+                      : item.id === 3
+                      ? formatTimeElapsed(
+                          activities.map((act: any) => act.createdAt)
+                        )
+                      : ""}
                   </span>
                 </div>
               </div>
