@@ -25,7 +25,7 @@ const Navbar = () => {
       className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500"
       id="navbar"
     >
-      <Link href="/Homepage">
+      <Link href="/">
         <Image
           src="/logo.png"
           width={isMobileScreen ? 70 : 150}
@@ -49,7 +49,7 @@ const Navbar = () => {
           }`}
         >
           {navLinks.map((links) => {
-            if (links.href === "/Homepage/contactUs") {
+            if (links.href === "/contactUs") {
               return (
                 <Link href={links.href} onClick={() => setNavOpen(false)}>
                   Contact

@@ -336,7 +336,7 @@ export const TopBar = () => {
   return (
     <div className=" h-[7rem]">
       <div className="fixed top-0 flex w-full justify-between items-center pb-3 px-5 pt-5 shadow-sm bg-white z-30">
-        <Link href="/Homepage">
+        <Link href="/">
           <Image
             src="/logo.png"
             width={isMobileScreen ? 70 : 150}
