@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "Auth",
-  description: "signup/login ",
+  description: "signup/login",
 };
 
 export default function RootLayout({

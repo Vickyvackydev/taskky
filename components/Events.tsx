@@ -15,6 +15,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { useFetchFirestoreData } from "@/hooks";
+import { MarkAsDone, ReverseStatus } from "@/utils";
 
 type ValuePiece = Date | null;
 
@@ -88,6 +89,7 @@ const Events = () => {
             eventImage: imageUrl,
             otherDetails: other_details,
             userId: currentUser.uid,
+            prevStatus: status,
             status: status,
             hostName: hostName,
             eventType: selectedEventType,
@@ -169,6 +171,7 @@ const Events = () => {
           location: location,
           eventImage: imageUrl,
           otherDetails: other_details,
+          prevStatus: status,
           status: status,
           hostName: hostName,
           eventType: selectedEventType,
@@ -246,7 +249,7 @@ const Events = () => {
           setOtherDetails(e.target?.value)
         }
         createEvent={createEvent}
-        loading={loading}
+        loading={isLoading}
         setStatus={(e: React.ChangeEvent<HTMLSelectElement>) =>
           setStatus(e.target?.value)
         }
@@ -265,8 +268,9 @@ const Events = () => {
         loading={loading}
         doneTask={done}
         handleCompletedEvent={() => handleCompletedEvent(selectedEvent?.id)}
-        markEventDone={() => markEventDone(selectedEvent?.id)}
         markSelected={MarkSelected}
+        markEventDone={() => MarkAsDone("events", selectedEvent?.id)}
+        revertstatus={() => ReverseStatus("events", selectedEvent?.id)}
       />
     </div>
   );

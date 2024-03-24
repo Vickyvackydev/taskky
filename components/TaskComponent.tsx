@@ -37,6 +37,7 @@ interface tasksMainProps {
   updated: any;
   loading: boolean;
   markAsDone: any;
+  revertStatus: any;
 }
 
 // The todo/task component that is reusable to in all todo components
@@ -52,6 +53,7 @@ const TaskComponent = ({
   updated,
   loading,
   markAsDone,
+  revertStatus,
 }: tasksMainProps) => {
   const { resolvedTheme } = useTheme();
   const { showTopContent } = useSearchQuery();
@@ -168,6 +170,7 @@ const TaskComponent = ({
                       handleComplete={() => {
                         markAsDone(task?.id);
                       }}
+                      handleReverse={() => revertStatus(task?.id)}
                       complete={task.status !== "completed" ? null : task.id}
                     />
                   )}

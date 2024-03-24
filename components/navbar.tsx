@@ -9,7 +9,7 @@ import Image from "next/image";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useMediaQuery } from "@/hooks";
 import { motion } from "framer-motion";
-import { scrollToComponent } from "@/utils/ScrollToComponent";
+import { scrollToComponent } from "@/utils";
 
 const Navbar = () => {
   const router = useRouter();

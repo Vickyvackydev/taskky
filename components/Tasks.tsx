@@ -6,6 +6,7 @@ import PageHeader from "./pageHeader";
 import { maxWidth } from "./width";
 import { useFetchFirestoreData } from "@/hooks";
 import {
+  Timestamp,
   addDoc,
   collection,
   deleteDoc,
@@ -15,19 +16,20 @@ import {
 import { auth, db } from "@/firebase/firebase.config";
 import { T_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
-import MarkAsDone from "@/utils/markasdone";
+import { MarkAsDone, ReverseStatus } from "@/utils";
 
 const Tasks = () => {
   const [modal, setModal] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const tasksCollectionRef = collection(db, "tasks");
-  const [taskName, setTaskName] = useState("");
-  const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("");
   const [selectedTask, setSelectedTask] = useState<TaskProps | null | any>(
     null
   );
+  const [taskName, setTaskName] = useState("");
+  const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("");
+
   const { data: tasks, loading } = useFetchFirestoreData("tasks"); // fetch task data from firstore
 
   const createTask = async () => {
@@ -41,10 +43,11 @@ const Tasks = () => {
             name: taskName,
             desc: description,
             status: status,
+            prevStatus: status,
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
-            createdAt: new Date().getMinutes(),
+            createdAt: Timestamp.now(),
           });
           setModal(false);
         } else {
@@ -75,9 +78,9 @@ const Tasks = () => {
     // select task to update
     setSelectedTask(task);
 
-    setDescription(description);
-    setTaskName(taskName);
-    setStatus(status);
+    setDescription(selectedTask?.desc);
+    setTaskName(selectedTask?.name);
+    setStatus(selectedTask?.status);
 
     setModal(true);
   };
@@ -92,10 +95,11 @@ const Tasks = () => {
         name: taskName,
         desc: description,
         status: status,
+        prevStatus: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
         updatedTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
-        createdAt: new Date().getMinutes(),
+        createdAt: new Date(),
       };
 
       try {
@@ -147,6 +151,7 @@ const Tasks = () => {
         updated={updated}
         loading={loading}
         markAsDone={() => MarkAsDone("tasks", selectedTask?.id)}
+        revertStatus={() => ReverseStatus("tasks", selectedTask?.id)}
       />
       <AddTaskModal
         openModal={modal}

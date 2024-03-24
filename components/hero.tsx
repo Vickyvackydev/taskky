@@ -4,7 +4,7 @@ import Button from "./Button";
 import { useRouter } from "next/navigation";
 import { ReactTyped } from "react-typed";
 import { motion } from "framer-motion";
-import { scrollToComponent } from "@/utils/ScrollToComponent";
+import { scrollToComponent } from "@/utils";
 
 const Hero = () => {
   const router = useRouter();

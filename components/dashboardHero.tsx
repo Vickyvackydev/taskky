@@ -9,6 +9,7 @@ import PageHeader from "./pageHeader";
 import { useFetchFirestoreData, useMediaQuery } from "@/hooks";
 import { useSearchQuery } from "@/context/searchContext";
 import { Transition } from "@headlessui/react";
+import moment from "moment";
 
 const DashboardHero = () => {
   const { showTopContent, searchQuery } = useSearchQuery(); // coming from useQueryContext to handle search from navbar to the dashboardHero
@@ -34,29 +35,29 @@ const DashboardHero = () => {
   };
 
   // function to in use but generated to detect time task was created
-  const formatTimeElapsed = (timestamp: any) => {
-    if (!timestamp) {
-      return "no data yet";
-    }
+
+  function formatTimeElapsed(createdAt: any) {
     const now: any = new Date();
-    const taskDate: any = new Date(timestamp);
+    const diff = now - createdAt;
 
-    const diffInMs = now - taskDate;
-    const diffInMinutes = Math.floor(diffInMs / (1000 * 60));
+    // Convert milliseconds to seconds
+    const seconds = Math.floor(diff / 1000);
 
-    if (diffInMinutes < 1) {
-      return "just now";
-    } else if (diffInMinutes < 60) {
-      return `${diffInMinutes} minutes ago`;
-    } else if (diffInMinutes < 1440) {
-      return `${Math.floor(diffInMinutes / 60)} hours ago`;
-    } else if (diffInMinutes < 2880) {
-      return "yesterday";
+    // Calculate minutes, hours, and days
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (seconds < 60) {
+      return "Just now";
+    } else if (minutes < 60) {
+      return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
+    } else if (hours < 24) {
+      return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
     } else {
-      const diffInDays = Math.floor(diffInMinutes / 1440);
-      return `${diffInDays} days ago`;
+      return `${days} ${days === 1 ? "day" : "days"} ago`;
     }
-  };
+  }
 
   return (
     <div
@@ -119,19 +120,15 @@ const DashboardHero = () => {
                       : item.num}
                   </span>
                   <span className="dark:text-gray-300">
-                    {item.id === 1
-                      ? formatTimeElapsed(
-                          tasks.map((task: any) => task.createdAt)
-                        )
-                      : item.id === 2
-                      ? formatTimeElapsed(
-                          plans.map((plan: any) => plan.createdAt)
-                        )
-                      : item.id === 3
-                      ? formatTimeElapsed(
-                          activities.map((act: any) => act.createdAt)
-                        )
-                      : ""}
+                    {item.id === 1 && tasks.length > 0
+                      ? `Task${tasks.length > 1 ? "s" : ""} found`
+                      : item.id === 2 && plans.length > 0
+                      ? `Plan${plans.length > 1 ? "s" : ""} found`
+                      : item.id === 3 && activities.length > 0
+                      ? `${
+                          activities.length > 1 ? "Activities" : "Activity"
+                        } found`
+                      : "no activities"}
                   </span>
                 </div>
               </div>
@@ -181,6 +178,7 @@ const DashboardHero = () => {
             updated={undefined}
             loading={false}
             markAsDone={undefined} // allTasks={allTaskies}
+            revertStatus={undefined}
           />
         </Transition>
 

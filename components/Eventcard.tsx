@@ -1,10 +1,11 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import {
   FaCalendar,
   FaCheck,
   FaClock,
   FaDotCircle,
+  FaEllipsisV,
   FaMapMarker,
   FaPen,
   FaTrash,
@@ -12,6 +13,8 @@ import {
 import Deletemodal from "./Deletemodal";
 import Skeleton from "./skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { THREE_DOTS_GRAY } from "@/public";
+import DropDownV2 from "./dropdownV2";
 
 export interface eventCardDataProps {
   // state event data types from firestore
@@ -45,6 +48,7 @@ interface eventCardProps {
   markEventDone: (id: any) => void;
   handleCompletedEvent: (id: any) => void;
   markSelected: any;
+  revertstatus: any;
 }
 
 const Eventcard = ({
@@ -57,7 +61,10 @@ const Eventcard = ({
   loading,
   markEventDone,
   markSelected,
+  revertstatus,
 }: eventCardProps) => {
+  const [click, setClick] = useState<number | null>(0);
+  const [dropDown, setDropDown] = useState(false);
   return (
     <main className="lg:mt-0 mt-3">
       <span className="lg:text-xl text-lg font-semibold text-text_black lg:mt-0 pt-2 dark:text-gray-300">
@@ -112,13 +119,17 @@ const Eventcard = ({
                     }`}
                     onClick={() => {
                       markSelected(data);
-                      markEventDone(data.id);
+                      setClick(data.id);
+                      setDropDown((prev) => !prev);
                     }}
-                    data-tip={` ${
-                      data.status === "Done" ? "Marked as done" : "Mark as done"
-                    }`}
                   >
-                    <FaCheck />
+                    {/* <Image
+                      src={THREE_DOTS_GRAY}
+                      width={10}
+                      height={10}
+                      alt="three dot icon"
+                    /> */}
+                    <FaEllipsisV />
                   </span>
                 </div>
               </div>
@@ -130,7 +141,7 @@ const Eventcard = ({
                         ? "text-green-400 dark:text-green-500"
                         : data.status === "pending"
                         ? "text-orange-400 dark:text-orange-500"
-                        : data.status === "Done"
+                        : data.status === "completed"
                         ? "text-green-400  dark:text-green-500"
                         : ""
                     } text-sm`}
@@ -190,6 +201,14 @@ const Eventcard = ({
                   </span>
                 </div>
               </div>
+              {click === data.id && (
+                <DropDownV2
+                  open={dropDown}
+                  handleComplete={() => markEventDone(data.id)}
+                  handleReverse={() => revertstatus(data.id)}
+                  done={data.status !== "completed" ? null : data.id}
+                />
+              )}
             </div>
           ))
         ) : (

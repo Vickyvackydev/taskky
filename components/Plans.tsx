@@ -16,7 +16,8 @@ import { auth, db } from "@/firebase/firebase.config";
 import { P_ICON } from "@/public";
 import AddTaskModal from "./AddTaskModal";
 import { useFetchFirestoreData } from "@/hooks";
-import MarkAsDone from "@/utils/markasdone";
+
+import { MarkAsDone, ReverseStatus } from "@/utils";
 
 const Plans = () => {
   const [modal, setModal] = useState(false);
@@ -44,6 +45,7 @@ const Plans = () => {
             name: planName,
             desc: description,
             status: status,
+            prevStatus: status,
             createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
             createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
             userId: currentUser.uid,
@@ -91,6 +93,7 @@ const Plans = () => {
         name: planName,
         desc: description,
         status: status,
+        prevStatus: status,
         createdDate: `${new Date().getDate()}/${new Date().getMonth()}/${new Date().getFullYear()}`,
         createdTime: `${new Date().getHours()}:${new Date().getMinutes()}`,
         createdAt: new Date().getMinutes(),
@@ -139,6 +142,7 @@ const Plans = () => {
         updated={updated}
         loading={loading}
         markAsDone={() => MarkAsDone("plans", selectedPlan?.id)}
+        revertStatus={() => ReverseStatus("plans", selectedPlan?.id)}
       />
 
       <AddTaskModal

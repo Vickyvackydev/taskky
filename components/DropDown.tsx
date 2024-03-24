@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import React, { Fragment } from "react";
-import { FaCheckCircle, FaInfo, FaPen, FaTrash } from "react-icons/fa";
+import { FaCheckCircle, FaInfo, FaPen, FaTrash, FaUndo } from "react-icons/fa";
 
 interface Props {
   // state dropdown types
@@ -9,6 +9,7 @@ interface Props {
   handleDelete: () => void;
   handleUpdate: () => void;
   handleComplete: any;
+  handleReverse: any;
   complete: any;
 }
 const DropDown = ({
@@ -17,6 +18,7 @@ const DropDown = ({
   handleDelete,
   handleComplete,
   handleUpdate,
+  handleReverse,
   complete,
 }: Props) => {
   // dropdown menu for the taskcomponent
@@ -53,19 +55,23 @@ const DropDown = ({
           <FaTrash />
           <span>Delete</span>
         </div>
-        <div
-          className={`flex gap-2 items-center  rounded-lg p-1  ${
-            complete
-              ? "hover:bg-none cursor-default"
-              : "hover:bg-green-100 cursor-pointer dark:hover:bg-green-500 dark:hover:text-white"
-          }`}
-          onClick={handleComplete}
-        >
-          <FaCheckCircle />
-          <span className={`${complete ? "text-green-300" : ""}`}>
-            {complete ? "Marked as done" : "Mark as done"}
-          </span>
-        </div>
+        {complete ? (
+          <div
+            className="flex gap-2 items-center  rounded-lg p-1 hover:bg-green-100 cursor-pointer dark:hover:bg-green-500 dark:hover:text-white "
+            onClick={handleReverse}
+          >
+            <FaUndo />
+            <span>{"undo completed"}</span>
+          </div>
+        ) : (
+          <div
+            className="flex gap-2 items-center  rounded-lg p-1 hover:bg-green-100 cursor-pointer dark:hover:bg-green-500 dark:hover:text-white"
+            onClick={handleComplete}
+          >
+            <FaCheckCircle />
+            <span>{"Mark as done"}</span>
+          </div>
+        )}
       </div>
     </Transition>
   );

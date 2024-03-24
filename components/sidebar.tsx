@@ -45,7 +45,6 @@ type sideBaTypes = {
 };
 const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
   const router = useRouter();
-
   const pathname = usePathname();
   const smallScreen = useMediaQuery("(max-width: 600px)");
 
