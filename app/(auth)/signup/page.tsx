@@ -143,7 +143,7 @@ const Signup = () => {
                   setUserName(e.target.value)
                 }
                 placeholder="e.g Josh Sam"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm"
+                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
               />
               {noUser && (
                 <span className="text-red-400">please add a username</span>
@@ -164,7 +164,7 @@ const Signup = () => {
                   setEmail(e.target.value)
                 }
                 placeholder="josh@gmail.com"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm"
+                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
               />
               <span className="text-red-400">{errorMessage}</span>
             </div>
@@ -183,7 +183,7 @@ const Signup = () => {
                   setPassword(e.target.value)
                 }
                 placeholder="e.g 1234"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm"
+                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
               />
               {showPassword ? (
                 <span
@@ -216,7 +216,7 @@ const Signup = () => {
                   setConfirmPassword(e.target.value)
                 }
                 placeholder="e.g 1234"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm"
+                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
               />
               {showConfirmPassword ? (
                 <span

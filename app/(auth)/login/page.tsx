@@ -128,7 +128,7 @@ const Login = () => {
               <input
                 type="text"
                 value={displayUserName || userName}
-                className="outline-none ml-3 border-l pl-3"
+                className="outline-none ml-3 border-l pl-3 dark:bg-transparent"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setUserName(e.target.value)
                 }
@@ -151,7 +151,7 @@ const Login = () => {
               </span>
               <input
                 type="email"
-                className="border-l outline-none ml-3 pl-3 w-full"
+                className="border-l outline-none ml-3 pl-3 w-full dark:bg-transparent"
                 value={email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setEmail(e.target.value)
