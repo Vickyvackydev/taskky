@@ -15,8 +15,8 @@ const faQs = () => {
           Frequently Asked Questions.
         </span>
         <div className="flex lg:flex-row flex-col justify-around lg:mt-10 mt-0 items-center overflow-hidden">
-          <div className="w-full px-4 pt-16">
-            <span className="ml-3 text-xl font-medium text-green-300">
+          <div className="w-full lg:px-4 px-0 pt-16">
+            <span className="ml-3 lg:text-xl text-lg font-medium text-green-300 flex lg:justify-start justify-center">
               Questions you may want to ask
             </span>
             <motion.div

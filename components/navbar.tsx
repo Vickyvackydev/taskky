@@ -32,17 +32,13 @@ const Navbar = () => {
 
       <div
         className={`lg:relative absolute lg:top-0 top-24 z-auto ${
-          navopen && isMobileScreen ? " bg-white left-0" : "bg-none"
+          navopen && isMobileScreen ? " bg-white left-0 shadow-md" : "bg-none"
         } lg:w-32 w-full `}
       >
         <ul
-          className={`flex flex-col gap-12 lg:text-2xl text-xl lg:text-center text-start lg:pl-0 pl-3 pt-10 lg:pr-0 pr-10 w-full overflow-hidden transition-all duration-500  ${
+          className={`flex flex-col gap-12 lg:text-2xl text-xl lg:text-center text-start text-text_black font-medium lg:pl-0 pl-3 pt-10 lg:pr-0 pr-10 w-full overflow-hidden transition-all duration-500  ${
             navopen ? "navopen" : "navclose"
-          } ${
-            navopen && isMobileScreen
-              ? "border-b-2 max-w-[10rem]"
-              : "border-none max-w-[10rem]"
-          }`}
+          } ${navopen && isMobileScreen ? "" : "border-none max-w-[10rem]"}`}
         >
           {navLinks.map((links) => {
             if (links.href === "/contactUs") {
@@ -73,14 +69,14 @@ const Navbar = () => {
           <Button
             text="My Dashboard"
             textStyles="text-white lg:text-lg text-sm"
-            btnStyles="rounded-xl bg-green-500 lg:px-5 px-2 py-3 float-right"
+            btnStyles="rounded-xl bg-green-500 lg:px-5 px-2 py-3 float-right shadow-md"
             handleClick={() => router.push("/login")}
           />
         </div>
         {/* displays navigation bar */}
         <div
           onClick={() => setNavOpen((prev) => !prev)}
-          className={`arrow bg-gray-50 w-12 h-12 rounded-full flex justify-center items-center ${
+          className={`arrow bg-gray-50 w-12 h-12 rounded-full flex justify-center items-center shadow-sm ${
             navopen ? "rotateDown" : "rotateUp"
           }`}
         >

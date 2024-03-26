@@ -116,7 +116,7 @@ const Signup = () => {
           <FaCheckSquare />
         </span>
       </motion.div>
-      <main className="flex justify-center items-center rounded-2xl lg:px-10 px-3 lg:pl-10 pl-4 bg-backgrd max-w-[550px] max-h-[900px] overflow-y-scroll pb-6">
+      <main className="flex justify-center items-center rounded-2xl lg:px-10 px-3 lg:pl-10 pl-4 bg-backgrd max-w-[550px] max-h-[900px] overflow-y-scroll pb-6 shadow-box">
         <div className="mt-7">
           <div className={``}>
             <span className="lg:text-3xl text-xl text-center">

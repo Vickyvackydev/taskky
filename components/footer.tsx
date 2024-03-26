@@ -14,28 +14,28 @@ function Footer() {
     >
       <aside>
         <Image src={"/logo.png"} width={100} height={100} alt="logo image" />
-        <p>
+        <p className="text-text_black font-medium">
           Task Management Ltd.
           <br />
-          Providing reliable task management assistance since 2024
+          Providing reliable task management assistance since 2024.
         </p>
         <p>{`Copyright © task management team ${new Date().getFullYear()}`}</p>
       </aside>
-      <nav>
+      <nav className="text-text_black font-medium">
         <h6 className="footer-title">Services</h6>
         <a className="link link-hover">Speed</a>
         <a className="link link-hover">Safety</a>
         <a className="link link-hover">Time Management</a>
         <a className="link link-hover">Best Security</a>
       </nav>
-      <nav>
+      <nav className="text-text_black font-medium">
         <h6 className="footer-title">Company</h6>
         <a className="link link-hover">About us</a>
         <a className="link link-hover">Contact</a>
         <a className="link link-hover">Faqs</a>
         <a className="link link-hover">Blog</a>
       </nav>
-      <nav>
+      <nav className="text-text_black font-medium">
         <h6 className="footer-title">Legal</h6>
         <a className="link link-hover">Terms of use</a>
         <a className="link link-hover">Privacy policy</a>

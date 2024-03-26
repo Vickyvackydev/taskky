@@ -8,6 +8,9 @@ module.exports = {
 
   theme: {
     extend: {
+      boxShadow: {
+        box: "0px 0px 4px 0px rgba(0, 0, 0, 0.12);",
+      },
       colors: {
         text_black: "#26282C",
         text_gray: "#3A3F51",

@@ -15,20 +15,22 @@ const Explore = () => {
         transition={{ duration: 2 }}
         className="flex flex-col gap-10"
       >
-        <span className="text-center lg:text-5xl text-3xl font-semibold text-text_black">
+        <span className="text-center lg:text-5xl text-3xl font-semibold text-text_black ">
           Why Choose Us.
         </span>
         <div className="flex gap-10 lg:flex-row flex-col">
           {whyChooseUs.map((item) => {
             return (
-              <div className="flex flex-col justify-center items-center gap-8 shadow-sm rounded-lg p-5 max-h-full w-full bg-backgrd hover:-translate-y-10 transition-all duration-500">
+              <div className="flex flex-col justify-center items-center gap-8  rounded-lg p-5 max-h-full w-full bg-backgrd hover:-translate-y-10 transition-all duration-500 shadow-md">
                 <div>
                   <Image src={item.icon} width={50} height={50} alt="image" />
                 </div>
                 <span className="text-2xl text-gray-500 font-semibold">
                   {item.title}
                 </span>
-                <p className="text-center">{item.details}</p>
+                <p className="text-center text-text_black font-medium">
+                  {item.details}
+                </p>
               </div>
             );
           })}

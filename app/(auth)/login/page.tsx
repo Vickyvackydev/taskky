@@ -89,7 +89,7 @@ const Login = () => {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: false, amount: 0.25 }}
         transition={{ duration: 2 }}
-        className="flex justify-center items-center bg-backgrd w-fit h-full rounded-xl  px-5 pb-4"
+        className="flex justify-center items-center bg-backgrd w-fit h-full rounded-xl  px-5 pb-4 shadow-box"
       >
         <div className="mt-7">
           <span className="text-3xl flex justify-center font-medium text-green-400">

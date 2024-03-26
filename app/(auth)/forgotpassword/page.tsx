@@ -29,7 +29,7 @@ const Forgot_Password = () => {
   };
   return (
     <section className="flex justify-center items-center lg:px-0 px-6">
-      <main className="flex justify-center items-center px-5 pb-7 bg-backgrd w-fit h-full rounded-xl">
+      <main className="flex justify-center items-center px-5 pb-7 bg-backgrd w-fit h-full rounded-xl shadow-box">
         <div className="mt-7">
           <div>
             <span className="text-3xl flex justify-center text-text_black">

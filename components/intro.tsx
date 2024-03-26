@@ -14,13 +14,13 @@ const Intro = () => {
         whileInView={{ opacity: 1, x: 1 }}
         viewport={{ once: false, amount: 0.25 }}
         transition={{ duration: 1 }}
-        className="lg:w-[500px] lg:h-[500px] w-auto h-full justify-center items-start flex flex-col shadow-sm  rounded-xl px-5 py-6 bg-backgrd hover:scale-105 transition-all duration-200"
+        className="lg:w-[500px] lg:h-[500px] w-auto h-full justify-center items-start flex flex-col shadow-box  rounded-xl px-5 py-6 bg-backgrd hover:scale-105 transition-all duration-200"
       >
         <span className="text-3xl text-green-500 font-semibold">
           What We Do
         </span>
 
-        <p>
+        <p className="text-text_black font-medium">
           In today's fast-paced digital world, staying organized and productive
           is paramount for individuals and businesses alike. Task management
           systems have emerged as indispensable tools, particularly in the realm

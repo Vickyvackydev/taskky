@@ -31,7 +31,7 @@ const Hero = () => {
         />
 
         <div className="justify-center items-center flex">
-          <p className="max-w-xl lg:ml-10 ml-0 lg:px-0 px-3">
+          <p className="max-w-xl lg:ml-10 ml-0 lg:px-0 px-3 text-text_black font-medium">
             Welcome to
             <span className="text-green-500 font-semibold"> {"taskky"} </span>
             here you'll manage all your task, save your tasks, edit your undone
