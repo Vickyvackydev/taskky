@@ -67,7 +67,7 @@ const Eventcard = ({
   const [dropDown, setDropDown] = useState(false);
   return (
     <main className="lg:mt-0 mt-3">
-      <span className="lg:text-xl text-lg font-semibold text-text_black lg:mt-0 pt-2 dark:text-gray-300">
+      <span className="lg:text-xl text-sm font-semibold text-text_black lg:mt-0 pt-2 dark:text-gray-300">
         All Featured events available here
       </span>
       <div className="grid lg:grid-cols-3 grid-cols-1 gap-5 mt-5">
@@ -213,7 +213,9 @@ const Eventcard = ({
           ))
         ) : (
           <div>
-            <span className="dark:text-gray-300">No events currently</span>
+            <span className="dark:text-gray-300 lg:text-sm text-xs font-medium text-text_black">
+              No events currently
+            </span>
           </div>
         )}
       </div>

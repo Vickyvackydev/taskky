@@ -32,15 +32,21 @@ const PageHeader = ({
 }: Props) => {
   return (
     <div className={`flex justify-between pt-6 ${style} `}>
-      <span className={textStyle}>{text}</span>
+      <span
+        className={
+          "dark:text-gray-300 lg:text-sm text-xs text-text_black font-medium"
+        }
+      >
+        {text}
+      </span>
 
       {button === true ? (
         <Button
           text={btnText}
           textStyles={btnTextStyle}
-          btnStyles={` ${btnStyle} rounded-3xl  py-3`}
+          btnStyles={` ${btnStyle} rounded-3xl lg:py-3 py-2`}
           icon={<FaPlus />}
-          iconStyles={`pt-[0.125rem] ${btnIconStyle}`}
+          iconStyles={`lg:pt-[0.125rem] pt-[0.120rem] ${btnIconStyle}`}
           handleClick={() => setState(true)}
         />
       ) : button === false ? (

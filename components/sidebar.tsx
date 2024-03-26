@@ -86,7 +86,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
     >
       <main>
         <div
-          className="absolute lg:hidden  z-50 right-[5rem] w-10 h-10 rounded-full flex justify-center items-center border-2 top-3 "
+          className="absolute lg:hidden  z-50 right-[8rem] w-10 h-10 rounded-full flex justify-center items-center border-2 top-3 "
           onClick={onClose}
         >
           <span className="text-lg dark:text-gray-300">
@@ -101,7 +101,7 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
           >
             <Image
               src="/logo.png"
-              width={150}
+              width={smallScreen ? 100 : 150}
               height={150}
               alt="dashboard logo"
             />
@@ -111,15 +111,15 @@ const SidebarLg = ({ isOpen, onClose }: sideBaTypes) => {
               <Link
                 href={item.leadTo}
                 onClick={() => handleSidebarClose()}
-                className={` flex items-center gap-5 cursor-pointer  ${
+                className={` flex items-center gap-5 cursor-pointer lg:text-sm text-xs  ${
                   pathname === item.leadTo && item.id === 1
-                    ? "border-r-8 rounded-md border-purple-400 text-purple-400 "
+                    ? "lg:border-r-8 border-r-4 rounded-md border-purple-400 text-purple-400 "
                     : pathname === item.leadTo && item.id === 2
-                    ? "border-r-8 rounded-md border-red-500 text-red-400"
+                    ? "lg:border-r-8 border-r-4 rounded-md border-red-500 text-red-400"
                     : pathname === item.leadTo && item.id === 3
-                    ? "border-r-8 rounded-md border-orange-400 text-orange-300"
+                    ? "lg:border-r-8 border-r-4 rounded-md border-orange-400 text-orange-300"
                     : pathname === item.leadTo && item.id === 4
-                    ? "border-r-8 rounded-md border-blue-400 text-blue-300"
+                    ? "lg:border-r-8 border-r-4 rounded-md border-blue-400 text-blue-300"
                     : "text-gray-300"
                 } transition-all duration-300`}
                 key={item.id}

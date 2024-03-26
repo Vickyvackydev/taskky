@@ -75,8 +75,8 @@ const Button = ({
           onClick={handleClick}
           disabled={disabled}
         >
-          <span className={iconStyles}>{icon}</span>
-          <span className={textStyles}>{text}</span>
+          <span className={`${iconStyles} lg:text-sm text-xs`}>{icon}</span>
+          <span className={`${textStyles} lg:text-sm text-xs`}>{text}</span>
           <div>
             {showImg && (
               // @ts-ignore

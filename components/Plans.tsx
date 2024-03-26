@@ -116,7 +116,7 @@ const Plans = () => {
     <div className={maxWidth}>
       <PageHeader
         text="Your plans here"
-        textStyle="dark:text-gray-300"
+        // textStyle="dark:text-gray-300"
         button={true}
         setState={() => {
           setModal(true);
@@ -124,8 +124,8 @@ const Plans = () => {
         }}
         btnText="Add plan"
         btnStyle="border-2 border-border_color dark:border-gray-700"
-        btnIconStyle="text-red-400"
-        btnTextStyle="text-red-400"
+        btnIconStyle="text-red-400 lg:text-sm text-xs"
+        btnTextStyle="text-red-400 lg:text-sm text-xs"
       />
 
       <TaskComponent

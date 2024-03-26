@@ -13,6 +13,7 @@
 body {
   font-family: "Montserrat", sans-serif;
   background-image: url("/purple.gif");
+  background-size: cover;
   overflow-x: hidden;
 }
 

@@ -161,7 +161,7 @@ const Dashboardnav = ({ isOpen, Open, mobileView }: navBarType) => {
         </div>
       )}
       <div className="flex justify-between items-center ">
-        <span className="pl-4 pr-[5rem] dark:text-gray-300  ">
+        <span className="pl-4 pr-[5rem] dark:text-gray-300  lg:text-sm text-xs text-text_black font-medium">
           {greeting}{" "}
           {`${displayName ? displayName?.split(" ")[0] : userName} 😊`}
         </span>

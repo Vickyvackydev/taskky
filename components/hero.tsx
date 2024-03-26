@@ -36,7 +36,7 @@ const Hero = () => {
             <span className="text-green-500 font-semibold"> {"taskky"} </span>
             here you'll manage all your task, save your tasks, edit your undone
             task and even delete them, lots of existing features here on our
-            website. Explore the new generated of maintaining your task
+            website. Explore the new ways of maintaining your task
           </p>
         </div>
       </motion.div>

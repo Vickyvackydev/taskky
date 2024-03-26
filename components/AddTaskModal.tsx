@@ -42,25 +42,27 @@ const AddTaskModal = ({
       maxWidth="w-[400px]"
     >
       <div>
-        <span className="dark:text-gray-300">Please fill in the details</span>
+        <span className="dark:text-gray-300 lg:text-sm text-xs">
+          Please fill in the details
+        </span>
 
         <form className="flex flex-col gap-5 mt-5">
           <div className="flex flex-col items-start gap-1">
             <label
               htmlFor=""
-              className="dark:text-gray-300"
+              className="dark:text-gray-300 lg:text-sm text-xs"
             >{`${taskName} name`}</label>
             <input
               type="text"
               name="task"
               placeholder={`Enter ${taskName} name`}
               onChange={setTaskName}
-              className="w-full border h-12 outline-none rounded-lg pl-3  dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900"
+              className="w-full border h-12 outline-none rounded-lg pl-3  dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900 placeholder:lg:text-sm placeholder:text-xs lg:text-sm text-xs"
             />
           </div>
 
           <div className="flex flex-col items-start gap-1">
-            <label htmlFor="" className="dark:text-gray-300">
+            <label htmlFor="" className="dark:text-gray-300 lg:text-sm text-xs">
               Description
             </label>
             <input
@@ -69,19 +71,19 @@ const AddTaskModal = ({
               placeholder="Enter description: min of 5 words"
               minLength={40}
               onChange={setDescription}
-              className="w-full border h-12 outline-none rounded-lg pl-3  dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900"
+              className="w-full border h-12 outline-none rounded-lg pl-3  dark:border-gray-700 dark:text-gray-300 dark:bg-gray-900 placeholder:lg:text-sm placeholder:text-xs lg:text-sm text-xs"
             />
           </div>
 
           <div className="flex flex-col items-start gap-1">
-            <label htmlFor="" className="dark:text-gray-300">
+            <label htmlFor="" className="dark:text-gray-300 lg:text-sm text-xs">
               Status
             </label>
 
             <select
               name="status"
               onChange={setStatus}
-              className="w-full border h-12 outline-none rounded-lg pl-3 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
+              className="w-full border h-12 outline-none rounded-lg pl-3 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 placeholder:lg:text-sm placeholder:text-xs lg:text-sm text-xs"
             >
               <option value="Select status" className="">
                 Select status
@@ -95,14 +97,14 @@ const AddTaskModal = ({
           <Button
             text={`${loading ? "updating..." : `Update ${taskName}`} `}
             textStyles={textColor}
-            btnStyles={`rounded-3xl ${btnStyle} py-3 mt-5 dark:border-gray-700`}
+            btnStyles={`rounded-3xl ${btnStyle} lg:py-3 py-2 mt-5 dark:border-gray-700`}
             handleClick={handleSelectedToUpdate}
           />
         ) : (
           <Button
             text={`${loading ? "creating..." : `Add ${taskName}`} `}
             textStyles={textColor}
-            btnStyles={`rounded-3xl ${btnStyle} py-3 mt-5 dark:border-gray-700`}
+            btnStyles={`rounded-3xl ${btnStyle} lg:py-3 py-2 mt-5 dark:border-gray-700`}
             handleClick={createTask}
           />
         )}

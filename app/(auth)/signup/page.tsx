@@ -32,6 +32,7 @@ const Signup = () => {
   const [modal, setModal] = useState(false);
   const userCollectionRef = collection(db, "usernames");
   const [errorMessage, setErrorMessage] = useState("");
+  const isMobileScreen = useMediaQuery("(max-width: 640px)");
 
   const handleRegister = async () => {
     setLogging(true);
@@ -119,17 +120,17 @@ const Signup = () => {
       <main className="flex justify-center items-center rounded-2xl lg:px-10 px-3 lg:pl-10 pl-4 bg-backgrd max-w-[550px] max-h-[900px] overflow-y-scroll pb-6 shadow-box">
         <div className="mt-7">
           <div className={``}>
-            <span className="lg:text-3xl text-xl text-center">
+            <span className="lg:text-3xl text-sm text-center">
               Get started by{" "}
               <span className="text-green-400">{"creating an account"}</span>
             </span>
-            <p className="text-start mt-3 lg:text-lg text-sm">
+            <p className="text-start mt-3 lg:text-lg text-xs">
               Create an account to manage and view your tasks.
             </p>
           </div>
           <div className="flex flex-col gap-4 mt-7 relative">
             <div className="">
-              <label htmlFor="" className="text-gray-500">
+              <label htmlFor="" className="text-gray-500 lg:text-sm text-xs">
                 Username
               </label>
               <motion.input
@@ -143,14 +144,16 @@ const Signup = () => {
                   setUserName(e.target.value)
                 }
                 placeholder="e.g Josh Sam"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
+                className="w-full  lg:h-12 h-10 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent placeholder:lg:text-sm placeholder:text-xs lg:text-sm text-xs"
               />
               {noUser && (
-                <span className="text-red-400">please add a username</span>
+                <span className="text-red-400 lg:text-sm text-xs">
+                  please add a username
+                </span>
               )}
             </div>
             <div>
-              <label htmlFor="" className="text-gray-500">
+              <label htmlFor="" className="text-gray-500 lg:text-sm text-xs">
                 Email
               </label>
               <motion.input
@@ -164,12 +167,15 @@ const Signup = () => {
                   setEmail(e.target.value)
                 }
                 placeholder="josh@gmail.com"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
+                className="w-full  lg:h-12 h-10 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent lg:text-sm text-xs placeholder:lg:text-sm placeholder:text-xs"
               />
               <span className="text-red-400">{errorMessage}</span>
             </div>
             <div>
-              <label htmlFor="password" className="text-gray-500">
+              <label
+                htmlFor="password"
+                className="text-gray-500 lg:text-sm text-xs"
+              >
                 Password
               </label>
               <motion.input
@@ -183,18 +189,18 @@ const Signup = () => {
                   setPassword(e.target.value)
                 }
                 placeholder="e.g 1234"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
+                className="w-full  lg:h-12 h-10 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent placeholder:lg:text-sm placeholder:text-xs lg:text-sm text-xs"
               />
               {showPassword ? (
                 <span
-                  className="absolute right-6 text-2xl mt-3 cursor-pointer text-gray-300"
+                  className="absolute right-6 lg:text-2xl text-xl lg:mt-3 mt-2 cursor-pointer text-gray-300"
                   onClick={() => setShowPassword(false)}
                 >
                   <FaEyeSlash />
                 </span>
               ) : (
                 <span
-                  className="absolute right-6 text-2xl mt-3 cursor-pointer text-gray-300"
+                  className="absolute right-6 lg:text-2xl text-xl lg:mt-3 mt-2 cursor-pointer text-gray-300"
                   onClick={() => setShowPassword(true)}
                 >
                   <FaEye />
@@ -202,7 +208,10 @@ const Signup = () => {
               )}
             </div>
             <div>
-              <label htmlFor="password" className="text-gray-500">
+              <label
+                htmlFor="password"
+                className="text-gray-500 lg:text-sm text-xs"
+              >
                 Confirm password
               </label>
               <motion.input
@@ -216,25 +225,27 @@ const Signup = () => {
                   setConfirmPassword(e.target.value)
                 }
                 placeholder="e.g 1234"
-                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent"
+                className="w-full  h-12 outline-none pl-3 rounded-xl shadow-sm dark:bg-transparent lg:text-sm text-xs placeholder:lg:text-sm placeholder:text-xs"
               />
               {showConfirmPassword ? (
                 <span
-                  className="absolute right-6 text-2xl mt-3 cursor-pointer text-gray-300"
+                  className="absolute right-6 lg:text-2xl text-xl mt-3 cursor-pointer text-gray-300"
                   onClick={() => setShowConfirmPassword(false)}
                 >
                   <FaEyeSlash />
                 </span>
               ) : (
                 <span
-                  className="absolute right-6 text-2xl mt-3 cursor-pointer text-gray-300"
+                  className="absolute right-6 lg:text-2xl text-xl mt-3 cursor-pointer text-gray-300"
                   onClick={() => setShowConfirmPassword(true)}
                 >
                   <FaEye />
                 </span>
               )}
               {noPassword && (
-                <span className="text-red-400">password is not the same</span>
+                <span className="text-red-400 lg:text-sm text-xs">
+                  password is not the same
+                </span>
               )}
             </div>
 
@@ -242,18 +253,18 @@ const Signup = () => {
               <div
                 className={`flex justify-center items-center cursor-pointer ${
                   check ? "border-red-400" : ""
-                } border w-7 h-7 lg:rounded-lg rounded-xl ${
+                } border lg:w-7 w-5 lg:h-7 h-5 rounded-lg ${
                   checked ? "bg-green-500" : ""
                 }`}
                 onClick={() => setChecked((prev) => !prev)}
               >
                 {checked ? (
-                  <span className="text-white">
+                  <span className="text-white lg:text-sm text-xs">
                     <FaCheck />
                   </span>
                 ) : null}
               </div>
-              <span className="lg:text-lg text-sm text-gray-500">
+              <span className="lg:text-sm text-xs text-gray-500">
                 I agree to the terms and conditions applied
               </span>
             </div>
@@ -280,14 +291,14 @@ const Signup = () => {
                 image="/g_icon.png"
               />
             </div>
-            <span className="lg:text-lg text-sm">
-              Already have an account?
+            <span className="lg:text-sm text-xs">
+              {"Already have an account?"} {""}
               <Link href={"/login"} className="underline text-green-400">
                 Login here
               </Link>
             </span>
             <div className="max-w-sm justify-center items-center flex">
-              <span className="lg:text-lg text-sm">
+              <span className="lg:text-sm text-xs">
                 By creating an account your agree to our
                 <span className="text-green-500"> {"Terms of Service"} </span>
                 and <span className="text-green-500"> {"Privacy Policy"}</span>
@@ -303,13 +314,20 @@ const Signup = () => {
         >
           <div className="flex flex-col justify-center items-center text-xl text-center">
             <div>
-              <Image src="/mail_giffy.gif" width={200} height={200} alt="gif" />
+              <Image
+                src="/mail_giffy.gif"
+                width={isMobileScreen ? 100 : 200}
+                height={200}
+                alt="gif"
+              />
             </div>
-            <span>
+            <span className="lg:text-sm text-xs text-text_black font-medium ">
               We've sent you your email verification, <br />
               please verify your
             </span>
-            <span className="text-green-400 font-medium">email address</span>
+            <span className="text-green-400 font-medium lg:text-sm text-xs">
+              email address
+            </span>
 
             <Button
               text="Ok, got it"

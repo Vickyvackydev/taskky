@@ -126,7 +126,7 @@ const Tasks = () => {
     <div className={maxWidth}>
       <PageHeader
         text="Your Task Page"
-        textStyle="dark:text-gray-300"
+        // textStyle="dark:text-gray-300"
         button={true}
         setState={() => {
           setModal(true);
@@ -134,8 +134,8 @@ const Tasks = () => {
         }}
         btnText="Add task"
         btnStyle="border-2 border-border_color dark:border-gray-700"
-        btnIconStyle="text-purple-400"
-        btnTextStyle="text-purple-400"
+        btnIconStyle="text-purple-400 lg:text-sm text-xs"
+        btnTextStyle="text-purple-400 lg:text-sm text-xs"
       />
       <TaskComponent
         tasks={tasks}

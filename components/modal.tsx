@@ -47,7 +47,7 @@ const Modal = ({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel
-                  className={` ${maxWidth} transform overflow-hidden rounded-2xl text-center bg-white dark:bg-bg_black p-6 align-middle shadow-xl transition-all h-full`}
+                  className={` ${maxWidth} transform overflow-hidden rounded-2xl text-center bg-white dark:bg-bg_black lg:p-6 p-3 align-middle shadow-xl transition-all h-full`}
                 >
                   <button
                     type="button"
@@ -56,7 +56,7 @@ const Modal = ({
                   >
                     <FaTimes />
                   </button>
-                  <div className="mt-2 max-h-[500px] overflow-y-auto ">
+                  <div className="mt-2 max-h-[500px] overflow-y-scroll overscroll-x-none ">
                     {children}
                   </div>
                 </Dialog.Panel>

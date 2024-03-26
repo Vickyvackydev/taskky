@@ -112,7 +112,7 @@ const Activity = () => {
       {/* page-header component */}
       <PageHeader
         text="Your activities here"
-        textStyle="dark:text-gray-300"
+        // textStyle="dark:text-gray-300"
         button={true}
         setState={() => {
           setModal(true);
@@ -120,8 +120,8 @@ const Activity = () => {
         }}
         btnText="Add activity"
         btnStyle="border-2 border-border_color dark:border-gray-700"
-        btnIconStyle="text-orange-400"
-        btnTextStyle="text-orange-400"
+        btnIconStyle="text-orange-400 lg:text-sm text-xs"
+        btnTextStyle="text-orange-400 lg:text-sm text-xs"
       />
 
       {/* task component mapping activities data */}

@@ -92,10 +92,10 @@ const Login = () => {
         className="flex justify-center items-center bg-backgrd w-fit h-full rounded-xl  px-5 pb-4 shadow-box"
       >
         <div className="mt-7">
-          <span className="text-3xl flex justify-center font-medium text-green-400">
+          <span className="lg:text-3xl text-xl flex justify-center font-medium text-green-400">
             Login
           </span>
-          <p className="text-center mt-3 text-gray-500">
+          <p className="text-center mt-3 text-gray-500 lg:text-sm text-xs">
             Kindly login to continue
           </p>
           {wrongDetailsPopUp && (
@@ -118,11 +118,11 @@ const Login = () => {
           )}
 
           <div className="flex flex-col gap-4 mt-7 relative">
-            <label htmlFor="" className="text-gray-500">
+            <label htmlFor="" className="text-gray-500 lg:text-sm text-xs">
               Username
             </label>
-            <div className="flex items-center lg:w-[25rem] w-full rounded-xl shadow-sm h-12 outline-none pl-3 bg-white">
-              <span className="text-gray-400">
+            <div className="flex items-center lg:w-[25rem] w-full rounded-xl shadow-sm lg:h-12 h-10 outline-none pl-3 bg-white">
+              <span className="text-gray-400 lg:text-sm text-xs">
                 <FaUserNinja />
               </span>
               <input
@@ -142,11 +142,11 @@ const Login = () => {
                 </div>
               )}
             </div>
-            <label htmlFor="" className="text-gray-500">
+            <label htmlFor="" className="text-gray-500 lg:text-sm text-xs">
               Email
             </label>
-            <div className="flex items-center lg:w-[25rem] w-full rounded-xl shadow-sm h-12 outline-none pl-3 bg-white">
-              <span className="text-gray-400">
+            <div className="flex items-center lg:w-[25rem] w-full rounded-xl shadow-sm lg:h-12 h-10 outline-none pl-3 bg-white">
+              <span className="text-gray-400 lg:text-sm text-xs">
                 <FaUser />
               </span>
               <input
@@ -158,11 +158,14 @@ const Login = () => {
                 }
               />
             </div>
-            <label htmlFor="password" className="text-gray-500">
+            <label
+              htmlFor="password"
+              className="text-gray-500 lg:text-sm text-xs"
+            >
               Password
             </label>
-            <div className="flex items-center lg:w-[25rem] w-full rounded-xl shadow-sm h-12 outline-none pl-3 bg-white">
-              <span className="text-gray-400">
+            <div className="flex items-center lg:w-[25rem] w-full rounded-xl shadow-sm lg:h-12 h-10 outline-none pl-3 bg-white">
+              <span className="text-gray-400 lg:text-sm text-xs">
                 <FaKey />
               </span>
               <input
@@ -199,13 +202,16 @@ const Login = () => {
               handleClick={handleLogin}
               loading={loading}
             />
-            <span className="text-gray-500">
+            <span className="text-gray-500 lg:text-sm text-xs">
               Don't have an account?{" "}
               <Link href={"/signup"} className="underline text-green-400">
                 sign up
               </Link>
             </span>
-            <Link href="/forgotpassword" className="underline text-green-400">
+            <Link
+              href="/forgotpassword"
+              className="underline text-green-400 lg:text-sm text-xs"
+            >
               Forgot password?
             </Link>
           </div>

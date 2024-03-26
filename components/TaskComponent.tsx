@@ -200,7 +200,7 @@ const TaskComponent = ({
           </div>
         ))
       ) : (
-        <div className="flex justify-center items-center text-gray-300 lg:text-3xl text-xl">
+        <div className="flex justify-center items-center text-gray-300 lg:text-3xl text-lg">
           <span className="text-center">
             {`You don't have any active ${emptyText}`}
           </span>
