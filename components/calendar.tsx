@@ -57,7 +57,7 @@ const Calendar = () => {
   );
   return (
     <div className="mt-4 border-b-2 pb-6 dark:border-gray-700 ">
-      <span className="text-xl text-gray-400">Calendar</span>
+      <span className="lg:text-xl text-sm text-gray-400">Calendar</span>
       <div className="flex justify-between mt-5">
         <button
           onClick={handlePreviousMonth}
@@ -71,7 +71,7 @@ const Calendar = () => {
             className="scale-x-[-1]"
           />
         </button>
-        <span className="text-lg font-semibold text-gray-500">{`${selectedDate.getDate()} ${selectedDate.toLocaleString(
+        <span className="lg:text-lg text-sm font-semibold text-gray-500">{`${selectedDate.getDate()} ${selectedDate.toLocaleString(
           "default",
           {
             month: "long",
@@ -95,13 +95,15 @@ const Calendar = () => {
           <thead>
             <tr>
               {daysOfWeek.map((days) => (
-                <th className="px-1 py-2 dark:text-gray-400">{days}</th>
+                <th className="px-1 py-2 dark:text-gray-400 text-text_black lg:text-sm text-xs">
+                  {days}
+                </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {monthData.map((data, i) => (
-              <tr key={i} className="text-black">
+              <tr key={i} className="text-black lg:text-sm text-xs">
                 {data.map((days, i) => (
                   <td
                     key={i}
