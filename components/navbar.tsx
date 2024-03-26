@@ -17,11 +17,7 @@ const Navbar = () => {
   const isMobileScreen = useMediaQuery("(max-width: 640px)");
 
   return (
-    <motion.nav
-      initial={{ opacity: 0, y: -100 }}
-      whileInView={{ opacity: 1, y: 1 }}
-      viewport={{ once: false, amount: 0.25 }}
-      transition={{ duration: 1 }}
+    <nav
       className="lg:p-10 p-4 sticky flex justify-between transition-all duration-500"
       id="navbar"
     >
@@ -93,7 +89,7 @@ const Navbar = () => {
           </span>
         </div>
       </div>
-    </motion.nav>
+    </nav>
   );
 };
 
